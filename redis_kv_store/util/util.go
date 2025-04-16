@@ -2,7 +2,24 @@ package util
 
 import (
 	"errors"
+	"os"
+	"encoding/json"
+	"regexp"
+	"strconv"
 )
+
+type Shard struct {
+	RangeStart int `json:"start"`
+	RangeEnd   int `json:"end"`
+	Primary	string `json:"primary"` 
+	PrimaryID string `json:"primaryID"` 
+}
+
+type Config struct {
+	Shards []Shard `json:"shards"`
+}
+
+var keyNumericRegex = regexp.MustCompile(`\d+`)
 
 // CheckKeyAndValue returns an error if k == "" or if v == nil
 func CheckKeyAndValue(k string, v any) error {
@@ -26,4 +43,26 @@ func CheckVal(v any) error {
 		return errors.New("The passed value is nil, which is not allowed")
 	}
 	return nil
+}
+
+func KeyToInt(k string) (int, error) {
+	match := keyNumericRegex.FindString(k)
+	if match == "" {
+		return 0, errors.New("no numeric part found in key")
+	}
+	return strconv.Atoi(match)
+}
+
+func LoadConfig(path string) (*Config, error) { 
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	var config Config
+	err = json.Unmarshal(data, &config)
+	if err != nil {
+		return nil, err
+	}
+
+	return &config, nil
 }

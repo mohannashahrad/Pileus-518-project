@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"fmt"
 	"context"
 	"time"
 	"github.com/redis/go-redis/v9"
@@ -15,14 +16,27 @@ type Client struct {
 	c       *redis.Client
 	timeOut time.Duration
 	codec   encoding.Codec
+	ShardRangeStart int
+	ShardRangeEnd   int
 }
 
-// Set stores the given value for the given key.
+// Set stores the given value for the given key.(The key must not be "" and the value must not be nil.)
 // Values are automatically marshalled to JSON or gob (depending on the configuration).
-// The key must not be "" and the value must not be nil.
+// It also checks weather the node is the primary for the given key
 func (c Client) Set(k string, v any) error {
 	if err := util.CheckKeyAndValue(k, v); err != nil {
 		return err
+	}
+
+	// Check if the node is primary for the given key
+	numericKey, err := util.KeyToInt(k)
+	if err != nil {
+		return fmt.Errorf("invalid key format: %v", err)
+	}
+
+	if numericKey < c.ShardRangeStart || numericKey > c.ShardRangeEnd {
+		return fmt.Errorf("key '%s' with numeric value %d is out of shard range [%d, %d]",
+			k, numericKey, c.ShardRangeStart, c.ShardRangeEnd)
 	}
 
 	// First turn the passed object into something that Redis can handle
@@ -91,35 +105,28 @@ func (c Client) Close() error {
 }
 
 // Options are the options for the Redis client.
-type Options struct {
-	// Address of the Redis server, including the port.
-	// Optional ("localhost:6379" by default).
-	Address string
-	// Password for the Redis server.
-	// Optional ("" by default).
-	Password string
-	// DB to use.
-	// Optional (0 by default).
-	DB int
-	// The timeout for operations.
-	// Optional (2 * time.Second by default).
-	Timeout *time.Duration
-	// Encoding format.
-	// Optional (encoding.JSON by default).
-	Codec encoding.Codec
+type Options struct {	
+	Address string  		// Optional ("localhost:6379" by default).
+	ShardRangeStart int
+	ShardRangeEnd int
+	Password string 		// Optional ("" by default).	
+	DB int 					// Optional (0 by default).
+	Timeout *time.Duration	// Optional (2 * time.Second by default).
+	Codec encoding.Codec	// Optional (encoding.JSON by default).
 }
 
 // DefaultOptions is an Options object with default values.
 // Address: "localhost:6379", Password: "", DB: 0, Timeout: 2 * time.Second, Codec: encoding.JSON
 var DefaultOptions = Options{
 	Address: "localhost:6379",
+	ShardRangeStart: 0,
+	ShardRangeEnd: 0,
 	Timeout: &defaultTimeout,
 	Codec:   encoding.JSON,
 	// No need to set Password or DB because their Go zero values are fine for that.
 }
 
 // NewClient creates a new Redis client.
-//
 // You must call the Close() method on the client when you're done working with it.
 func NewClient(options Options) (Client, error) {
 	result := Client{}
@@ -127,6 +134,12 @@ func NewClient(options Options) (Client, error) {
 	// Set default values
 	if options.Address == "" {
 		options.Address = DefaultOptions.Address
+	}
+	if options.ShardRangeStart == 0 {
+		options.ShardRangeStart = DefaultOptions.ShardRangeStart
+	}
+	if options.ShardRangeEnd == 0 {
+		options.ShardRangeEnd = DefaultOptions.ShardRangeEnd
 	}
 	if options.Timeout == nil {
 		options.Timeout = DefaultOptions.Timeout
@@ -152,6 +165,8 @@ func NewClient(options Options) (Client, error) {
 	result.c = client
 	result.timeOut = *options.Timeout
 	result.codec = options.Codec
+	result.ShardRangeStart = options.ShardRangeStart
+	result.ShardRangeEnd = options.ShardRangeEnd
 
 	return result, nil
 }

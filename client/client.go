@@ -3,15 +3,16 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"math/rand"
 	"encoding/json"
-	"pileus/redis"
+	"bytes"
+    "net/http"
+	"strconv"
 	"github.com/google/uuid"
 )
 
 type Record struct {
-    Key   int `json:"key"`
+    Key   string `json:"key"`
     Value string `json:"value"`
 }
 
@@ -19,19 +20,16 @@ type Record struct {
 type Shard struct {
 	RangeStart int `json:"start"`
 	RangeEnd   int `json:"end"`
-	PrimaryAddress	string `json:"primary"` 
-	Primary	redis.Client `json:"-"`	
+	Primary	string `json:"primary"` 
 }
 
 type Config struct {
 	Shards []Shard `json:"shards"`
 }
 
-// Define the Global varibales: config, redis.Client
-var Node0_Store redis.Client
 var GlobalConfig *Config
 
-func LoadConfig(path string) (*Config, error) {
+func LoadConfig(path string) (*Config, error) { 
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -42,20 +40,6 @@ func LoadConfig(path string) (*Config, error) {
 		return nil, err
 	}
 
-	// Initialize Redis clients for each shard
-	for i, shard := range config.Shards {
-	
-		opts := redis.DefaultOptions
-		opts.Address = shard.PrimaryAddress
-
-		client, err := redis.NewClient(opts)
-		if err != nil {
-			return nil, fmt.Errorf("failed to connect to redis at %s: %w", shard.PrimaryAddress, err)
-		}
-
-		config.Shards[i].Primary = client
-	}
-
 	return &config, nil
 }
 
@@ -64,7 +48,7 @@ func main() {
 	// Load the sharding config 
 	var err error
 
-	GlobalConfig, err = LoadConfig("sharding_config.json")
+	GlobalConfig, err = LoadConfig("../sharding_config.json")
 	if err != nil {
 		panic(err)
 	}
@@ -79,7 +63,7 @@ func putWorkload(count int) error {
 
     for i := 1; i <= count; i++ {
 		// Randomly generate the key and value
-        key := rand.Intn(6000)
+        key := fmt.Sprintf("%04d", rand.Intn(4000))
 		value := uuid.New().String()
 
         rec := Record{
@@ -102,17 +86,25 @@ func sendPut(rec Record) error {
     shardID := determineShardForKey(rec.Key)
 	fmt.Printf("shardId is %d \n", shardID)
 
-	var err error
-	err = GlobalConfig.Shards[shardID].Primary.Set(strconv.Itoa(rec.Key), rec.Value)
-    if err != nil {
-		fmt.Printf("Failed with the write\n")
-		fmt.Printf("%w \n", err)
-        return fmt.Errorf("failed to store key %d: %w", rec.Key, err)
-    }
+	recordJson, _ := json.Marshal(rec)
+	url := fmt.Sprintf("http://%s/set", GlobalConfig.Shards[shardID].Primary)
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(recordJson))
+	if err != nil || resp.StatusCode != http.StatusOK {
+		fmt.Printf("some error happened \n")
+		fmt.Printf("%v \n", err)
+		fmt.Printf("%v \n", resp)
+		return fmt.Errorf("HTTP error: %v", err)
+	}
     return nil
 }
 
-func determineShardForKey(key int) int {
+func determineShardForKey(string_key string) int {
+	key, err := strconv.Atoi(string_key)
+	if err != nil {
+		fmt.Printf("Error happened in getting the int value of the key")
+		return -1
+	}
+
     fmt.Printf("Entered determineShardForKey with key %d\n", key)
    
     for i, shard := range GlobalConfig.Shards {
