@@ -20,3 +20,7 @@ To run the basic key-value store on multiple nodes, follow these steps:
 
    - You can adjust the size of the workload directly in the code.  
    - Eventually, client workloads will be more complex and configurable using YCSB workloads for our experiments.
+
+**ToDo's** 
+
+- [ ] Imlement the client-side API + Consistency SLA's

@@ -65,19 +65,12 @@ func (c Client) Set(k string, v any) error {
 	return nil
 }
 
+// This function is only called during the replication phase, where secondaries pull data from primaries
+// NOTE: Here we don't check the key range constraints anymore, because this is only callled by secondary storage nodes (the inital puts from clients, do not hit this function)
 func (c Client) SetVersioned(k string, vv VersionedValue) error {
 	if err := util.CheckKey(k); err != nil {
 		return err
 	}
-
-	// TODO: correct this part
-	// numericKey, err := util.KeyToInt(k)
-	// if err != nil {
-	// 	return fmt.Errorf("invalid key format: %v", err)
-	// }
-	// if numericKey < c.ShardRangeStart || numericKey > c.ShardRangeEnd {
-	// 	return fmt.Errorf("key '%s' is out of shard range", k)
-	// }
 
 	data, err := c.codec.Marshal(vv)
 	if err != nil {
