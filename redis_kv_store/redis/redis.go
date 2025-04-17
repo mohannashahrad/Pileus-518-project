@@ -9,6 +9,12 @@ import (
 	"pileus/util"
 )
 
+// For incoming (k,v) pairs, we also store the timestamp/version
+type VersionedValue struct {
+	Value     any    `json:"value"`
+	Timestamp int64 `json:"timestamp"`
+}
+
 var defaultTimeout = 2 * time.Second
 
 // Client is a gokv.Store implementation for Redis.
@@ -39,11 +45,12 @@ func (c Client) Set(k string, v any) error {
 			k, numericKey, c.ShardRangeStart, c.ShardRangeEnd)
 	}
 
-	// First turn the passed object into something that Redis can handle
-	// (the Set method takes an interface{}, but the Get method only returns a string,
-	// so it can be assumed that the interface{} parameter type is only for convenience
-	// for a couple of builtin types like int etc.).
-	data, err := c.codec.Marshal(v)
+	record := VersionedValue{
+		Value: v,
+		Timestamp: time.Now().UTC().UnixNano() / int64(time.Millisecond),
+	}
+
+	data, err := c.codec.Marshal(record)
 	if err != nil {
 		return err
 	}
@@ -56,6 +63,31 @@ func (c Client) Set(k string, v any) error {
 		return err
 	}
 	return nil
+}
+
+func (c Client) SetVersioned(k string, vv VersionedValue) error {
+	if err := util.CheckKey(k); err != nil {
+		return err
+	}
+
+	// TODO: correct this part
+	// numericKey, err := util.KeyToInt(k)
+	// if err != nil {
+	// 	return fmt.Errorf("invalid key format: %v", err)
+	// }
+	// if numericKey < c.ShardRangeStart || numericKey > c.ShardRangeEnd {
+	// 	return fmt.Errorf("key '%s' is out of shard range", k)
+	// }
+
+	data, err := c.codec.Marshal(vv)
+	if err != nil {
+		return err
+	}
+
+	tctx, cancel := context.WithTimeout(context.Background(), c.timeOut)
+	defer cancel()
+
+	return c.c.Set(tctx, k, string(data), 0).Err()
 }
 
 // Get retrieves the stored value for the given key.
@@ -96,6 +128,36 @@ func (c Client) Delete(k string) error {
 
 	_, err := c.c.Del(tctx, k).Result()
 	return err
+}
+
+func (c *Client) ScanUpdatedKeys(since time.Time) []util.Record {
+	var updates []util.Record
+
+	ctx, cancel := context.WithTimeout(context.Background(), c.timeOut)
+	defer cancel()
+
+	iter := c.c.Scan(ctx, 0, "*", 0).Iterator()
+	for iter.Next(ctx) {
+		key := iter.Val()
+
+		var vv VersionedValue
+		found, err := c.Get(key, &vv)
+		if err != nil || !found {
+			continue
+		}
+		if vv.Timestamp > since.UnixMilli() {
+			updates = append(updates, util.Record{
+				Key:       key,
+				Value:     vv.Value,
+				Timestamp: vv.Timestamp,
+			})
+		}
+	}
+	if err := iter.Err(); err != nil {
+		fmt.Printf("Error scanning keys: %v\n", err)
+	}
+
+	return updates
 }
 
 // Close closes the client.

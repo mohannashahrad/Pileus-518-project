@@ -8,15 +8,30 @@ import (
 	"strconv"
 )
 
+type Record struct {
+	Key       string    `json:"key"`
+	Value     any       `json:"value"`
+	Timestamp int64
+}
+
 type Shard struct {
 	RangeStart int `json:"start"`
 	RangeEnd   int `json:"end"`
 	Primary	string `json:"primary"` 
 	PrimaryID string `json:"primaryID"` 
+	Secondaries []string `json:"secondaryIDs"`
 }
 
 type Config struct {
 	Shards []Shard `json:"shards"`
+}
+
+// Struct for tracking the primary replicas of the shards, that a storage node is a secondary replica of
+type SecondaryShardInfo struct {
+	Primary   string
+	RangeStart  int
+	RangeEnd    int
+	HighTS      int64 // highest known timestamp from this shard
 }
 
 var keyNumericRegex = regexp.MustCompile(`\d+`)
@@ -65,4 +80,13 @@ func LoadConfig(path string) (*Config, error) {
 	}
 
 	return &config, nil
+}
+
+func Contains(s []string, e string) bool {
+    for _, a := range s {
+        if a == e {
+            return true
+        }
+    }
+    return false
 }
