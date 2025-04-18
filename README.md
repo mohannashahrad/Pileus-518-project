@@ -24,3 +24,5 @@ To run the basic key-value store on multiple nodes, follow these steps:
 **ToDo's** 
 
 - [ ] Imlement the client-side API + Consistency SLA's
+- [ ] Remaking Figure 3 in the paper [different consistency levels among 4 sites]: the goal is to observe the latency difference based on the consistency level
+- [ ] Session-Monitoring functions in the client-side API

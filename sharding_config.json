@@ -2,9 +2,16 @@
   "shards": [
     {
       "start": 0,
-      "end": 1999,
+      "end": 999,
       "primary": "130.127.133.5:8080",
       "primaryID": "clem0",
+      "secondaryIDs": ["clem1"]
+    },
+    {
+      "start": 1000,
+      "end": 1999,
+      "primary": "130.127.133.240:8080",
+      "primaryID": "clem1",
       "secondaryIDs": ["clem1"]
     }
   ]

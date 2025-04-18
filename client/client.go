@@ -2,117 +2,94 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"math/rand"
-	"encoding/json"
-	"bytes"
-    "net/http"
-	"strconv"
-	"github.com/google/uuid"
+	// "math/rand"
+	// "github.com/google/uuid"
+	"client/consistency"
+	"client/util"
+	"client/api"
 )
 
+// TODO: this records thing should be changed
 type Record struct {
     Key   string `json:"key"`
     Value string `json:"value"`
 }
 
-// The logic for sharding based on the shard_config
-type Shard struct {
-	RangeStart int `json:"start"`
-	RangeEnd   int `json:"end"`
-	Primary	string `json:"primary"` 
-}
-
-type Config struct {
-	Shards []Shard `json:"shards"`
-}
-
-var GlobalConfig *Config
-
-func LoadConfig(path string) (*Config, error) { 
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return nil, err
-	}
-	var config Config
-	err = json.Unmarshal(data, &config)
-	if err != nil {
-		return nil, err
-	}
-
-	return &config, nil
-}
+var GlobalSLAs = map[string]consistency.SLA{}
 
 func main() {
 
-	// Load the sharding config 
+	// Load the sharding config [this is done on the api-side for checking the put/get]
 	var err error
-
-	GlobalConfig, err = LoadConfig("../sharding_config.json")
+	err = api.LoadReplicationConfig("../sharding_config.json")
 	if err != nil {
+		fmt.Printf("An error happened loading the replication configuration.\n")
 		panic(err)
 	}
 
-	fmt.Printf("Loaded config: %+v\n", GlobalConfig)
+	// Load the static SLAs
+	var sla consistency.SLA
+	
+	sla, err = util.LoadSLAFromFile("consistency/samples/password_checking.json", "psw_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
 
-	putWorkload(20)
+	sla, err = util.LoadSLAFromFile("consistency/samples/web_application.json", "web_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
+
+	sla, err = util.LoadSLAFromFile("consistency/samples/shopping_cart.json", "cart_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
+
+	sla, err = util.LoadSLAFromFile("consistency/samples/strong.json", "strong_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
+
+	fmt.Printf("Cart SLA: %+v\n", GlobalSLAs["cart_sla"])
+	fmt.Printf("**************************************\n")
+	fmt.Printf("Web Applicaiton SLA: %+v\n", GlobalSLAs["web_sla"])
+	fmt.Printf("**************************************\n")
+	fmt.Printf("Password SLA: %+v\n", GlobalSLAs["psw_sla"])
+
+	password_checking_putWorkload(20)
 }
 
-func putWorkload(count int) error {
+// Start a session and do a bunch of puts in the same session
+func password_checking_putWorkload(count int) error {
 	fmt.Printf("Entered the putworkalod function\n")
 
-    for i := 1; i <= count; i++ {
-		// Randomly generate the key and value
-        key := fmt.Sprintf("%04d", rand.Intn(4000))
-		value := uuid.New().String()
+	// Start the session
+	s := api.BeginSession(GlobalSLAs["psw_sla"])
+	
+	// Randomly generate the key and value
+	// for i := 1; i <= count; i++ {
+    //     key := fmt.Sprintf("%04d", rand.Intn(1000))
+	// 	value := uuid.New().String()
+    //     api.Put(s, key, value)
+    // }
 
-        rec := Record{
-            Key:   key,
-            Value: value,
-        }
+	// simple test of strong reads [which should go to the primary]
+	api.Put(s, "0001", "test")
 
-		fmt.Printf("Record: %+v\n", rec)
-
-        err := sendPut(rec)
-        if err != nil {
-            return fmt.Errorf("failed to sendPut for key %s: %w", key, err)
-        }
-    }
-    return nil
-}
-
-func sendPut(rec Record) error {
-	fmt.Printf("Entered the sendPut function\n")
-    shardID := determineShardForKey(rec.Key)
-	fmt.Printf("shardId is %d \n", shardID)
-
-	recordJson, _ := json.Marshal(rec)
-	url := fmt.Sprintf("http://%s/set", GlobalConfig.Shards[shardID].Primary)
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(recordJson))
-	if err != nil || resp.StatusCode != http.StatusOK {
-		fmt.Printf("some error happened \n")
-		fmt.Printf("%v \n", err)
-		fmt.Printf("%v \n", resp)
-		return fmt.Errorf("HTTP error: %v", err)
-	}
-    return nil
-}
-
-func determineShardForKey(string_key string) int {
-	key, err := strconv.Atoi(string_key)
+	get_sla := GlobalSLAs["strong_sla"]
+	val, cc, err := api.Get(s, "0001", &get_sla)
 	if err != nil {
-		fmt.Printf("Error happened in getting the int value of the key")
-		return -1
+		fmt.Printf("Get error for key %s: %v (CC: %v)\n", "0001", err, cc)
+	} else {
+		fmt.Printf("Read key=%s, value=%s, CC=%v\n", "0001", string(val), cc)
 	}
+	
+	// Terminate the session
+	api.EndSession(s)
 
-    fmt.Printf("Entered determineShardForKey with key %d\n", key)
-   
-    for i, shard := range GlobalConfig.Shards {
-    
-        if key >= shard.RangeStart && key <= shard.RangeEnd {
-            fmt.Printf("Key %d belongs to shard #%d: %+v\n", key, i, shard)
-            return i
-        }
-    }
-    panic(fmt.Sprintf("No shard found for key: %d", key))
+	return nil
 }

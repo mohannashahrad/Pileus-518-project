@@ -1,0 +1,32 @@
+{
+  "subSLAs": [
+    {
+      "rank": 1,
+      "consistecy": "bounded",
+      "staleness_bound": 300,
+      "latency_bound": 200,
+      "utility": 0.00001
+    },
+    {
+      "rank": 2,
+      "consistecy": "bounded",
+      "staleness_bound": 300,
+      "latency_bound": 400,
+      "utility": 0.000008
+    },
+    {
+      "rank": 1,
+      "consistecy": "bounded",
+      "staleness_bound": 300,
+      "latency_bound": 600,
+      "utility": 0.000005
+    },
+    {
+      "rank": 2,
+      "consistecy": "bounded",
+      "staleness_bound": 300,
+      "latency_bound": 1000,
+      "utility": 0.0
+    }
+  ]
+}
