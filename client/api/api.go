@@ -2,6 +2,7 @@ package api
 
 import (
 	"client/consistency"
+	"client/monitor"
 	// "errors"
 	"fmt"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"encoding/json"
 	"os"
 	"strconv"
+	"time"
 	// "sync"
 )
 
@@ -98,12 +100,19 @@ func Put(s *Session, key string, value string) error {
 	recordJson, _ := json.Marshal(rec)
 	url := fmt.Sprintf("http://%s/set", GlobalConfig.Shards[shardID].Primary)
 
+	start := time.Now()
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(recordJson))
+	rtt := time.Since(start)
+
 	if err != nil || resp.StatusCode != http.StatusOK {
 		fmt.Printf("An error happened invoking the put endpoint of the storage node\n")
 		fmt.Printf("%v \n", err)
 		return fmt.Errorf("HTTP error: %v", err)
 	}
+
+	// If no error, then update RTT window in monitor
+	monitor.RecordRTT(GlobalConfig.Shards[shardID].Primary, rtt)
+
     return nil
 }
 
@@ -132,7 +141,10 @@ func Get(s *Session, key string, sla *consistency.SLA) (string, ConditionCode, e
 		shardID := determineShardForKey(key)
 		url := fmt.Sprintf("http://%s/get?key=%s", GlobalConfig.Shards[shardID].Primary, key)
 
+		start := time.Now()
 		resp, err := http.Get(url)
+		rtt := time.Since(start)
+
 		if err != nil || resp.StatusCode != http.StatusOK {
 			fmt.Printf("Error invoking the storage node's GET endpoint\n")
 			return "", CC_ConsistencyNotMet, fmt.Errorf("HTTP error: %v", err)
@@ -147,6 +159,15 @@ func Get(s *Session, key string, sla *consistency.SLA) (string, ConditionCode, e
 		if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 			return "", CC_ConsistencyNotMet, fmt.Errorf("error decoding response: %v", err)
 		}
+
+		// If no err, update the RTT window
+		monitor.RecordRTT(GlobalConfig.Shards[shardID].Primary, rtt)
+
+		fmt.Printf("The node key in the monitor: %v\n", GlobalConfig.Shards[shardID].Primary)
+		fmt.Printf("RTT's are %v\n", monitor.GetRTTs(GlobalConfig.Shards[shardID].Primary))
+		
+
+		// TODO: handle the condition code [high timestamp] in the monitor as well
 
 		return response.Value, CC_Success, nil
 	}

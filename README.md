@@ -23,6 +23,31 @@ To run the basic key-value store on multiple nodes, follow these steps:
 
 **ToDo's** 
 
-- [ ] Imlement the client-side API + Consistency SLA's
-- [ ] Remaking Figure 3 in the paper [different consistency levels among 4 sites]: the goal is to observe the latency difference based on the consistency level
+- [ ] Make Redis persistant on nodes so that we hit disk and not just memory
+- [x] Implement replication agents [pull-based]
+   - double-check it works fine
+- [ ] Implement the client-side API 
+- [ ] Comeplete the implementation of Get function
+   - [ ] Handling the condition code + unavailable codes
+- [x] Implement different consistencies and the SLA definitions
 - [ ] Session-Monitoring functions in the client-side API
+
+- [ ] Recreating Figure 3 [ Avergae Observed Latency for Consistency Choices ]
+   - takeaway: latency differs in different consistency levels + with a single consistency choice latency varies client by client
+
+- [ ]Implementing Monitors [co-located with clients]
+   - [x] Monitoring the RTT + RTT sliding window
+   - [ ] Monitoring the timestamp lag of the nodes
+
+- [ ] Implement Storage metadata on each storage node
+
+- [ ] Implement min_acceptable read timestamp for different consistency levels
+
+- [ ] Implement the server selection algorithm
+   - [ ] PNodeCons
+   - [ ] PNodeLat
+   - [ ] PNodeSLA
+
+Eval:
+- [ ] Test different replication windows and utility changes
+- [ ] Size of the sliding window impacts reactivity to the load or server responsiveness
