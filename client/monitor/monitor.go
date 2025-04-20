@@ -95,3 +95,82 @@ func GetHTS(node string) int64 {
 	}
 	return *ptr
 }
+
+func GetAvgRTT(node string) time.Duration {
+	globalMonitor.mu.RLock()
+	window, exists := globalMonitor.nodeRTTs[node]
+	globalMonitor.mu.RUnlock()
+	if !exists {
+		return 0 // Or some sentinel value like time.Duration(-1)
+	}
+
+	window.mu.Lock()
+	defer window.mu.Unlock()
+
+	var total time.Duration
+	var count int
+
+	if window.full {
+		for _, sample := range window.samples {
+			total += sample
+		}
+		count = maxSamples
+	} else {
+		for i := 0; i < window.index; i++ {
+			total += window.samples[i]
+		}
+		count = window.index
+	}
+
+	if count == 0 {
+		return 0
+	}
+	return total / time.Duration(count)
+}
+
+// TODO: this maybe won't capture the recent changes/increases to the RTT's
+func ProbabilityOfRTTBelow(node string, threshold time.Duration, optimistic bool) float64 {
+	globalMonitor.mu.RLock()
+	window, exists := globalMonitor.nodeRTTs[node]
+	globalMonitor.mu.RUnlock()
+
+	// if RTT for the node doesn't exists yet, assume it is fast
+	if !exists {
+		if optimistic {
+			return 1.0
+		}
+
+		// if no RTT avaialable and we are not optimistic, return 0
+		return 0.0
+	}
+
+	window.mu.Lock()
+	defer window.mu.Unlock()
+
+	var total int
+	var count int
+
+	samples := window.samples
+	limit := maxSamples
+	if !window.full {
+		limit = window.index
+	}
+
+	for i := 0; i < limit; i++ {
+		if samples[i] <= threshold {
+			count++
+		}
+		total++
+	}
+
+	// If no RTT in the window: same as above
+	if total == 0 {
+		if optimistic {
+			return 1.0
+		}
+		return 0.0
+	}
+
+	// Return the proportion of RTT's less than threshold over all exisiting RTT's
+	return float64(count) / float64(total)
+}

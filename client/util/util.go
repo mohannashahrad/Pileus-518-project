@@ -24,6 +24,22 @@ type rawSLAFile struct {
 	SubSLAs []rawSubSLA `json:"subSLAs"`
 }
 
+type Shard struct {
+	RangeStart int `json:"start"`
+	RangeEnd   int `json:"end"`
+	Primary	string `json:"primary"` 
+}
+
+type StorageNode struct {
+	Id string `json:"nodeId"`
+	Address   string `json:"nodeAddress"`
+}
+
+type ReplicationConfig struct {
+	Nodes  []StorageNode `json:"nodes"`
+	Shards []Shard `json:"shards"`
+}
+
 func LoadSLAFromFile(path string, id string) (consistency.SLA, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {

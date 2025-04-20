@@ -3,11 +3,12 @@ package api
 import (
 	"client/consistency"
 	"client/monitor"
+	"client/util"
+	"client/optimizer"
 	// "errors"
 	"fmt"
 	"net/http"
 	"bytes"
-	// "io/ioutil"
 	"encoding/json"
 	"os"
 	"strconv"
@@ -51,17 +52,7 @@ func (cc ConditionCode) String() string {
 	}
 }
 
-type Shard struct {
-	RangeStart int `json:"start"`
-	RangeEnd   int `json:"end"`
-	Primary	string `json:"primary"` 
-}
-
-type Config struct {
-	Shards []Shard `json:"shards"`
-}
-
-var GlobalConfig *Config
+var GlobalConfig *util.ReplicationConfig
 
 // =====================
 // Core API Methods
@@ -117,8 +108,6 @@ func Put(s *Session, key string, value string) error {
 }
 
 // TODO: implement "Condition Code", how to know which sla was met!
-// TODO: here the probablisitic optimization should be implented
-// TODO: should I pass sla by pointer?
 func Get(s *Session, key string, sla *consistency.SLA) (string, ConditionCode, error) {
 	// Determine SLA for the op: use session default if not specified by input
 	activeSLA := s.DefaultSLA
@@ -142,7 +131,8 @@ func Get(s *Session, key string, sla *consistency.SLA) (string, ConditionCode, e
 	}
 
 	// Case 2: Find the storage node that maximizes the utility
-	server := optimizer.FindNodeToRead(key, activeSLA)
+	storageNode, chosenSubSLA := optimizer.FindNodeToRead(key, &activeSLA)
+	fmt.Printf("chosen storage node is %v and chosen subsla is %v\n", storageNode, chosenSubSLA)
 
 	// TODO: Issue the read to the selected server
 
@@ -161,13 +151,17 @@ func LoadReplicationConfig(path string) error {
 	if err != nil {
 		return err
 	}
-	var config Config
+	var config util.ReplicationConfig
 	err = json.Unmarshal(data, &config)
 	if err != nil {
 		return err
 	}
 
 	GlobalConfig = &config
+
+	// Also udpate the optimizer with the same config
+	optimizer.Init(GlobalConfig)
+
 	return nil 
 }
 

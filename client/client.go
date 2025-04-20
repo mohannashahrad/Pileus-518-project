@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"time"
+	// "time"
 	// "math/rand"
 	// "github.com/google/uuid"
 	"client/consistency"
@@ -79,25 +79,25 @@ func password_checking_putWorkload(count int) error {
     // }
 
 	// simple test of strong reads [which should go to the primary]
-	api.Put(s, "0001", "test1")
+	// api.Put(s, "0001", "test1")
 
-	get_sla := GlobalSLAs["strong_sla"]
-	val, cc, err := api.Get(s, "0001", &get_sla)
-	if err != nil {
-		fmt.Printf("Get error for key %s: %v (CC: %v)\n", "0001", err, cc)
-	} else {
-		fmt.Printf("Read key=%s, value=%s, CC=%v\n", "0001", string(val), cc)
-	}
+	// get_sla := GlobalSLAs["strong_sla"]
+	// val, cc, err := api.Get(s, "0001", &get_sla)
+	// if err != nil {
+	// 	fmt.Printf("Get error for key %s: %v (CC: %v)\n", "0001", err, cc)
+	// } else {
+	// 	fmt.Printf("Read key=%s, value=%s, CC=%v\n", "0001", string(val), cc)
+	// }
 
-	time.Sleep(1 * time.Second)
-	api.Put(s, "0002", "test2")
+	// time.Sleep(1 * time.Second)
+	// api.Put(s, "0002", "test2")
 
-	val, cc, err = api.Get(s, "0001", &get_sla)
-	if err != nil {
-		fmt.Printf("Get error for key %s: %v (CC: %v)\n", "0001", err, cc)
-	} else {
-		fmt.Printf("Read key=%s, value=%s, CC=%v\n", "0001", string(val), cc)
-	}
+	// val, cc, err = api.Get(s, "0001", &get_sla)
+	// if err != nil {
+	// 	fmt.Printf("Get error for key %s: %v (CC: %v)\n", "0001", err, cc)
+	// } else {
+	// 	fmt.Printf("Read key=%s, value=%s, CC=%v\n", "0001", string(val), cc)
+	// }
 	
 	// Terminate the session
 	api.EndSession(s)

@@ -146,11 +146,11 @@ func handleGet(w http.ResponseWriter, r *http.Request) {
 
 	// Find HighTS of the shard for the requested key [should either be the primary shard or the secondary shard]
 	var shardHighTS int64
-	if primaryShard.RangeStart <= numericKey && numericKey < primaryShard.RangeEnd {
+	if primaryShard.RangeStart <= numericKey && numericKey <= primaryShard.RangeEnd {
 		shardHighTS = primaryShard.HighTS
 	} else {
 		for _, shard := range secondaryShards {
-			if shard.RangeStart <= numericKey && numericKey < shard.RangeEnd {
+			if shard.RangeStart <= numericKey && numericKey <= shard.RangeEnd {
 				shardHighTS = shard.HighTS
 				break
 			}

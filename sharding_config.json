@@ -1,4 +1,14 @@
 {
+  "nodes": [
+    {
+      "nodeId": "clem0",
+      "nodeAddress": "130.127.133.5:8080"
+    }, 
+    {
+      "nodeId": "clem1",
+      "nodeAddress": "130.127.133.240:8080"
+    }
+  ], 
   "shards": [
     {
       "id": 0,
