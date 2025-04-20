@@ -7,13 +7,14 @@ import (
 )
 
 var nodes = map[string]string{
-	"US_EAST": "http://<IP_US_EAST>:8080",
-	"US_WEST": "http://<IP_US_WEST>:8080",
-	"ASIA":    "http://<IP_ASIA>:8080",
-	"EU":      "http://<IP_EU>:8080",
+	"US_EAST": "http://18.207.114.130:8080",
+	"US_WEST": "http://13.52.221.108:8080",
+	"ASIA":    "http://54.249.77.47:8080",
+	"EU":      "http://3.71.77.125:8080",
 }
 
-const currentNode = "US_EAST" // Change this on each EC2 instance
+// Change this on each EC2 instance
+const currentNode = "ASIA" 
 const pingCount = 5
 
 func measureRTT(url string) (float64, error) {
