@@ -14,24 +14,21 @@ type Record struct {
 	Timestamp int64
 }
 
+// All data shards that the node is primary or secondary for are stored as shards
 type Shard struct {
+	ShardId    int `json:"id"`
 	RangeStart int `json:"start"`
 	RangeEnd   int `json:"end"`
 	Primary	string `json:"primary"` 
 	PrimaryID string `json:"primaryID"` 
 	Secondaries []string `json:"secondaryIDs"`
+	AmIPrimary bool
+	AmISecondary bool
+	HighTS  int64 // highest known timestamp from this shard
 }
 
 type Config struct {
 	Shards []Shard `json:"shards"`
-}
-
-// Struct for tracking the primary replicas of the shards, that a storage node is a secondary replica of
-type SecondaryShardInfo struct {
-	Primary   string
-	RangeStart  int
-	RangeEnd    int
-	HighTS      int64 // highest known timestamp from this shard
 }
 
 var keyNumericRegex = regexp.MustCompile(`\d+`)

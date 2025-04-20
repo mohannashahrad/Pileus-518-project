@@ -18,6 +18,7 @@ type VersionedValue struct {
 var defaultTimeout = 2 * time.Second
 
 // Client is a gokv.Store implementation for Redis.
+// NOTE: for now assuming that a storage node is primary for only 1 shard
 type Client struct {
 	c       *redis.Client
 	timeOut time.Duration
@@ -29,19 +30,21 @@ type Client struct {
 // Set stores the given value for the given key.(The key must not be "" and the value must not be nil.)
 // Values are automatically marshalled to JSON or gob (depending on the configuration).
 // It also checks weather the node is the primary for the given key
-func (c Client) Set(k string, v any) error {
+
+// Returns: object timestamp + any errors
+func (c Client) Set(k string, v any) (obj_ts int64, err error) {
 	if err := util.CheckKeyAndValue(k, v); err != nil {
-		return err
+		return -1, err
 	}
 
 	// Check if the node is primary for the given key
 	numericKey, err := util.KeyToInt(k)
 	if err != nil {
-		return fmt.Errorf("invalid key format: %v", err)
+		return -1, fmt.Errorf("invalid key format: %v", err)
 	}
 
 	if numericKey < c.ShardRangeStart || numericKey > c.ShardRangeEnd {
-		return fmt.Errorf("key '%s' with numeric value %d is out of shard range [%d, %d]",
+		return -1, fmt.Errorf("key '%s' with numeric value %d is out of shard range [%d, %d]",
 			k, numericKey, c.ShardRangeStart, c.ShardRangeEnd)
 	}
 
@@ -50,9 +53,11 @@ func (c Client) Set(k string, v any) error {
 		Timestamp: time.Now().UTC().UnixNano() / int64(time.Millisecond),
 	}
 
+	// fmt.Println("The data being set has the timestamp %d\n",record.Timestamp)
+
 	data, err := c.codec.Marshal(record)
 	if err != nil {
-		return err
+		return -1, err
 	}
 
 	tctx, cancel := context.WithTimeout(context.Background(), c.timeOut)
@@ -60,9 +65,9 @@ func (c Client) Set(k string, v any) error {
 
 	err = c.c.Set(tctx, k, string(data), 0).Err()
 	if err != nil {
-		return err
+		return -1, err
 	}
-	return nil
+	return record.Timestamp, nil
 }
 
 // This function is only called during the replication phase, where secondaries pull data from primaries
@@ -83,12 +88,8 @@ func (c Client) SetVersioned(k string, vv VersionedValue) error {
 	return c.c.Set(tctx, k, string(data), 0).Err()
 }
 
-// Get retrieves the stored value for the given key.
-// You need to pass a pointer to the value, so in case of a struct
-// the automatic unmarshalling can populate the fields of the object
-// that v points to with the values of the retrieved object's values.
-// If no value is found it returns (false, nil).
-// The key must not be "" and the pointer must not be nil.
+// Get retrieves the stored value for the given key. If no value is found it returns (false, nil).
+// Get should also return: High TS of the node, and the timestamp of the object as well
 func (c Client) Get(k string, v any) (found bool, err error) {
 	if err := util.CheckKeyAndValue(k, v); err != nil {
 		return false, err
@@ -123,7 +124,8 @@ func (c Client) Delete(k string) error {
 	return err
 }
 
-func (c *Client) ScanUpdatedKeys(since time.Time) []util.Record {
+// TODO: this should be more efficient
+func (c *Client) ScanUpdatedKeys(since time.Time, startKey int, endKey int) []util.Record {
 	var updates []util.Record
 
 	ctx, cancel := context.WithTimeout(context.Background(), c.timeOut)
@@ -132,6 +134,16 @@ func (c *Client) ScanUpdatedKeys(since time.Time) []util.Record {
 	iter := c.c.Scan(ctx, 0, "*", 0).Iterator()
 	for iter.Next(ctx) {
 		key := iter.Val()
+
+		numericKey, err := util.KeyToInt(key)
+		if err != nil {
+			continue 
+		}
+
+		// Skip keys not in the shard range
+		if numericKey < startKey || numericKey >= endKey {
+			continue 
+		}
 
 		var vv VersionedValue
 		found, err := c.Get(key, &vv)

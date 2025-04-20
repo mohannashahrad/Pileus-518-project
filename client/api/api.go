@@ -126,7 +126,7 @@ func Get(s *Session, key string, sla *consistency.SLA) (string, ConditionCode, e
 		activeSLA = *sla
 	}
 
-	// Case 1: If all SubSLAs require Strong consistency, contact the primary directly
+	// Edge Case 1: If all SubSLAs require Strong consistency, contact the primary directly
 	allStrong := true
 	for _, sub := range activeSLA.SubSLAs {
 		if sub.Consistency != consistency.Strong {
@@ -135,46 +135,18 @@ func Get(s *Session, key string, sla *consistency.SLA) (string, ConditionCode, e
 		}
 	}
 
+	// If strong consistency => Always route to Primary
 	if allStrong {
-		fmt.Printf("Contacting the primary for the Get operation\n")
-
-		shardID := determineShardForKey(key)
-		url := fmt.Sprintf("http://%s/get?key=%s", GlobalConfig.Shards[shardID].Primary, key)
-
-		start := time.Now()
-		resp, err := http.Get(url)
-		rtt := time.Since(start)
-
-		if err != nil || resp.StatusCode != http.StatusOK {
-			fmt.Printf("Error invoking the storage node's GET endpoint\n")
-			return "", CC_ConsistencyNotMet, fmt.Errorf("HTTP error: %v", err)
-		}
-		defer resp.Body.Close()
-
-		var response struct {
-			Key       string      `json:"key"`
-			Value     string `json:"value"`
-			Timestamp int64       `json:"timestamp"`
-		}
-		if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-			return "", CC_ConsistencyNotMet, fmt.Errorf("error decoding response: %v", err)
-		}
-
-		// If no err, update the RTT window
-		monitor.RecordRTT(GlobalConfig.Shards[shardID].Primary, rtt)
-
-		fmt.Printf("The node key in the monitor: %v\n", GlobalConfig.Shards[shardID].Primary)
-		fmt.Printf("RTT's are %v\n", monitor.GetRTTs(GlobalConfig.Shards[shardID].Primary))
-		
-
-		// TODO: handle the condition code [high timestamp] in the monitor as well
-
-		return response.Value, CC_Success, nil
+		// TODO: here we might need to return which sub-SLA worked [if multiple strong sub-SLA's exist with different latencies]
+		return readFromPrimary(key)
 	}
 
-	// TODO: SLA-based selection logic
+	// Case 2: Find the storage node that maximizes the utility
+	server := optimizer.FindNodeToRead(key, activeSLA)
 
-	// Case 2: If all SubSLAs are at eventual consistency, go to the closest replica
+	// TODO: Issue the read to the selected server
+
+	// TODO: handle the condition code [which consistency actually happened]
 
 	return "", CC_SessionError, fmt.Errorf("non-Strong SLA logic not implemented yet")
 }
@@ -216,7 +188,46 @@ func determineShardForKey(string_key string) int {
     panic(fmt.Sprintf("No shard found for key: %d", key))
 }
 
-// TODO: this should be called by the get endpoint per
-	// monitoring data of the latency and high timestamps of the replicas
-	// run the probablistic alg in the paper [Figure 8]
-// func optimizer()
+func readFromPrimary(key string) (string, ConditionCode, error) {
+	fmt.Printf("Contacting the primary for the Get operation\n")
+
+	shardID := determineShardForKey(key)
+	url := fmt.Sprintf("http://%s/get?key=%s", GlobalConfig.Shards[shardID].Primary, key)
+
+	start := time.Now()
+	resp, err := http.Get(url)
+	rtt := time.Since(start)
+
+	if err != nil || resp.StatusCode != http.StatusOK {
+		fmt.Printf("Error invoking the storage node's GET endpoint\n")
+		return "", CC_ConsistencyNotMet, fmt.Errorf("HTTP error: %v", err)
+	}
+	defer resp.Body.Close()
+
+	var response struct {
+		Key       string    `json:"key"`
+		Value     string 	`json:"value"`
+		Timestamp int64     `json:"timestamp"`
+		HighTS 	  int64 	`json:"highTS"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return "", CC_ConsistencyNotMet, fmt.Errorf("error decoding response: %v", err)
+	}
+
+	// If no err, update the RTT window
+	monitor.RecordRTT(GlobalConfig.Shards[shardID].Primary, rtt)
+
+	// Extracting the timestamp info returned from the storage node
+	object_ts := response.Timestamp
+	node_high_ts := response.HighTS
+
+	fmt.Printf("Returned Object TS is: %d\n", object_ts)
+	fmt.Printf("HighTS of the node responding is: %d\n", node_high_ts)
+	fmt.Printf("The node key in the monitor: %v\n", GlobalConfig.Shards[shardID].Primary)
+	fmt.Printf("RTT's are %v\n", monitor.GetRTTs(GlobalConfig.Shards[shardID].Primary))
+
+	monitor.RecordHTS(GlobalConfig.Shards[shardID].Primary, node_high_ts)
+	fmt.Printf("Monitor HTS is %v\n", monitor.GetHTS(GlobalConfig.Shards[shardID].Primary))
+	
+	return response.Value, CC_Success, nil
+}

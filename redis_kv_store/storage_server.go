@@ -16,7 +16,8 @@ var localStore redis.Client
 var storageID string
 var shard_range_start int
 var shard_range_end int
-var secondaryShards []util.SecondaryShardInfo
+var primaryShard util.Shard		// Note: Assumption that each storage node is primary for 1 shard for now
+var secondaryShards []util.Shard
 
 // How to invoke: go run storage_server.go <storage_id>
 func main() {
@@ -27,8 +28,9 @@ func main() {
 	storageID = os.Args[1]
 	fmt.Println("Starting storage node with ID:", storageID)
 
-	// Load the key/shard ranges that this node is primary for (using storageID)
-	setShardRange()
+	// Load the key/shard ranges that this node is primary/secondary for (using storageID)
+	// Note: I think in the paper's evaluation only one shard is assumed
+	initShards()
 
 	opts := redis.DefaultOptions
 	opts.Address = "localhost:6379" // connect to local Redis
@@ -50,7 +52,7 @@ func main() {
 	http.ListenAndServe(":8080", nil)
 }
 
-func setShardRange() {
+func initShards() {
 	var err error
 
 	conf, err := util.LoadConfig("../sharding_config.json")
@@ -61,20 +63,23 @@ func setShardRange() {
 	for _, shard := range conf.Shards {
     
 		// Find the shard that the storage node is the primary for
+		// TODO: for this version, we assume that each node is the primary for 1 shard
         if storageID == shard.PrimaryID {
 			shard_range_start = shard.RangeStart
 			shard_range_end = shard.RangeEnd
+			shard.AmIPrimary = true
+			shard.AmISecondary = false
+			shard.HighTS= 0.0
+
+			primaryShard = shard
         }
 
 		// Also find the shards that the storage node is secondary for
 		if util.Contains(shard.Secondaries, storageID) {
-
-			secondaryShards = append(secondaryShards, util.SecondaryShardInfo{
-				Primary:  shard.Primary,
-				RangeStart: shard.RangeStart,
-				RangeEnd:   shard.RangeEnd,
-				HighTS: 0,
-			})
+			shard.AmIPrimary = false
+			shard.AmISecondary = true
+			shard.HighTS= 0.0
+			secondaryShards = append(secondaryShards, shard)
 		}
     }
 
@@ -82,7 +87,8 @@ func setShardRange() {
 	fmt.Printf("Secondary shards: %+v\n", secondaryShards)
 
 	for _, shard := range secondaryShards {
-		go func(shard util.SecondaryShardInfo) {
+		go func(shard util.Shard) {
+			// TODO: the frequency of the replication pulling should be tuned
 			ticker := time.NewTicker(5 * time.Second)
 			defer ticker.Stop()
 	
@@ -104,19 +110,31 @@ func handleSet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// The store.set call checks wwather put for the key is allowed on this node [e.g. if the node is primary for the shard]
-	err := localStore.Set(rec.Key, rec.Value)
+	obj_ts, err := localStore.Set(rec.Key, rec.Value)
+
+	// Update the shard HighTS based on the TS of the value just written [when a set hapens for a key in the primary storage node]
+	primaryShard.HighTS = obj_ts
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	fmt.Println("Primary shard is updated to %v\n:", primaryShard)
 	w.WriteHeader(http.StatusOK)
 }
 
 func handleGet(w http.ResponseWriter, r *http.Request) {
 	key := r.URL.Query().Get("key")
+
+	numericKey, err := util.KeyToInt(key)
+	if err != nil {
+		return 
+	}
 	
 	var record redis.VersionedValue
 	found, err := localStore.Get(key, &record)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -125,15 +143,32 @@ func handleGet(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+
+	// Find HighTS of the shard for the requested key [should either be the primary shard or the secondary shard]
+	var shardHighTS int64
+	if primaryShard.RangeStart <= numericKey && numericKey < primaryShard.RangeEnd {
+		shardHighTS = primaryShard.HighTS
+	} else {
+		for _, shard := range secondaryShards {
+			if shard.RangeStart <= numericKey && numericKey < shard.RangeEnd {
+				shardHighTS = shard.HighTS
+				break
+			}
+		}
+	}
+
 	
+	// Return: Key,Value + Obj timestamp + Shard/Node High Timestamp
 	response := struct {
 		Key       string `json:"key"`
 		Value     any    `json:"value"`
 		Timestamp int64  `json:"timestamp"`
+		HighTS	  int64  `json:"highTS"`
 	}{
 		Key:       key,
 		Value:     record.Value,
 		Timestamp: record.Timestamp,
+		HighTS: shardHighTS,
 	}
 
 	json.NewEncoder(w).Encode(response)
@@ -143,25 +178,62 @@ func handleGet(w http.ResponseWriter, r *http.Request) {
 // only invoked for shards that the current storage node is primary for
 func replicationHandler(w http.ResponseWriter, r *http.Request) {
 	sinceStr := r.URL.Query().Get("since")
-	sinceTS, err := strconv.ParseInt(sinceStr, 10, 64) // timestamp in ms
+	startKeyStr := r.URL.Query().Get("start")
+	endKeyStr := r.URL.Query().Get("end")
+
+	sinceTS, err := strconv.ParseInt(sinceStr, 10, 64)
 	if err != nil {
 		http.Error(w, "Invalid timestamp", http.StatusBadRequest)
 		return
 	}
-
 	sinceTime := time.UnixMilli(sinceTS)
+
+	startKey, err := strconv.Atoi(startKeyStr)
+	if err != nil {
+		http.Error(w, "Invalid start range", http.StatusBadRequest)
+		return
+	}
+
+	endKey, err := strconv.Atoi(endKeyStr)
+	if err != nil {
+		http.Error(w, "Invalid end range", http.StatusBadRequest)
+		return
+	}
 
 	// scan the shard for the timestamps > sinceTime
 	// TODO: this should be improved, right now very expensive
-	updates := localStore.ScanUpdatedKeys(sinceTime)
+	updates := localStore.ScanUpdatedKeys(sinceTime, startKey, endKey)
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(updates)
 
+	type Response struct {
+		Updates []util.Record `json:"updates"`
+		Version int64    `json:"version"`
+	}
+
+	var resp Response
+
+	// If no updates, still share the HTS of the shard
+	// NOTE: this is based on the assumption that each node is primary for a shard for now [and this endpoint is only called regarding the same shard that the current node is primary for]
+	if len(updates) == 0 {
+		resp = Response{
+			Updates: nil,
+			Version: primaryShard.HighTS, // TODO: according to 4.3, should this be the node's timestamp itself?
+		}
+	} else {
+		resp = Response{
+			Updates: updates,
+			Version: -1,
+		}
+	}
+
+	if err := json.NewEncoder(w).Encode(resp); err != nil {
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+	}
 }
 
-func pullFromPrimary(shard *util.SecondaryShardInfo) error {
-	url := fmt.Sprintf("http://%s/replicate?since=%d", shard.Primary, shard.HighTS)
+func pullFromPrimary(shard *util.Shard) error {
+	url := fmt.Sprintf("http://%s/replicate?since=%d&start=%d&end=%d", shard.HighTS, shard.RangeStart, shard.RangeEnd)
 	fmt.Println(url)
 
 	resp, err := http.Get(url)
@@ -176,35 +248,47 @@ func pullFromPrimary(shard *util.SecondaryShardInfo) error {
 	}
 
 	// Assuming that key and values are being returned with timestamps from the shard primary
-	var updates []struct {
-		Key       string `json:"key"`
-		Value     string `json:"value"`
-		Timestamp int64  `json:"timestamp"`
+	var response struct {
+		Updates     []struct {
+			Key       string `json:"key"`
+			Value     string `json:"value"`
+			Timestamp int64  `json:"timestamp"`
+		} `json:"updates"`
+		Version int64 `json:"version"` 
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&updates); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 		return err
 	}
 
-	// Apply the updates and HS of the shard
-	for _, update := range updates {
-		fmt.Printf("update recieved is %v", update)
+	// If there are no updates, then just update the HighTS
+	if len(response.Updates) == 0 {
+		shard.HighTS = response.Version
+	} else {
+		// Apply the updates and HS of the shard
+		for _, update := range response.Updates {
+			fmt.Printf("update recieved is %v", update)
 
-		vv := redis.VersionedValue{
-			Value:     update.Value,
-			Timestamp: update.Timestamp,
-		}
-		err := localStore.SetVersioned(update.Key, vv)
-		if err != nil {
-			fmt.Printf("Error setting key %s: %v\n", update.Key, err)
-			continue
-		}
-	
-		if update.Timestamp > shard.HighTS {
-			fmt.Printf("Updating the shard HighTs to %d\n", update.Timestamp)
-			shard.HighTS = update.Timestamp
+			vv := redis.VersionedValue{
+				Value:     update.Value,
+				Timestamp: update.Timestamp,
+			}
+			err := localStore.SetVersioned(update.Key, vv)
+			if err != nil {
+				fmt.Printf("Error setting key %s: %v\n", update.Key, err)
+				continue
+			}
+		
+			// Updating the shard HighTS
+			if update.Timestamp > shard.HighTS {
+				fmt.Printf("Updating the shard HighTs to %d\n", update.Timestamp)
+				shard.HighTS = update.Timestamp
+			}
 		}
 	}
 
 	return nil
 }
+
+// TODO: change the pull mechanism so that it's per shard
+// for each shard then also share the high timestamp
