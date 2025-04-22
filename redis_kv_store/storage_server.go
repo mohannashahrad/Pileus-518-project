@@ -109,19 +109,27 @@ func handleSet(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	// The store.set call checks wwather put for the key is allowed on this node [e.g. if the node is primary for the shard]
+
+	// Attempt to store the key-value pair
 	obj_ts, err := localStore.Set(rec.Key, rec.Value)
 
-	// Update the shard HighTS based on the TS of the value just written [when a set hapens for a key in the primary storage node]
-	primaryShard.HighTS = obj_ts
+	// Update HighTS if successful
+	if err == nil {
+		primaryShard.HighTS = obj_ts
+		fmt.Println("Primary shard is updated to %v\n:", primaryShard)
+	}
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	fmt.Println("Primary shard is updated to %v\n:", primaryShard)
-	w.WriteHeader(http.StatusOK)
+	response := map[string]int64{
+		"put_timestamp": obj_ts,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
 
 func handleGet(w http.ResponseWriter, r *http.Request) {

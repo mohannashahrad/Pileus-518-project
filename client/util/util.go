@@ -40,6 +40,14 @@ type ReplicationConfig struct {
 	Shards []Shard `json:"shards"`
 }
 
+// Session should hold state for read-my-writes and monotonic consistency levels
+// TODO: Add session-specific state for monotonic reads, etc.
+type Session struct {
+	DefaultSLA consistency.SLA
+	ObjectsWritten map[string]int64
+	ObjectsRead map[string]int64
+}
+
 func LoadSLAFromFile(path string, id string) (consistency.SLA, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {

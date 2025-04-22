@@ -16,13 +16,6 @@ import (
 	// "sync"
 )
 
-// TODO: Do we even care about the notion of "Tables" here? [what if we use a pute key-value store]
-
-type Session struct {
-	DefaultSLA consistency.SLA
-	// TODO: Add session-specific state for monotonic reads, etc.
-}
-
 // A condition code returned by Get:
 // Indicates how well the SLA was met, including the consistency of the data.
 type ConditionCode int
@@ -60,13 +53,16 @@ var GlobalConfig *util.ReplicationConfig
 
 // TODO: The session monitoring functions should be implemented
 // Default: Each session starts with a default SLA, but the Get reqs in the session could specify their SLA's also 
-func BeginSession(sla consistency.SLA) *Session {
-	return &Session{
+func BeginSession(sla consistency.SLA) *util.Session {
+	return &util.Session{
 		DefaultSLA: sla,
+		ObjectsWritten:	make(map[string]int64),
+		ObjectsRead:	make(map[string]int64),
 	}
 }
 
-func EndSession(s *Session) {
+// TODO: how should it be implemented?
+func EndSession(s *util.Session) {
 	// Clean up state
 }
 
@@ -77,7 +73,8 @@ type Record struct {
     Value string `json:"value"`
 }
 
-func Put(s *Session, key string, value string) error {
+// This will update session metadata on write timestamps
+func Put(s *util.Session, key string, value string) error {
 
 	fmt.Printf("Entered the api Put function\n")
     shardID := determineShardForKey(key)
@@ -94,21 +91,36 @@ func Put(s *Session, key string, value string) error {
 	start := time.Now()
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(recordJson))
 	rtt := time.Since(start)
-
+	
 	if err != nil || resp.StatusCode != http.StatusOK {
 		fmt.Printf("An error happened invoking the put endpoint of the storage node\n")
 		fmt.Printf("%v \n", err)
 		return fmt.Errorf("HTTP error: %v", err)
 	}
 
+	defer resp.Body.Close()
+
+	// TODO: instead of a map, why not a single timestamp
+	var result struct {
+		SetTimestamp int64 `json:"put_timestamp"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		fmt.Printf("Failed to decode response: %v", err)
+		return fmt.Errorf("Failed to decode response: %v", err)
+	}
+
 	// If no error, then update RTT window in monitor
 	monitor.RecordRTT(GlobalConfig.Shards[shardID].Primary, rtt)
+
+	// Update write timestamp of the session
+	fmt.Printf("Set succeeded. Updating session write timestamp: %d\n", result.SetTimestamp)
+	s.ObjectsWritten[key] = result.SetTimestamp          
 
     return nil
 }
 
 // TODO: implement "Condition Code", how to know which sla was met!
-func Get(s *Session, key string, sla *consistency.SLA) (string, ConditionCode, error) {
+func Get(s *util.Session, key string, sla *consistency.SLA) (string, ConditionCode, error) {
 	// Determine SLA for the op: use session default if not specified by input
 	activeSLA := s.DefaultSLA
 	if sla != nil {
@@ -127,18 +139,25 @@ func Get(s *Session, key string, sla *consistency.SLA) (string, ConditionCode, e
 	// If strong consistency => Always route to Primary
 	if allStrong {
 		// TODO: here we might need to return which sub-SLA worked [if multiple strong sub-SLA's exist with different latencies]
-		return readFromPrimary(key)
+		val, get_timestamp, condition_code, err := readFromPrimary(key)
+
+		// Update the session's get timestamp 
+		s.ObjectsRead[key] = get_timestamp
+
+		return val, condition_code, err
+
 	}
 
 	// Case 2: Find the storage node that maximizes the utility
-	storageNode, chosenSubSLA := optimizer.FindNodeToRead(key, &activeSLA)
+	storageNode, chosenSubSLA := optimizer.FindNodeToRead(s, key, &activeSLA)
 	fmt.Printf("chosen storage node is %v and chosen subsla is %v\n", storageNode, chosenSubSLA)
 
-	// TODO: Issue the read to the selected server
+	// TODO: The chosen Sub SLA should also be returned as part of the CC maybe?
+	val, get_timestamp, condition_code, err := readFromNode(key, storageNode)
 
-	// TODO: handle the condition code [which consistency actually happened]
+	s.ObjectsRead[key] = get_timestamp
 
-	return "", CC_SessionError, fmt.Errorf("non-Strong SLA logic not implemented yet")
+	return val, condition_code, err
 }
 
 // =====================
@@ -182,7 +201,8 @@ func determineShardForKey(string_key string) int {
     panic(fmt.Sprintf("No shard found for key: %d", key))
 }
 
-func readFromPrimary(key string) (string, ConditionCode, error) {
+// TODO: move this to the optimizer flow also
+func readFromPrimary(key string) (string, int64, ConditionCode, error) {
 	fmt.Printf("Contacting the primary for the Get operation\n")
 
 	shardID := determineShardForKey(key)
@@ -194,7 +214,7 @@ func readFromPrimary(key string) (string, ConditionCode, error) {
 
 	if err != nil || resp.StatusCode != http.StatusOK {
 		fmt.Printf("Error invoking the storage node's GET endpoint\n")
-		return "", CC_ConsistencyNotMet, fmt.Errorf("HTTP error: %v", err)
+		return "", -1, CC_ConsistencyNotMet, fmt.Errorf("HTTP error: %v", err)
 	}
 	defer resp.Body.Close()
 
@@ -205,7 +225,7 @@ func readFromPrimary(key string) (string, ConditionCode, error) {
 		HighTS 	  int64 	`json:"highTS"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		return "", CC_ConsistencyNotMet, fmt.Errorf("error decoding response: %v", err)
+		return "", -1, CC_ConsistencyNotMet, fmt.Errorf("error decoding response: %v", err)
 	}
 
 	// If no err, update the RTT window
@@ -223,5 +243,45 @@ func readFromPrimary(key string) (string, ConditionCode, error) {
 	monitor.RecordHTS(GlobalConfig.Shards[shardID].Primary, node_high_ts)
 	fmt.Printf("Monitor HTS is %v\n", monitor.GetHTS(GlobalConfig.Shards[shardID].Primary))
 	
-	return response.Value, CC_Success, nil
+	return response.Value, object_ts, CC_Success, nil
+}
+
+func readFromNode(key string, storageNode string) (string, int64, ConditionCode, error) {
+
+	url := fmt.Sprintf("http://%s/get?key=%s", storageNode, key)
+
+	start := time.Now()
+	resp, err := http.Get(url)
+	rtt := time.Since(start)
+
+	if err != nil || resp.StatusCode != http.StatusOK {
+		fmt.Printf("Error invoking the storage node's GET endpoint\n")
+		return "", -1, CC_ConsistencyNotMet, fmt.Errorf("HTTP error: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// TODO: here should we check the timestamp of the object to make sure consistency was met?
+	var response struct {
+		Key       string    `json:"key"`
+		Value     string 	`json:"value"`
+		Timestamp int64     `json:"timestamp"`
+		HighTS 	  int64 	`json:"highTS"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return "", -1, CC_ConsistencyNotMet, fmt.Errorf("error decoding response: %v", err)
+	}
+
+	// If no err, update the RTT window
+	monitor.RecordRTT(storageNode, rtt)
+
+	// Extracting the timestamp info returned from the storage node
+	object_ts := response.Timestamp
+	node_high_ts := response.HighTS
+
+	fmt.Printf("Returned Object TS is: %d\n", object_ts)
+	fmt.Printf("HighTS of the node responding is: %d\n", node_high_ts)
+
+	monitor.RecordHTS(storageNode, node_high_ts)
+	
+	return response.Value, object_ts, CC_Success, nil
 }

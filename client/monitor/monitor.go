@@ -91,7 +91,7 @@ func GetHTS(node string) int64 {
 
 	ptr, exists := globalMonitor.nodeHTS[node]
 	if !exists || ptr == nil {
-		return -1 // or 0, or some sentinel value
+		return 0
 	}
 	return *ptr
 }

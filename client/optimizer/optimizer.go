@@ -23,14 +23,15 @@ func Init(config *util.ReplicationConfig) {
 }
 
 // FindNodeToRead selects the node with the highest utility for the given key and SLA
-func FindNodeToRead(key string, sla *consistency.SLA) (string, consistency.SubSLA) {
+func FindNodeToRead(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA) {
 
+	fmt.Printf("entered FindNodeToRead function \n")
 	var chosenNode string
 	var chosenSubSLA consistency.SubSLA
 	maxUtility := float32(-1)
 
 	for _, sub := range sla.SubSLAs {
-		subUtility := ComputeUtilityForSubSLA(key, &sub)
+		subUtility := ComputeUtilityForSubSLA(s, key, &sub)
 
 		// TODO: handle stale nodes [when the utility is zero] -> Look at pileus code for this
 		// if subUtility.Utility <= 0 { ... }
@@ -46,12 +47,13 @@ func FindNodeToRead(key string, sla *consistency.SLA) (string, consistency.SubSL
 }
 
 // Returns the best node for a given SubSLA
-func ComputeUtilityForSubSLA(key string, sub *consistency.SubSLA) SubUtility {
+func ComputeUtilityForSubSLA(s *util.Session, key string, sub *consistency.SubSLA) SubUtility {
+	fmt.Printf("entered ComputeUtilityForSubSLA for %v\n", sub)
 	var chosen string
 	var maxProb float64 = -1
 
 	// Only filter those nodes that satisfy the consistency
-	nodes := SelectNodesForConsistency(key, sub.Consistency, sub.StalenessBound)
+	nodes := SelectNodesForConsistency(s, key, sub.Consistency, sub.StalenessBound)
 
 	// TODO: implement the RTT functions in the monitor
 	for _, node := range nodes {
@@ -78,7 +80,7 @@ func ComputeUtilityForSubSLA(key string, sub *consistency.SubSLA) SubUtility {
 }
 
 // returns nodes that can serve a given consistency requirement
-func SelectNodesForConsistency(key string, level consistency.ConsistencyLevel, bound *time.Duration) []string {
+func SelectNodesForConsistency(session *util.Session, key string, level consistency.ConsistencyLevel, bound *time.Duration) []string {
 	var selected []string
 
 	// TODO: implement the helper functions for other consistency levels below
@@ -86,8 +88,8 @@ func SelectNodesForConsistency(key string, level consistency.ConsistencyLevel, b
 		case consistency.Strong:
 			selected = append(selected, SelectNodesForStrongConsistency(key)...)
 
-		// case consistency.ReadMyWrites:
-		// 	selected = append(selected, SelectNodesForReadMyWrites(key))
+		case consistency.ReadMyWrites:
+			selected = append(selected, SelectNodesForReadMyWrites(session, key)...)
 
 		// case consistency.Bounded:
 		// 	selected = append(selected, SelectNodesForBoundedStaleness(key))
@@ -133,5 +135,57 @@ func SelectNodesForEventualConsistency(key string) []string {
 	for _, node := range replicationConfig.Nodes {
 			selected = append(selected, node.Address)
 		}
+	return selected
+}
+
+func SelectNodesForReadMyWrites(session *util.Session, key string) []string {
+	fmt.Printf("entered SelectNodesForReadMyWrites \n")
+	var selected []string
+	var minHighTS int64
+
+	// Get the last time key was written in this session
+	if ts, ok := session.ObjectsWritten[key]; ok {
+		minHighTS = ts
+	} else {
+		minHighTS = 0
+	}
+
+	fmt.Printf("minHighTS is set to %d \n", minHighTS)
+
+	numericKey, err := strconv.Atoi(key)
+	if err != nil {
+		fmt.Printf("Error: Could not convert key to numeric value.\n")
+		return selected
+	}
+
+	primary := ""
+	// Find primary for the key
+	for _, shard := range replicationConfig.Shards {
+		if numericKey >= shard.RangeStart && numericKey <= shard.RangeEnd {
+			primary = shard.Primary
+			selected = append(selected, primary)
+			break
+		}
+	}
+
+	fmt.Printf("primary %s is added to the list\n", primary)
+
+	// Consider secondaries that are sufficiently up-to-date
+	for _, node := range replicationConfig.Nodes {
+		fmt.Printf("Searching though nodes with node %v \n", node)
+		// TODO: here make sure weather we are saving addresses or ids of storage nodes
+		if node.Address == primary {
+			continue 
+		}
+
+		highTS := monitor.GetHTS(node.Address)
+		fmt.Printf("Node highTS is %d \n", highTS)
+
+		if highTS >= minHighTS {
+			selected = append(selected, node.Address)
+		}
+	}
+
+	fmt.Printf("returnung the nodes %v\n", selected)
 	return selected
 }
