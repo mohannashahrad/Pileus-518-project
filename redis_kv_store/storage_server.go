@@ -75,7 +75,6 @@ func initShards(configPath string) {
 			shard.AmIPrimary = true
 			shard.AmISecondary = false
 			shard.HighTS= 0.0
-
 			primaryShard = shard
         }
 
@@ -246,7 +245,7 @@ func replicationHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func pullFromPrimary(shard *util.Shard) error {
-	url := fmt.Sprintf("http://%s/replicate?since=%d&start=%d&end=%d", shard.HighTS, shard.RangeStart, shard.RangeEnd)
+	url := fmt.Sprintf("http://%s/replicate?since=%d&start=%d&end=%d", shard.Primary, shard.HighTS, shard.RangeStart, shard.RangeEnd)
 	fmt.Println(url)
 
 	resp, err := http.Get(url)
