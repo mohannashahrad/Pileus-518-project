@@ -22,7 +22,7 @@ func main() {
 
 	// Load the sharding config [this is done on the api-side for checking the put/get]
 	var err error
-	err = api.LoadReplicationConfig("../sharding_config.json")
+	err = api.LoadReplicationConfig("../single_shard_config.json")
 	if err != nil {
 		fmt.Printf("An error happened loading the replication configuration.\n")
 		panic(err)
@@ -88,7 +88,7 @@ func password_checking_putWorkload(count int) error {
 	api.Put(s, "0001", "test1")
 	
 	// Change this for testing purposes
-	get_sla := GlobalSLAs["read_my_write_sla"]
+	get_sla := GlobalSLAs["strong_sla"]
 
 	val, cc, err := api.Get(s, "0001", &get_sla)
 	if err != nil {

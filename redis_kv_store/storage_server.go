@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"pileus/redis"
 	"pileus/util"
+	"os/signal"
+	"syscall"
 )
 
 // each storage node is co-located with a local redis instance
@@ -52,6 +54,9 @@ func main() {
 	http.HandleFunc("/get", handleGet)
 	http.HandleFunc("/replicate", replicationHandler)
 
+	// Shutdown Signal Handler: For storing the high timestamp information (on Redis)
+	go handleShutdown()
+
 	fmt.Println("Storage node listening on :8080")
 	http.ListenAndServe(":8080", nil)
 }
@@ -74,6 +79,8 @@ func initShards(configPath string) {
 			shard_range_end = shard.RangeEnd
 			shard.AmIPrimary = true
 			shard.AmISecondary = false
+			
+			// oprimary should make sure its highTS is consistent with its local copy
 			shard.HighTS= 0.0
 			primaryShard = shard
         }
@@ -89,6 +96,13 @@ func initShards(configPath string) {
 
 	// Then set-up tasks for the secondary shards replication pulls
 	fmt.Printf("Secondary for shards: %+v\n", secondaryShards)
+
+	// Loading highTS info of the previous run,
+	// TODO: here should be an additional check that these data actually exists in the Redis as well
+	loadHighTSFromSnapshot()
+
+	fmt.Printf("Secondary shards after snapshot loading: %+v\n", secondaryShards)
+	fmt.Printf("Primary shard after snapshot loading: %+v\n", primaryShard)
 
 	for _, shard := range secondaryShards {
 		go func(shard util.Shard) {
@@ -228,11 +242,13 @@ func replicationHandler(w http.ResponseWriter, r *http.Request) {
 	// If no updates, still share the HTS of the shard
 	// NOTE: this is based on the assumption that each node is primary for a shard for now [and this endpoint is only called regarding the same shard that the current node is primary for]
 	if len(updates) == 0 {
+		fmt.Println("No updates to send just sharing the HighTS\n")
 		resp = Response{
 			Updates: nil,
 			Version: primaryShard.HighTS, // TODO: according to 4.3, should this be the node's timestamp itself?
 		}
 	} else {
+		fmt.Println("There exists updates to share with secondaries\n")
 		resp = Response{
 			Updates: updates,
 			Version: -1,
@@ -302,5 +318,59 @@ func pullFromPrimary(shard *util.Shard) error {
 	return nil
 }
 
-// TODO: change the pull mechanism so that it's per shard
-// for each shard then also share the high timestamp
+// Before shutting down, persist the shard hightimestam information
+func handleShutdown() {
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	<-sigs
+	fmt.Println("\nReceived shutdown signal. Saving HighTS to disk...")
+
+	snapshotHighTS()
+
+	os.Exit(0)
+}
+
+func snapshotHighTS() {
+	snapshot := util.ShardHighTSSnapshot{
+		Primary: primaryShard.HighTS,
+		Secondaries: make(map[int]int64),
+	}
+	for _, shard := range secondaryShards {
+		snapshot.Secondaries[shard.ShardId] = shard.HighTS
+	}
+
+	data, err := json.MarshalIndent(snapshot, "", "  ")
+	if err != nil {
+		fmt.Println("Failed to serialize HighTS:", err)
+		return
+	}
+
+	err = os.WriteFile("high_ts_snapshot.json", data, 0644)
+	if err != nil {
+		fmt.Println("Failed to write HighTS to file:", err)
+	}
+}
+
+func loadHighTSFromSnapshot() {
+	data, err := os.ReadFile("high_ts_snapshot.json")
+	if err != nil {
+		fmt.Println("No existing HighTS snapshot found.")
+		return
+	}
+
+	var snapshot util.ShardHighTSSnapshot
+	if err := json.Unmarshal(data, &snapshot); err != nil {
+		fmt.Println("Failed to parse HighTS snapshot:", err)
+		return
+	}
+
+	primaryShard.HighTS = snapshot.Primary
+
+	for i := range secondaryShards {
+		if ts, ok := snapshot.Secondaries[secondaryShards[i].ShardId]; ok {
+			secondaryShards[i].HighTS = ts
+		}
+	}
+	fmt.Println("HighTS values restored from snapshot.")
+}

@@ -31,6 +31,11 @@ type Config struct {
 	Shards []Shard `json:"shards"`
 }
 
+type ShardHighTSSnapshot struct {
+	Primary    int64            `json:"primary"`
+	Secondaries map[int]int64   `json:"secondaries"` // keyed by RangeStart
+}
+
 var keyNumericRegex = regexp.MustCompile(`\d+`)
 
 // CheckKeyAndValue returns an error if k == "" or if v == nil
