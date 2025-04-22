@@ -14,6 +14,7 @@ import (
 // each storage node is co-located with a local redis instance
 var localStore redis.Client
 var storageID string
+var configPath string
 var shard_range_start int
 var shard_range_end int
 var primaryShard util.Shard		// Note: Assumption that each storage node is primary for 1 shard for now
@@ -25,8 +26,8 @@ func main() {
 		fmt.Println("Usage: go run storage_server.go <storage-id> <replication-config-path>")
 		os.Exit(1)
 	}
-	storageID := os.Args[1]
-	configPath := os.Args[2]
+	storageID = os.Args[1]
+	configPath = os.Args[2]
 
 	fmt.Println("Starting storage node with ID:", storageID)
 	fmt.Println("Using replication config:", configPath)
@@ -56,6 +57,7 @@ func main() {
 }
 
 func initShards(configPath string) {
+
 	var err error
 
 	conf, err := util.LoadConfig(configPath)
