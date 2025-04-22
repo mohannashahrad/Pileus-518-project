@@ -1,0 +1,26 @@
+{
+  "nodes": [
+    {
+      "nodeId": "clem",
+      "nodeAddress": "130.127.133.5:8080"
+    }, 
+    {
+      "nodeId": "utah",
+      "nodeAddress": "128.110.217.110:8080"
+    }, 
+    {
+      "nodeId": "wisc",
+      "nodeAddress": "128.105.145.198:8080"
+    }
+  ], 
+  "shards": [
+    {
+      "id": 0,
+      "start": 0,
+      "end": 999,
+      "primary": "130.127.133.5:8080",
+      "primaryID": "clem",
+      "secondaryIDs": ["utah", "wisc"]
+    }
+  ]
+}
