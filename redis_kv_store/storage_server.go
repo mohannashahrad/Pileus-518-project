@@ -21,16 +21,19 @@ var secondaryShards []util.Shard
 
 // How to invoke: go run storage_server.go <storage_id>
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: go run storage.go <storage-id>")
+	if len(os.Args) < 3 {
+		fmt.Println("Usage: go run storage_server.go <storage-id> <replication-config-path>")
 		os.Exit(1)
 	}
-	storageID = os.Args[1]
+	storageID := os.Args[1]
+	configPath := os.Args[2]
+
 	fmt.Println("Starting storage node with ID:", storageID)
+	fmt.Println("Using replication config:", configPath)
 
 	// Load the key/shard ranges that this node is primary/secondary for (using storageID)
 	// Note: I think in the paper's evaluation only one shard is assumed
-	initShards()
+	initShards(configPath)
 
 	opts := redis.DefaultOptions
 	opts.Address = "localhost:6379" // connect to local Redis
@@ -52,10 +55,10 @@ func main() {
 	http.ListenAndServe(":8080", nil)
 }
 
-func initShards() {
+func initShards(configPath string) {
 	var err error
 
-	conf, err := util.LoadConfig("../sharding_config.json")
+	conf, err := util.LoadConfig(configPath)
 	if err != nil {
 		panic(err)
 	}
@@ -84,7 +87,7 @@ func initShards() {
     }
 
 	// Then set-up tasks for the secondary shards replication pulls
-	fmt.Printf("Secondary shards: %+v\n", secondaryShards)
+	fmt.Printf("Secondary for shards: %+v\n", secondaryShards)
 
 	for _, shard := range secondaryShards {
 		go func(shard util.Shard) {
