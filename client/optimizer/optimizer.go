@@ -23,16 +23,20 @@ func Init(config *util.ReplicationConfig) {
 }
 
 // FindNodeToRead selects the node with the highest utility for the given key and SLA
-func FindNodeToRead(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA) {
+// The last return value is the list of min_read_timestamp for all sub_sla's [used for utility calculation] 
+func FindNodeToRead(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, []int64) {
 
 	fmt.Printf("entered FindNodeToRead function \n")
 	var chosenNode string
 	var chosenSubSLA consistency.SubSLA
+	var minTSPerSubSLA []int64
+
 	maxUtility := float32(-1)
 
 	for _, sub := range sla.SubSLAs {
-		subUtility := ComputeUtilityForSubSLA(s, key, &sub)
+		subUtility, minReadTS := ComputeUtilityForSubSLA(s, key, &sub)
 		fmt.Println("SubUtility is %v\n", subUtility)
+		minTSPerSubSLA = append(minTSPerSubSLA, minReadTS)
 
 		// TODO: handle stale nodes [when the utility is zero] -> Look at pileus code for this
 		// if subUtility.Utility <= 0 { ... }
@@ -44,17 +48,18 @@ func FindNodeToRead(s *util.Session, key string, sla *consistency.SLA) (string, 
 		}
 	}
 
-	return chosenNode, chosenSubSLA
+	return chosenNode, chosenSubSLA, minTSPerSubSLA
 }
 
 // Returns the best node for a given SubSLA
-func ComputeUtilityForSubSLA(s *util.Session, key string, sub *consistency.SubSLA) SubUtility {
+func ComputeUtilityForSubSLA(s *util.Session, key string, sub *consistency.SubSLA) (SubUtility, int64) {
+
 	fmt.Printf("entered ComputeUtilityForSubSLA for %v\n", sub)
 	var chosen string
 	var maxProb float64 = -1
 
 	// Only filter those nodes that satisfy the consistency
-	nodes := SelectNodesForConsistency(s, key, sub.Consistency, sub.StalenessBound)
+	nodes, minReadTS := SelectNodesForConsistency(s, key, sub.Consistency, sub.StalenessBound)
 
 	// TODO: implement the RTT functions in the monitor
 	for _, node := range nodes {
@@ -77,32 +82,41 @@ func ComputeUtilityForSubSLA(s *util.Session, key string, sub *consistency.SubSL
 	return SubUtility{
 		Utility: utility,
 		Node:    chosen,
-	}
+	}, minReadTS
 }
 
 // returns nodes that can serve a given consistency requirement
-func SelectNodesForConsistency(session *util.Session, key string, level consistency.ConsistencyLevel, bound *time.Duration) []string {
+func SelectNodesForConsistency(session *util.Session, key string, level consistency.ConsistencyLevel, bound *time.Duration) ([]string, int64) {
 	var selected []string
+	var minReadTS int64
 
 	// TODO: implement the helper functions for other consistency levels below
 	switch level {
 		case consistency.Strong:
 			selected = append(selected, SelectNodesForStrongConsistency(key)...)
 
+			// For strong consistency, minReadTS is not defined per client [we always go to primary]
+			// TODO: Is this right?
+			minReadTS = -1 
+
 		case consistency.ReadMyWrites:
-			selected = append(selected, SelectNodesForReadMyWrites(session, key)...)
+			nodes, requiredReadTS := SelectNodesForReadMyWrites(session, key)
+			selected = append(selected, nodes...)
+			minReadTS = requiredReadTS
 
 		// case consistency.Bounded:
 		// 	selected = append(selected, SelectNodesForBoundedStaleness(key))
 
 		case consistency.Eventual:
 			selected = append(selected, SelectNodesForEventualConsistency(key)...)
+			minReadTS = 0.0
 
 		default:
 			selected = append(selected, SelectNodesForStrongConsistency(key)...)
+			minReadTS = -1 
 	}
 
-	return selected
+	return selected, minReadTS
 }
 
 // Always return the primary for the key
@@ -139,7 +153,7 @@ func SelectNodesForEventualConsistency(key string) []string {
 	return selected
 }
 
-func SelectNodesForReadMyWrites(session *util.Session, key string) []string {
+func SelectNodesForReadMyWrites(session *util.Session, key string) ([]string, int64) {
 	fmt.Printf("entered SelectNodesForReadMyWrites \n")
 	var selected []string
 	var minHighTS int64
@@ -156,7 +170,7 @@ func SelectNodesForReadMyWrites(session *util.Session, key string) []string {
 	numericKey, err := strconv.Atoi(key)
 	if err != nil {
 		fmt.Printf("Error: Could not convert key to numeric value.\n")
-		return selected
+		return selected, minHighTS
 	}
 
 	primary := ""
@@ -188,5 +202,5 @@ func SelectNodesForReadMyWrites(session *util.Session, key string) []string {
 	}
 
 	fmt.Printf("returnung the nodes %v\n", selected)
-	return selected
+	return selected, minHighTS
 }

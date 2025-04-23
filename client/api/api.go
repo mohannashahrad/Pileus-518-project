@@ -5,7 +5,6 @@ import (
 	"client/monitor"
 	"client/util"
 	"client/optimizer"
-	// "errors"
 	"fmt"
 	"net/http"
 	"bytes"
@@ -13,37 +12,8 @@ import (
 	"os"
 	"strconv"
 	"time"
-	// "sync"
 )
 
-// A condition code returned by Get:
-// Indicates how well the SLA was met, including the consistency of the data.
-type ConditionCode int
-
-const (
-	CC_Success ConditionCode = iota
-	CC_Stale
-	CC_ConsistencyNotMet
-	CC_LatencyExceeded
-	CC_SessionError
-)
-
-func (cc ConditionCode) String() string {
-	switch cc {
-	case CC_Success:
-		return "OK"
-	case CC_Stale:
-		return "Stale"
-	case CC_ConsistencyNotMet:
-		return "ConsistencyNotMet"
-	case CC_LatencyExceeded:
-		return "LatencyExceeded"
-	case CC_SessionError:
-		return "SessionError"
-	default:
-		return "Unknown"
-	}
-}
 
 var GlobalConfig *util.ReplicationConfig
 
@@ -59,6 +29,7 @@ func BeginSession(sla consistency.SLA) *util.Session {
 		DefaultSLA: sla,
 		ObjectsWritten:	make(map[string]int64),
 		ObjectsRead:	make(map[string]int64),
+		Utilities:		[]float64{},
 	}
 }
 
@@ -120,45 +91,39 @@ func Put(s *util.Session, key string, value string) error {
     return nil
 }
 
-// TODO: implement "Condition Code", how to know which sla was met!
-func Get(s *util.Session, key string, sla *consistency.SLA) (string, ConditionCode, error) {
+// The return value to the client indicates how well the SLA was met [which sub-SLA was hit]
+// TODO: what happens if consistency is met but RTT is unexpectedly a lot?? [what would be the utility]
+func Get(s *util.Session, key string, sla *consistency.SLA) (string, util.ConditionCode, error) {
 	// Determine SLA for the op: use session default if not specified by input
 	activeSLA := s.DefaultSLA
 	if sla != nil {
 		activeSLA = *sla
 	}
 
-	// Edge Case 1: If all SubSLAs require Strong consistency, contact the primary directly
-	allStrong := true
-	for _, sub := range activeSLA.SubSLAs {
-		if sub.Consistency != consistency.Strong {
-			allStrong = false
-			break
-		}
-	}
-
-	// If strong consistency => Always route to Primary
-	if allStrong {
-		// TODO: here we might need to return which sub-SLA worked [if multiple strong sub-SLA's exist with different latencies]
-		val, get_timestamp, condition_code, err := readFromPrimary(key)
-
-		// Update the session's get timestamp 
-		s.ObjectsRead[key] = get_timestamp
-
-		return val, condition_code, err
-
-	}
-
-	// Case 2: Find the storage node that maximizes the utility
-	storageNode, chosenSubSLA := optimizer.FindNodeToRead(s, key, &activeSLA)
+	// Find the storage node that maximizes the utility
+	storageNode, chosenSubSLA, minReadTSPerSubSLA := optimizer.FindNodeToRead(s, key, &activeSLA)
 	fmt.Printf("chosen storage node is %v and chosen subsla is %v\n", storageNode, chosenSubSLA)
+	fmt.Printf("minReadTSPerSubSLA for subslas is %v\n", minReadTSPerSubSLA)
 
-	// TODO: The chosen Sub SLA should also be returned as part of the CC maybe?
-	val, get_timestamp, condition_code, err := readFromNode(key, storageNode)
+	// Perform the read + calculate exact utility achieved
+	val, get_timestamp, rtt, err := readFromNode(key, storageNode)
+
+	// Calculate and track utility based on get_timestamp and rtt (consistency + latency)
+
+	// The consistency level we were aiming (Note that it is only possible for the actual level to be better (stronger) than what we chose not weaker)
+	// TODO: how to check if utility is better or worse than the 
+	target_latency := chosenSubSLA.LatencyBound
+
+	// TODO: complete here for correct utility computation
+	if (rtt <= target_latency) {
+		s.Utilities = append(s.Utilities, chosenSubSLA.Utility)
+	}
 
 	s.ObjectsRead[key] = get_timestamp
 
-	return val, condition_code, err
+	// Condition Code: Sub-SLA hit + weather the latency was met or not
+	// TODO: re-implement condition code here
+	return val, nil, err
 }
 
 // =====================
@@ -202,52 +167,8 @@ func determineShardForKey(string_key string) int {
     panic(fmt.Sprintf("No shard found for key: %d", key))
 }
 
-// TODO: move this to the optimizer flow also
-func readFromPrimary(key string) (string, int64, ConditionCode, error) {
-	fmt.Printf("Contacting the primary for the Get operation\n")
-
-	shardID := determineShardForKey(key)
-	url := fmt.Sprintf("http://%s/get?key=%s", GlobalConfig.Shards[shardID].Primary, key)
-
-	start := time.Now()
-	resp, err := http.Get(url)
-	rtt := time.Since(start)
-
-	if err != nil || resp.StatusCode != http.StatusOK {
-		fmt.Printf("Error invoking the storage node's GET endpoint\n")
-		return "", -1, CC_ConsistencyNotMet, fmt.Errorf("HTTP error: %v", err)
-	}
-	defer resp.Body.Close()
-
-	var response struct {
-		Key       string    `json:"key"`
-		Value     string 	`json:"value"`
-		Timestamp int64     `json:"timestamp"`
-		HighTS 	  int64 	`json:"highTS"`
-	}
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		return "", -1, CC_ConsistencyNotMet, fmt.Errorf("error decoding response: %v", err)
-	}
-
-	// If no err, update the RTT window
-	monitor.RecordRTT(GlobalConfig.Shards[shardID].Primary, rtt)
-
-	// Extracting the timestamp info returned from the storage node
-	object_ts := response.Timestamp
-	node_high_ts := response.HighTS
-
-	fmt.Printf("Returned Object TS is: %d\n", object_ts)
-	fmt.Printf("HighTS of the node responding is: %d\n", node_high_ts)
-	fmt.Printf("The node key in the monitor: %v\n", GlobalConfig.Shards[shardID].Primary)
-	fmt.Printf("RTT's are %v\n", monitor.GetRTTs(GlobalConfig.Shards[shardID].Primary))
-
-	monitor.RecordHTS(GlobalConfig.Shards[shardID].Primary, node_high_ts)
-	fmt.Printf("Monitor HTS is %v\n", monitor.GetHTS(GlobalConfig.Shards[shardID].Primary))
-	
-	return response.Value, object_ts, CC_Success, nil
-}
-
-func readFromNode(key string, storageNode string) (string, int64, ConditionCode, error) {
+// Return Values: value, read_ts of the object, ConditionCode, utility , error (if any)
+func readFromNode(key string, storageNode string) (string, int64, time.Duration, error) {
 
 	url := fmt.Sprintf("http://%s/get?key=%s", storageNode, key)
 
@@ -257,7 +178,7 @@ func readFromNode(key string, storageNode string) (string, int64, ConditionCode,
 
 	if err != nil || resp.StatusCode != http.StatusOK {
 		fmt.Printf("Error invoking the storage node's GET endpoint\n")
-		return "", -1, CC_ConsistencyNotMet, fmt.Errorf("HTTP error: %v", err)
+		return "", -1, 0, fmt.Errorf("HTTP error: %v", err)
 	}
 	defer resp.Body.Close()
 
@@ -269,7 +190,7 @@ func readFromNode(key string, storageNode string) (string, int64, ConditionCode,
 		HighTS 	  int64 	`json:"highTS"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		return "", -1, CC_ConsistencyNotMet, fmt.Errorf("error decoding response: %v", err)
+		return "", -1, 0, fmt.Errorf("error decoding response: %v", err)
 	}
 
 	// If no err, update the RTT window
@@ -284,7 +205,7 @@ func readFromNode(key string, storageNode string) (string, int64, ConditionCode,
 
 	monitor.RecordHTS(storageNode, node_high_ts)
 	
-	return response.Value, object_ts, CC_Success, nil
+	return response.Value, object_ts, rtt, nil
 }
 
 // =====================
@@ -349,6 +270,6 @@ func MeasureProbeRTT(host string, timeout time.Duration, pingCount int) (time.Du
 
 func PrintRTTs() {
 	for _, node := range GlobalConfig.Nodes {
-		fmt.Println(monitor.GetRTTs(node.Address))
+		fmt.Println(node.Id, monitor.GetRTTs(node.Address))
 	}
 }

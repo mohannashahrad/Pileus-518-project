@@ -46,6 +46,13 @@ type Session struct {
 	DefaultSLA consistency.SLA
 	ObjectsWritten map[string]int64
 	ObjectsRead map[string]int64
+	Utilities []float64
+}
+
+type ConditionCode struct {
+	SubSlaChosen consistency.SubSLA
+	LatencyMet bool
+	ConsistencyMet bool
 }
 
 func LoadSLAFromFile(path string, id string) (consistency.SLA, error) {
