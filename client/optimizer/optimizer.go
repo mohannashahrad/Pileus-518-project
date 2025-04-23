@@ -32,6 +32,7 @@ func FindNodeToRead(s *util.Session, key string, sla *consistency.SLA) (string, 
 
 	for _, sub := range sla.SubSLAs {
 		subUtility := ComputeUtilityForSubSLA(s, key, &sub)
+		fmt.Println("SubUtility is %v\n", subUtility)
 
 		// TODO: handle stale nodes [when the utility is zero] -> Look at pileus code for this
 		// if subUtility.Utility <= 0 { ... }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 	// "math/rand"
-	// "github.com/google/uuid"
+	"github.com/google/uuid"
 	"client/consistency"
 	"client/util"
 	"client/api"
@@ -71,10 +71,10 @@ func main() {
 	// TODO: we can use probes also for HighTS to begin [for each shard]
 	api.SendProbes()
 
-	fmt.Println("Checking the RTT's after sending init probes\n")
-	api.PrintRTTs()
+	// fmt.Println("Checking the RTT's after sending init probes\n")
+	// api.PrintRTTs()
 
-	// password_checking_putWorkload(20)
+	password_checking_putWorkload(10)
 }
 
 // Start a session and do a bunch of puts in the same session
@@ -84,36 +84,29 @@ func password_checking_putWorkload(count int) error {
 	// Start the session
 	s := api.BeginSession(GlobalSLAs["psw_sla"])
 	
-	// Randomly generate the key and value
-	// for i := 1; i <= count; i++ {
-    //     key := fmt.Sprintf("%04d", rand.Intn(1000))
-	// 	value := uuid.New().String()
-    //     api.Put(s, key, value)
-    // }
+	// Do 10 puts
+	for i := 1; i <= count; i++ {
+        key := fmt.Sprintf("%04d", i)
+		value := uuid.New().String()
+        api.Put(s, key, value)
+    }
 
-	//simple test of strong reads [which should go to the primary]
-	api.Put(s, "0001", "test1")
+	time.Sleep(2 * time.Second)
+
+	// Do 10 reads
+	get_sla := GlobalSLAs["psw_sla"]
 	
 	// Change this for testing purposes
-	get_sla := GlobalSLAs["psw_sla"]
-
-	val, cc, err := api.Get(s, "0001", &get_sla)
-	if err != nil {
-		fmt.Printf("Get error for key %s: %v (CC: %v)\n", "0001", err, cc)
-	} else {
-		fmt.Printf("Read key=%s, value=%s, CC=%v\n", "0001", string(val), cc)
+	for i := 1; i <= count; i++ {
+		key := fmt.Sprintf("%04d", i)
+		val, cc, err := api.Get(s, key, &get_sla)
+		if err != nil {
+			fmt.Printf("Get error for key %s: %v (CC: %v)\n", key, err, cc)
+		} else {
+			fmt.Printf("Read key=%s, value=%s, CC=%v\n", key, string(val), cc)
+		}
 	}
 
-	time.Sleep(1 * time.Second)
-	api.Put(s, "0002", "test2")
-
-	val, cc, err = api.Get(s, "0003", &get_sla)
-	if err != nil {
-		fmt.Printf("Get error for key %s: %v (CC: %v)\n", "0001", err, cc)
-	} else {
-		fmt.Printf("Read key=%s, value=%s, CC=%v\n", "0001", string(val), cc)
-	}
-	
 	// Terminate the session
 	api.EndSession(s)
 
