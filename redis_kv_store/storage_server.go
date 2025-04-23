@@ -79,9 +79,8 @@ func initShards(configPath string) {
 			shard_range_end = shard.RangeEnd
 			shard.AmIPrimary = true
 			shard.AmISecondary = false
-			
-			// oprimary should make sure its highTS is consistent with its local copy
-			shard.HighTS= 0.0
+			// If it does not exist, return 0
+			shard.HighTS= loadHighTSFromSnapshot(shard.ShardId)
 			primaryShard = shard
         }
 
@@ -89,7 +88,8 @@ func initShards(configPath string) {
 		if util.Contains(shard.Secondaries, storageID) {
 			shard.AmIPrimary = false
 			shard.AmISecondary = true
-			shard.HighTS= 0.0
+			fmt.Println("loading the shard highTS from secondary\n")
+			shard.HighTS= loadHighTSFromSnapshot(shard.ShardId)
 			secondaryShards = append(secondaryShards, shard)
 		}
     }
@@ -97,21 +97,18 @@ func initShards(configPath string) {
 	// Then set-up tasks for the secondary shards replication pulls
 	fmt.Printf("Secondary for shards: %+v\n", secondaryShards)
 
-	// Loading highTS info of the previous run,
-	// TODO: here should be an additional check that these data actually exists in the Redis as well
-	loadHighTSFromSnapshot()
-
 	fmt.Printf("Secondary shards after snapshot loading: %+v\n", secondaryShards)
 	fmt.Printf("Primary shard after snapshot loading: %+v\n", primaryShard)
 
-	for _, shard := range secondaryShards {
-		go func(shard util.Shard) {
+	for i := range secondaryShards {
+		shard := &secondaryShards[i]
+		go func(shard *util.Shard) {
 			// TODO: the frequency of the replication pulling should be tuned
 			ticker := time.NewTicker(5 * time.Second)
 			defer ticker.Stop()
 	
 			for range ticker.C {
-				err := pullFromPrimary(&shard)
+				err := pullFromPrimary(shard)
 				if err != nil {
 					fmt.Printf("Replication error from primary %s: %v\n", shard.Primary, err)
 				}
@@ -171,6 +168,7 @@ func handleGet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Find HighTS of the shard for the requested key [should either be the primary shard or the secondary shard]
+	// TODO: Is this even correct?
 	var shardHighTS int64
 	if primaryShard.RangeStart <= numericKey && numericKey <= primaryShard.RangeEnd {
 		shardHighTS = primaryShard.HighTS
@@ -295,7 +293,7 @@ func pullFromPrimary(shard *util.Shard) error {
 	} else {
 		// Apply the updates and HS of the shard
 		for _, update := range response.Updates {
-			fmt.Printf("update recieved is %v", update)
+			fmt.Printf("update recieved is %v\n", update)
 
 			vv := redis.VersionedValue{
 				Value:     update.Value,
@@ -332,45 +330,50 @@ func handleShutdown() {
 }
 
 func snapshotHighTS() {
-	snapshot := util.ShardHighTSSnapshot{
-		Primary: primaryShard.HighTS,
-		Secondaries: make(map[int]int64),
+	snapshot := make(map[int]int64)
+
+	// Add primary shard
+	if (primaryShard.AmIPrimary) {
+		snapshot[primaryShard.ShardId] = primaryShard.HighTS
 	}
+	
+
+	// Add secondary shards
 	for _, shard := range secondaryShards {
-		snapshot.Secondaries[shard.ShardId] = shard.HighTS
+		if (shard.AmISecondary) {
+			snapshot[shard.ShardId] = shard.HighTS
+		}	
 	}
 
 	data, err := json.MarshalIndent(snapshot, "", "  ")
 	if err != nil {
-		fmt.Println("Failed to serialize HighTS:", err)
+		fmt.Println("Failed to serialize HighTS snapshot:", err)
 		return
 	}
 
 	err = os.WriteFile("high_ts_snapshot.json", data, 0644)
 	if err != nil {
-		fmt.Println("Failed to write HighTS to file:", err)
+		fmt.Println("Failed to write HighTS snapshot to file:", err)
 	}
 }
 
-func loadHighTSFromSnapshot() {
+// TODO: here we should double check this aligns with existence of these keys in Redis
+func loadHighTSFromSnapshot(shardId int) int64 {
 	data, err := os.ReadFile("high_ts_snapshot.json")
 	if err != nil {
 		fmt.Println("No existing HighTS snapshot found.")
-		return
+		return 0
 	}
 
-	var snapshot util.ShardHighTSSnapshot
+	var snapshot map[int]int64
 	if err := json.Unmarshal(data, &snapshot); err != nil {
 		fmt.Println("Failed to parse HighTS snapshot:", err)
-		return
+		return 0
 	}
 
-	primaryShard.HighTS = snapshot.Primary
-
-	for i := range secondaryShards {
-		if ts, ok := snapshot.Secondaries[secondaryShards[i].ShardId]; ok {
-			secondaryShards[i].HighTS = ts
-		}
+	if ts, ok := snapshot[shardId]; ok {
+		return ts
 	}
-	fmt.Println("HighTS values restored from snapshot.")
+
+	return 0
 }
