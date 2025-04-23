@@ -53,6 +53,7 @@ var GlobalConfig *util.ReplicationConfig
 
 // TODO: The session monitoring functions should be implemented
 // Default: Each session starts with a default SLA, but the Get reqs in the session could specify their SLA's also 
+
 func BeginSession(sla consistency.SLA) *util.Session {
 	return &util.Session{
 		DefaultSLA: sla,
@@ -284,4 +285,70 @@ func readFromNode(key string, storageNode string) (string, int64, ConditionCode,
 	monitor.RecordHTS(storageNode, node_high_ts)
 	
 	return response.Value, object_ts, CC_Success, nil
+}
+
+// =====================
+// Monitoring Functions
+// =====================
+
+// Note: We added this to our client-api, but this could also be done in the "beginSession" function
+// Start RTT for each node in the replicaiton config
+func SendProbes() {
+	for _, node := range GlobalConfig.Nodes {
+		rtt, err := MeasureProbeRTT(node.Address, 2, 5)	// Pass timeout and pingCount to the function as well
+		
+		if (err == nil) {
+			monitor.RecordRTT(node.Address, rtt)
+		} else {
+			fmt.Println("Error happened sending probes to node: %s\n", node.Address)
+		}
+		
+	} 
+}
+
+func MeasureProbeRTT(host string, timeout time.Duration, pingCount int) (time.Duration, error) {
+	var total float64
+	var success int
+
+	url := fmt.Sprintf("http://%s/probe", host)
+	fmt.Println(url)
+
+	client := http.Client{
+		Timeout: timeout * time.Second,
+	}
+
+	// Pinging 5 times
+	for i := 0; i < pingCount; i++ {
+		start := time.Now()
+		resp, err := client.Get(url)
+		elapsed := time.Since(start)
+
+		if err != nil {
+			fmt.Printf("Error pinging %s: %v\n", url, err)
+			continue
+		}
+		resp.Body.Close()
+
+		if resp.StatusCode == http.StatusOK {
+			total += float64(elapsed.Milliseconds())
+			success++
+		}
+	}
+
+	if success == 0 {
+		return 0, fmt.Errorf("no successful responses")
+	}
+	
+	rtt_float := total / float64(success)
+	return time.Duration(rtt_float * float64(time.Millisecond)), nil
+}
+
+// =====================
+// Debugging Functions
+// =====================
+
+func PrintRTTs() {
+	for _, node := range GlobalConfig.Nodes {
+		fmt.Println(monitor.GetRTTs(node.Address))
+	}
 }

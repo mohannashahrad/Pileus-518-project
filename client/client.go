@@ -67,7 +67,14 @@ func main() {
 	fmt.Printf("**************************************\n")
 	fmt.Printf("Password SLA: %+v\n", GlobalSLAs["psw_sla"])
 
-	password_checking_putWorkload(20)
+	// Before sending the workloads, send monitoring probes to the nodes to get RTT 
+	// TODO: we can use probes also for HighTS to begin [for each shard]
+	api.SendProbes()
+
+	fmt.Println("Checking the RTT's after sending init probes\n")
+	api.PrintRTTs()
+
+	// password_checking_putWorkload(20)
 }
 
 // Start a session and do a bunch of puts in the same session
@@ -88,7 +95,7 @@ func password_checking_putWorkload(count int) error {
 	api.Put(s, "0001", "test1")
 	
 	// Change this for testing purposes
-	get_sla := GlobalSLAs["strong_sla"]
+	get_sla := GlobalSLAs["psw_sla"]
 
 	val, cc, err := api.Get(s, "0001", &get_sla)
 	if err != nil {

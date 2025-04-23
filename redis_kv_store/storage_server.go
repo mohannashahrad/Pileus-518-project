@@ -53,6 +53,7 @@ func main() {
 	http.HandleFunc("/set", handleSet)
 	http.HandleFunc("/get", handleGet)
 	http.HandleFunc("/replicate", replicationHandler)
+	http.HandleFunc("/probe", handleProbe)
 
 	// Shutdown Signal Handler: For storing the high timestamp information (on Redis)
 	go handleShutdown()
@@ -314,6 +315,10 @@ func pullFromPrimary(shard *util.Shard) error {
 	}
 
 	return nil
+}
+
+func handleProbe(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }
 
 // Before shutting down, persist the shard hightimestam information
