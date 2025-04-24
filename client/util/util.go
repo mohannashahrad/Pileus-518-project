@@ -40,10 +40,20 @@ type ReplicationConfig struct {
 	Shards []Shard `json:"shards"`
 }
 
+type ServerSelectionPolicy int
+
+const (
+	Primary ServerSelectionPolicy = iota
+	Random
+	Closest
+	Pileus
+)
+
 // Session should hold state for read-my-writes and monotonic consistency levels
 // TODO: Add session-specific state for monotonic reads, etc.
 type Session struct {
 	DefaultSLA consistency.SLA
+	ServerSelectionPolicy ServerSelectionPolicy		// This is added purely for testing capabilities
 	ObjectsWritten map[string]int64
 	ObjectsRead map[string]int64
 	Utilities []float64

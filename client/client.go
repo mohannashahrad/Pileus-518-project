@@ -18,6 +18,7 @@ type Record struct {
 
 var GlobalSLAs = map[string]consistency.SLA{}
 
+
 func main() {
 
 	// Load the sharding config [this is done on the api-side for checking the put/get]
@@ -29,38 +30,7 @@ func main() {
 	}
 
 	// Load the static SLAs
-	var sla consistency.SLA
-	
-	sla, err = util.LoadSLAFromFile("consistency/samples/password_checking.json", "psw_sla")
-	if err != nil {
-		panic(err)
-	}
-	GlobalSLAs[sla.ID] = sla
-
-	sla, err = util.LoadSLAFromFile("consistency/samples/web_application.json", "web_sla")
-	if err != nil {
-		panic(err)
-	}
-	GlobalSLAs[sla.ID] = sla
-
-	sla, err = util.LoadSLAFromFile("consistency/samples/shopping_cart.json", "cart_sla")
-	if err != nil {
-		panic(err)
-	}
-	GlobalSLAs[sla.ID] = sla
-
-	sla, err = util.LoadSLAFromFile("consistency/samples/strong.json", "strong_sla")
-	if err != nil {
-		panic(err)
-	}
-	GlobalSLAs[sla.ID] = sla
-
-	sla, err = util.LoadSLAFromFile("consistency/samples/readMyWrites.json", "read_my_write_sla")
-	if err != nil {
-		panic(err)
-	}
-	GlobalSLAs[sla.ID] = sla
-
+	loadStaticSLAs()
 	fmt.Printf("Cart SLA: %+v\n", GlobalSLAs["cart_sla"])
 	fmt.Printf("**************************************\n")
 	fmt.Printf("Web Applicaiton SLA: %+v\n", GlobalSLAs["web_sla"])
@@ -74,15 +44,23 @@ func main() {
 	// fmt.Println("Checking the RTT's after sending init probes\n")
 	// api.PrintRTTs()
 
-	password_checking_putWorkload(10)
+	// TODO: this should be changed to a more realistic workload like YCSB
+
+	// Uncomment based on the type of the experiment you want to check
+	
+	// password_checking_putWorkload(10, util.Pileus)
+	// password_checking_putWorkload(10, util.Random)
+	// password_checking_putWorkload(10, util.Primary)
+	password_checking_putWorkload(10, util.Closest)
 }
 
 // Start a session and do a bunch of puts in the same session
-func password_checking_putWorkload(count int) error {
+func password_checking_putWorkload(count int, expType util.ServerSelectionPolicy) error {
 	fmt.Printf("Entered the putworkalod function\n")
 
 	// Start the session
-	s := api.BeginSession(GlobalSLAs["psw_sla"])
+	// We set the type of the exp in the session
+	s := api.BeginSession(GlobalSLAs["psw_sla"], expType)
 	
 	// Do 10 puts
 	for i := 1; i <= count; i++ {
@@ -115,3 +93,43 @@ func password_checking_putWorkload(count int) error {
 
 	return nil
 }
+
+func loadStaticSLAs() {
+	var sla consistency.SLA
+	var err error
+	
+	sla, err = util.LoadSLAFromFile("consistency/samples/password_checking.json", "psw_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
+
+	sla, err = util.LoadSLAFromFile("consistency/samples/web_application.json", "web_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
+
+	sla, err = util.LoadSLAFromFile("consistency/samples/shopping_cart.json", "cart_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
+
+	sla, err = util.LoadSLAFromFile("consistency/samples/strong.json", "strong_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
+
+	sla, err = util.LoadSLAFromFile("consistency/samples/readMyWrites.json", "read_my_write_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
+}
+
+// Runs a ycsb worklaod as part of the client
+// func ycsb_experiment() {
+
+// }

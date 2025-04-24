@@ -12,6 +12,7 @@ import (
 	"os"
 	"strconv"
 	"time"
+	"math/rand"
 )
 
 
@@ -24,9 +25,10 @@ var GlobalConfig *util.ReplicationConfig
 // TODO: The session monitoring functions should be implemented
 // Default: Each session starts with a default SLA, but the Get reqs in the session could specify their SLA's also 
 
-func BeginSession(sla consistency.SLA) *util.Session {
+func BeginSession(sla consistency.SLA, serverSelectionPolicy util.ServerSelectionPolicy) *util.Session {
 	return &util.Session{
 		DefaultSLA: sla,
+		ServerSelectionPolicy: serverSelectionPolicy,
 		ObjectsWritten:	make(map[string]int64),
 		ObjectsRead:	make(map[string]int64),
 		Utilities:		[]float64{},
@@ -36,6 +38,7 @@ func BeginSession(sla consistency.SLA) *util.Session {
 // TODO: how should it be implemented?
 func EndSession(s *util.Session) {
 	// Clean up state
+	// should have logic for reporting the avg utility of the session reads
 }
 
 // ========== GET/PUT Endpoints ==========
@@ -92,7 +95,27 @@ func Put(s *util.Session, key string, value string) error {
 }
 
 // Return:Value of the key requested + which subSLA was hit
+// Server selection policy from the session is used to choose the destination server
 func Get(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
+
+	if (s.ServerSelectionPolicy == util.Pileus) {
+		fmt.Println("Doing a Pileus Get:")
+		return PileusGet(s, key, sla)
+	} else if (s.ServerSelectionPolicy == util.Random) {
+		fmt.Println("Doing a Random Get:")
+		return randomGet(s, key, sla)
+	} else if (s.ServerSelectionPolicy == util.Primary) {
+		fmt.Println("Doing a Primary-Only Get:")
+		return primaryOnlyGet(s, key, sla)
+	} else if (s.ServerSelectionPolicy == util.Closest) {
+		fmt.Println("Doing a Closest Get:")
+		return closestGet(s, key, sla)
+	} else {
+		return PileusGet(s, key, sla)
+	}
+}
+
+func PileusGet(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
 	// Determine SLA for the op: use session default if not specified by input
 	activeSLA := s.DefaultSLA
 	if sla != nil {
@@ -209,6 +232,116 @@ func readFromNode(key string, storageNode string) (string, int64, int64, time.Du
 	monitor.RecordHTS(storageNode, node_high_ts)
 	
 	return response.Value, object_ts, node_high_ts, rtt, nil
+}
+
+// This is for evaluation purposes
+func primaryOnlyGet(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
+	activeSLA := s.DefaultSLA
+	if sla != nil {
+		activeSLA = *sla
+	}
+
+	shardID := determineShardForKey(key)
+	val, _, _, rtt, err := readFromNode(key, GlobalConfig.Shards[shardID].Primary)
+
+	// If we always go to primary, consistency is always met, the RTT is the only thing to check for the utility checking
+	for _, sub := range activeSLA.SubSLAs {
+		if rtt <= sub.Latency.Duration {
+			subAchieved := &sub // make a copy
+			s.Utilities = append(s.Utilities, subAchieved.Utility)
+			return val, *subAchieved, err
+		}
+	}
+
+	// If we have not returned yet, then no sub-SLA is met
+	fmt.Println("No utility could be computed for primary-only read")
+	s.Utilities = append(s.Utilities, 0.0)
+	return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
+}
+
+// This is for evaluation purposes
+// TODO: utility calculation is highly tuned for password checking now
+func randomGet(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
+	activeSLA := s.DefaultSLA
+	if sla != nil {
+		activeSLA = *sla
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	randomIndex := rand.Intn(len(GlobalConfig.Nodes))
+	randomNode := GlobalConfig.Nodes[randomIndex]
+	fmt.Println("Random Node is %s", randomNode.Id)
+
+	shardID := determineShardForKey(key)
+	primaryForKey := GlobalConfig.Shards[shardID].Primary
+
+	val, _, _, rtt, err := readFromNode(key, randomNode.Address)
+	fmt.Println("RTT was %f", rtt)
+
+	for _, sub := range activeSLA.SubSLAs {
+		if ( rtt <= sub.Latency.Duration && randomNode.Address == primaryForKey) {
+			fmt.Println("Random Node happened to be Primary")
+			subAchieved := &sub 
+			s.Utilities = append(s.Utilities, subAchieved.Utility)
+			return val, *subAchieved, err
+		}
+		if ( rtt <= sub.Latency.Duration && sub.Consistency == 0) {
+			subAchieved := &sub 
+			s.Utilities = append(s.Utilities, subAchieved.Utility)
+			return val, *subAchieved, err
+		} 
+		
+		// TODO: implement for other consistencies
+
+		// else if (rtt <= sub.Latency.Duration) {
+		// 	fmt.Println("Should compare sub sonsitency level %d and what we got from the random node")
+		// 	return val, consistency.SubSLA{}, fmt.Errorf("subSLA checking not implemented")
+		// }
+	}
+
+	// If we have not returned yet, then no sub-SLA is met
+	fmt.Println("No utility could be computed for random read")
+	s.Utilities = append(s.Utilities, 0.0)
+	return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
+}
+
+// TODO: utility calculation is highly tuned for password checking now
+func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
+	activeSLA := s.DefaultSLA
+	if sla != nil {
+		activeSLA = *sla
+	}
+
+	// Finding the closest server based on the monitoring data
+	closestNode, minRTT := monitor.GetLowestAvgRTTNode()
+	fmt.Println("Closest Node is %s with minRTT %d", closestNode, minRTT)
+
+	shardID := determineShardForKey(key)
+	primaryForKey := GlobalConfig.Shards[shardID].Primary
+
+	val, _, _, rtt, err := readFromNode(key, closestNode)
+	fmt.Println("RTT was %f", rtt)
+
+	for _, sub := range activeSLA.SubSLAs {
+		if (rtt <= sub.Latency.Duration && closestNode == primaryForKey) {
+			fmt.Println("Random Node happened to be Primary")
+			subAchieved := &sub 
+			s.Utilities = append(s.Utilities, subAchieved.Utility)
+			return val, *subAchieved, err
+		}
+		if ( rtt <= sub.Latency.Duration && sub.Consistency == 0) {
+			subAchieved := &sub 
+			s.Utilities = append(s.Utilities, subAchieved.Utility)
+			return val, *subAchieved, err
+		} 
+		
+		// TODO: implement for other consistencies
+	}
+
+	// If we have not returned yet, then no sub-SLA is met
+	fmt.Println("No utility could be computed for closest read")
+	s.Utilities = append(s.Utilities, 0.0)
+	return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 }
 
 // TODO: This implementation is right now highly tuned for the SLA's we are testing. Generalize this implementation

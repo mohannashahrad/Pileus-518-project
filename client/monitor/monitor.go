@@ -128,6 +128,47 @@ func GetAvgRTT(node string) time.Duration {
 	return total / time.Duration(count)
 }
 
+func GetLowestAvgRTTNode() (string, time.Duration) {
+	globalMonitor.mu.RLock()
+	defer globalMonitor.mu.RUnlock()
+
+	var minNode string
+	var minRTT time.Duration = -1 // sentinel value to indicate uninitialized state
+
+	for node, window := range globalMonitor.nodeRTTs {
+		window.mu.Lock()
+
+		var total time.Duration
+		var count int
+
+		if window.full {
+			for _, sample := range window.samples {
+				total += sample
+			}
+			count = maxSamples
+		} else {
+			for i := 0; i < window.index; i++ {
+				total += window.samples[i]
+			}
+			count = window.index
+		}
+
+		window.mu.Unlock()
+
+		if count == 0 {
+			continue // skip nodes with no data
+		}
+
+		avgRTT := total / time.Duration(count)
+		if minRTT < 0 || avgRTT < minRTT {
+			minRTT = avgRTT
+			minNode = node
+		}
+	}
+
+	return minNode, minRTT
+}
+
 // TODO: this maybe won't capture the recent changes/increases to the RTT's
 func ProbabilityOfRTTBelow(node string, threshold time.Duration, optimistic bool) float64 {
 	globalMonitor.mu.RLock()
