@@ -26,7 +26,6 @@ func Init(config *util.ReplicationConfig) {
 // The last return value is the list of min_read_timestamp for all sub_sla's [used for utility calculation] 
 func FindNodeToRead(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, []int64) {
 
-	fmt.Printf("entered FindNodeToRead function \n")
 	var chosenNode string
 	var chosenSubSLA consistency.SubSLA
 	var minTSPerSubSLA []int64
@@ -35,7 +34,6 @@ func FindNodeToRead(s *util.Session, key string, sla *consistency.SLA) (string, 
 
 	for _, sub := range sla.SubSLAs {
 		subUtility, minReadTS := ComputeUtilityForSubSLA(s, key, &sub)
-		fmt.Println("SubUtility is %v\n", subUtility)
 		minTSPerSubSLA = append(minTSPerSubSLA, minReadTS)
 
 		// TODO: handle stale nodes [when the utility is zero] -> Look at pileus code for this

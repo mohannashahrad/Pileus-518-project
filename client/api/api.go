@@ -91,9 +91,8 @@ func Put(s *util.Session, key string, value string) error {
     return nil
 }
 
-// The return value to the client indicates how well the SLA was met [which sub-SLA was hit]
-// TODO: what happens if consistency is met but RTT is unexpectedly a lot?? [what would be the utility]
-func Get(s *util.Session, key string, sla *consistency.SLA) (string, util.ConditionCode, error) {
+// Return:Value of the key requested + which subSLA was hit
+func Get(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
 	// Determine SLA for the op: use session default if not specified by input
 	activeSLA := s.DefaultSLA
 	if sla != nil {
@@ -101,29 +100,33 @@ func Get(s *util.Session, key string, sla *consistency.SLA) (string, util.Condit
 	}
 
 	// Find the storage node that maximizes the utility
-	storageNode, chosenSubSLA, minReadTSPerSubSLA := optimizer.FindNodeToRead(s, key, &activeSLA)
-	fmt.Printf("chosen storage node is %v and chosen subsla is %v\n", storageNode, chosenSubSLA)
+	storageNode, targetSubSLA, minReadTSPerSubSLA := optimizer.FindNodeToRead(s, key, &activeSLA)
+	fmt.Printf("chosen storage node is %v and chosen subsla is %v\n", storageNode, targetSubSLA)
 	fmt.Printf("minReadTSPerSubSLA for subslas is %v\n", minReadTSPerSubSLA)
 
 	// Perform the read + calculate exact utility achieved
-	val, get_timestamp, rtt, err := readFromNode(key, storageNode)
+	val, obj_ts, node_hts, rtt, err := readFromNode(key, storageNode)
 
 	// Calculate and track utility based on get_timestamp and rtt (consistency + latency)
+	// TODO: Right now it is very specific to the SLA's we implement, this should be more general
+	subAchieved := computeUtilityGained(obj_ts, node_hts, rtt, targetSubSLA, activeSLA)
 
-	// The consistency level we were aiming (Note that it is only possible for the actual level to be better (stronger) than what we chose not weaker)
-	// TODO: how to check if utility is better or worse than the 
-	target_latency := chosenSubSLA.LatencyBound
-
-	// TODO: complete here for correct utility computation
-	if (rtt <= target_latency) {
-		s.Utilities = append(s.Utilities, chosenSubSLA.Utility)
+	// If no sub-sla is achieved
+	if subAchieved == nil {
+		fmt.Println("No utility could be computed, because gained subSLA was null")
+		s.Utilities = append(s.Utilities, 0.0)
+		s.ObjectsRead[key] = obj_ts
+		return val, consistency.SubSLA{}, fmt.Errorf("no utility could be computed")
 	}
 
-	s.ObjectsRead[key] = get_timestamp
+	// Update session read utilities
+	s.Utilities = append(s.Utilities, subAchieved.Utility)
 
-	// Condition Code: Sub-SLA hit + weather the latency was met or not
-	// TODO: re-implement condition code here
-	return val, nil, err
+	// Update the read timestamp of the object read
+	s.ObjectsRead[key] = obj_ts
+
+	// TODO: make sure you return the correct status code with which sub-SLA is hit [use subSLAAchieved]
+	return val, *subAchieved, err
 }
 
 // =====================
@@ -168,7 +171,7 @@ func determineShardForKey(string_key string) int {
 }
 
 // Return Values: value, read_ts of the object, ConditionCode, utility , error (if any)
-func readFromNode(key string, storageNode string) (string, int64, time.Duration, error) {
+func readFromNode(key string, storageNode string) (string, int64, int64, time.Duration, error) {
 
 	url := fmt.Sprintf("http://%s/get?key=%s", storageNode, key)
 
@@ -178,7 +181,7 @@ func readFromNode(key string, storageNode string) (string, int64, time.Duration,
 
 	if err != nil || resp.StatusCode != http.StatusOK {
 		fmt.Printf("Error invoking the storage node's GET endpoint\n")
-		return "", -1, 0, fmt.Errorf("HTTP error: %v", err)
+		return "", -1, -1 , 0, fmt.Errorf("HTTP error: %v", err)
 	}
 	defer resp.Body.Close()
 
@@ -190,7 +193,7 @@ func readFromNode(key string, storageNode string) (string, int64, time.Duration,
 		HighTS 	  int64 	`json:"highTS"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		return "", -1, 0, fmt.Errorf("error decoding response: %v", err)
+		return "", -1, -1, 0, fmt.Errorf("error decoding response: %v", err)
 	}
 
 	// If no err, update the RTT window
@@ -205,7 +208,40 @@ func readFromNode(key string, storageNode string) (string, int64, time.Duration,
 
 	monitor.RecordHTS(storageNode, node_high_ts)
 	
-	return response.Value, object_ts, rtt, nil
+	return response.Value, object_ts, node_high_ts, rtt, nil
+}
+
+// TODO: This implementation is right now highly tuned for the SLA's we are testing. Generalize this implementation
+func computeUtilityGained(obj_ts int64, node_hts int64, rtt time.Duration, targetSubSLA consistency.SubSLA, activeSLA consistency.SLA) *consistency.SubSLA{
+	
+	if (activeSLA.ID == "psw_sla") {
+		fmt.Println("Checking the utility gained for password checking example: \n")
+
+		for _, sub := range activeSLA.SubSLAs {
+			// If we targeted strong consistency (contacted primary)
+			if (targetSubSLA.Consistency == 4) {
+				if (rtt <= sub.Latency.Duration) {
+					subGained := sub
+					return &subGained
+				}
+			} else if (targetSubSLA.Consistency == 0) {
+				// If aimed for eventual, then strong is not met [//NOTE: this is our assumption]
+				if (sub.Consistency == 0 && rtt <= sub.Latency.Duration) {
+					subGained := sub
+					return &subGained
+				}
+			}
+		}
+
+		// If didn't return yet, no sub-SLA was met 
+		fmt.Println("None of the utilities for password-checking is met, returning nil: \n")
+		return nil
+		
+	}
+
+	// If didn't return yet, no sub-SLA was met 
+	fmt.Println("Specific utility computing function is not implemented, returning nil: \n")
+	return nil
 }
 
 // =====================

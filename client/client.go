@@ -99,13 +99,16 @@ func password_checking_putWorkload(count int) error {
 	// Change this for testing purposes
 	for i := 1; i <= count; i++ {
 		key := fmt.Sprintf("%04d", i)
-		val, cc, err := api.Get(s, key, &get_sla)
+		val, subSLAGained, err := api.Get(s, key, &get_sla)
 		if err != nil {
-			fmt.Printf("Get error for key %s: %v (CC: %v)\n", key, err, cc)
+			fmt.Printf("Get error for key %s: %v (subSLAGained: %v)\n", key, err, subSLAGained)
 		} else {
-			fmt.Printf("Read key=%s, value=%s, CC=%v\n", key, string(val), cc)
+			fmt.Printf("Read key=%s, value=%s, subSLAGained=%v\n", key, string(val), subSLAGained)
 		}
 	}
+
+	// Get the Utilities of the session
+	fmt.Println(s.Utilities)
 
 	// Terminate the session
 	api.EndSession(s)
