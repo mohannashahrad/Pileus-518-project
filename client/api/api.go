@@ -19,13 +19,25 @@ import (
 var GlobalConfig *util.ReplicationConfig
 
 // =====================
+// HTTP Client
+// =====================
+
+var httpClient = &http.Client{
+    Transport: &http.Transport{
+        MaxIdleConns:        100,
+        MaxIdleConnsPerHost: 100,
+        IdleConnTimeout:     90 * time.Second,
+    },
+}
+
+// =====================
 // Core API Methods
 // =====================
 
 // TODO: The session monitoring functions should be implemented
 // Default: Each session starts with a default SLA, but the Get reqs in the session could specify their SLA's also 
 
-func BeginSession(sla consistency.SLA, serverSelectionPolicy util.ServerSelectionPolicy) *util.Session {
+func BeginSession(sla *consistency.SLA, serverSelectionPolicy util.ServerSelectionPolicy) *util.Session {
 	return &util.Session{
 		DefaultSLA: sla,
 		ServerSelectionPolicy: serverSelectionPolicy,
@@ -63,10 +75,20 @@ func Put(s *util.Session, key string, value string) error {
 	recordJson, _ := json.Marshal(rec)
 	url := fmt.Sprintf("http://%s/set", GlobalConfig.Shards[shardID].Primary)
 
+	// start := time.Now()
+	// resp, err := http.Post(url, "application/json", bytes.NewBuffer(recordJson))
+	// rtt := time.Since(start)
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(recordJson))
+	if err != nil {
+		return fmt.Errorf("failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
 	start := time.Now()
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(recordJson))
+	resp, err := httpClient.Do(req)
 	rtt := time.Since(start)
-	
+
 	if err != nil || resp.StatusCode != http.StatusOK {
 		fmt.Printf("An error happened invoking the put endpoint of the storage node\n")
 		fmt.Printf("%v \n", err)
@@ -119,11 +141,11 @@ func PileusGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 	// Determine SLA for the op: use session default if not specified by input
 	activeSLA := s.DefaultSLA
 	if sla != nil {
-		activeSLA = *sla
+		activeSLA = sla
 	}
 
 	// Find the storage node that maximizes the utility
-	storageNode, targetSubSLA, minReadTSPerSubSLA := optimizer.FindNodeToRead(s, key, &activeSLA)
+	storageNode, targetSubSLA, minReadTSPerSubSLA := optimizer.FindNodeToRead(s, key, activeSLA)
 	fmt.Printf("chosen storage node is %v and chosen subsla is %v\n", storageNode, targetSubSLA)
 	fmt.Printf("minReadTSPerSubSLA for subslas is %v\n", minReadTSPerSubSLA)
 
@@ -168,10 +190,32 @@ func LoadReplicationConfig(path string) error {
 		return err
 	}
 
+	// From the secondary IDs assign the secondary endpoints
+	nodeIDToAddress := make(map[string]string)
+	for _, node := range config.Nodes {
+		nodeIDToAddress[node.Id] = node.Address
+	}
+
+	// Populate the Secondaries field for each shard using the SecondaryIDs
+	for i := range config.Shards {
+		secondaryAddrs := []string{}
+		for _, secID := range config.Shards[i].SecondaryIDs {
+			addr, ok := nodeIDToAddress[secID]
+			if !ok {
+				return fmt.Errorf("could not find address for secondary ID %s", secID)
+			}
+			secondaryAddrs = append(secondaryAddrs, addr)
+		}
+		config.Shards[i].Secondaries = secondaryAddrs
+	}
+
 	GlobalConfig = &config
 
 	// Also udpate the optimizer with the same config
 	optimizer.Init(GlobalConfig)
+
+	fmt.Println("Loaded the config and it is:")
+	fmt.Println(GlobalConfig)
 
 	return nil 
 }
@@ -238,7 +282,14 @@ func readFromNode(key string, storageNode string) (string, int64, int64, time.Du
 func primaryOnlyGet(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
 	activeSLA := s.DefaultSLA
 	if sla != nil {
-		activeSLA = *sla
+		activeSLA = sla
+	}
+
+	if (activeSLA == nil) {
+		shardID := determineShardForKey(key)
+		// I want the highTS and onjTS back as well
+		val, _, _, _, err := readFromNode(key, GlobalConfig.Shards[shardID].Primary)
+		return val, consistency.SubSLA{}, err
 	}
 
 	shardID := determineShardForKey(key)
@@ -264,7 +315,7 @@ func primaryOnlyGet(s *util.Session, key string, sla *consistency.SLA) (string, 
 func randomGet(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
 	activeSLA := s.DefaultSLA
 	if sla != nil {
-		activeSLA = *sla
+		activeSLA = sla
 	}
 
 	rand.Seed(time.Now().UnixNano())
@@ -309,7 +360,7 @@ func randomGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
 	activeSLA := s.DefaultSLA
 	if sla != nil {
-		activeSLA = *sla
+		activeSLA = sla
 	}
 
 	// Finding the closest server based on the monitoring data
@@ -345,7 +396,7 @@ func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, cons
 }
 
 // TODO: This implementation is right now highly tuned for the SLA's we are testing. Generalize this implementation
-func computeUtilityGained(obj_ts int64, node_hts int64, rtt time.Duration, targetSubSLA consistency.SubSLA, activeSLA consistency.SLA) *consistency.SubSLA{
+func computeUtilityGained(obj_ts int64, node_hts int64, rtt time.Duration, targetSubSLA consistency.SubSLA, activeSLA *consistency.SLA) *consistency.SubSLA{
 	
 	if (activeSLA.ID == "psw_sla") {
 		fmt.Println("Checking the utility gained for password checking example: \n")
@@ -440,5 +491,66 @@ func MeasureProbeRTT(host string, timeout time.Duration, pingCount int) (time.Du
 func PrintRTTs() {
 	for _, node := range GlobalConfig.Nodes {
 		fmt.Println(node.Id, monitor.GetRTTs(node.Address))
+	}
+}
+
+// ==========================================
+// Helper Functions for the Pe-Laoding Phase
+// ==========================================
+func GetPrimaryLatestKey(key string) (value string, obj_ts int64, high_timestamp int64, err error) {
+	shardID := determineShardForKey(key)
+	val, obj_ts, node_hts, _, err := readFromNode(key, GlobalConfig.Shards[shardID].Primary)
+	return val, obj_ts, node_hts, err
+}	
+
+func WaitForSecondaries(target_ts int64, target_key string) {
+	// Now wait for secondaries to reach the obj_ts
+	fmt.Println("Waiting for secondaries to catch up...")
+
+	timeout := time.After(120 * time.Second)	// Give it max 2 minutes
+	ticker := time.NewTicker(5 * time.Second)	// Try every 5 seconds
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-timeout:
+			fmt.Println("Timeout waiting for secondaries to replicate.")
+			return
+		case <-ticker.C:
+			allCaughtUp := true
+
+			shardID := determineShardForKey(target_key)
+				for _, secondary := range GlobalConfig.Shards[shardID].Secondaries {
+				url := fmt.Sprintf("http://%s/status", secondary)
+
+				resp, err := http.Get(url)
+				if err != nil {
+					fmt.Printf("Failed to contact secondary %s: %v\n", secondary, err)
+					allCaughtUp = false
+					continue
+				}
+
+				var status map[int]int64
+				if err := json.NewDecoder(resp.Body).Decode(&status); err != nil {
+					fmt.Printf("Invalid response from %s: %v\n", secondary, err)
+					allCaughtUp = false
+					resp.Body.Close()
+					continue
+				}
+				resp.Body.Close()
+
+				// Get timestamp for the relevant shard
+				secTimestamp := status[shardID]
+				if secTimestamp < target_ts {
+					fmt.Printf("Secondary %s for shard %d not caught up (has %d, want %d)\n", secondary, shardID, secTimestamp, target_ts)
+					allCaughtUp = false
+				}
+			}
+
+			if allCaughtUp {
+				fmt.Println("All secondaries have caught up.")
+				return
+			}
+		}
 	}
 }

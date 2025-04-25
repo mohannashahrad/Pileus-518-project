@@ -24,10 +24,20 @@ type rawSLAFile struct {
 	SubSLAs []rawSubSLA `json:"subSLAs"`
 }
 
+// type Shard struct {
+// 	RangeStart int `json:"start"`
+// 	RangeEnd   int `json:"end"`
+// 	Primary	string `json:"primary"` 
+// }
+
 type Shard struct {
+	ShardId    int `json:"id"`
 	RangeStart int `json:"start"`
 	RangeEnd   int `json:"end"`
 	Primary	string `json:"primary"` 
+	SecondaryIDs []string `json:"secondaryIDs"`
+	Secondaries []string
+	HighTS  int64
 }
 
 type StorageNode struct {
@@ -52,7 +62,7 @@ const (
 // Session should hold state for read-my-writes and monotonic consistency levels
 // TODO: Add session-specific state for monotonic reads, etc.
 type Session struct {
-	DefaultSLA consistency.SLA
+	DefaultSLA *consistency.SLA
 	ServerSelectionPolicy ServerSelectionPolicy		// This is added purely for testing capabilities
 	ObjectsWritten map[string]int64
 	ObjectsRead map[string]int64

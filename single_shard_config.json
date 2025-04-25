@@ -2,7 +2,7 @@
   "nodes": [
     {
       "nodeId": "clem",
-      "nodeAddress": "130.127.133.5:8080"
+      "nodeAddress": "130.127.133.18:8080"
     }, 
     {
       "nodeId": "utah",
@@ -17,8 +17,8 @@
     {
       "id": 0,
       "start": 0,
-      "end": 999,
-      "primary": "130.127.133.5:8080",
+      "end": 10000,
+      "primary": "130.127.133.18:8080",
       "primaryID": "clem",
       "secondaryIDs": ["utah", "wisc"]
     }

@@ -44,6 +44,9 @@ func main() {
 	// fmt.Println("Checking the RTT's after sending init probes\n")
 	// api.PrintRTTs()
 
+	// This should always be called from the primary before testing the clients
+	preloadData()
+
 	// TODO: this should be changed to a more realistic workload like YCSB
 
 	// Uncomment based on the type of the experiment you want to check
@@ -51,7 +54,7 @@ func main() {
 	// password_checking_putWorkload(10, util.Pileus)
 	// password_checking_putWorkload(10, util.Random)
 	// password_checking_putWorkload(10, util.Primary)
-	password_checking_putWorkload(10, util.Closest)
+	// password_checking_putWorkload(10, util.Closest)
 }
 
 // Start a session and do a bunch of puts in the same session
@@ -60,7 +63,8 @@ func password_checking_putWorkload(count int, expType util.ServerSelectionPolicy
 
 	// Start the session
 	// We set the type of the exp in the session
-	s := api.BeginSession(GlobalSLAs["psw_sla"], expType)
+	psw_sla := GlobalSLAs["psw_sla"]
+	s := api.BeginSession(&psw_sla, expType)
 	
 	// Do 10 puts
 	for i := 1; i <= count; i++ {
@@ -129,7 +133,49 @@ func loadStaticSLAs() {
 	GlobalSLAs[sla.ID] = sla
 }
 
-// Runs a ycsb worklaod as part of the client
-// func ycsb_experiment() {
+// Write 10K key, value pairs to primary [and wait until it's replicated everywhere]
+func preloadData() {
+	fmt.Println("Starting preload of 10K keys to primary...")
 
-// }
+	sla := GlobalSLAs["strong_sla"] // Use strong SLA to ensure primary write
+
+	// TODO: how to make the second arg an optional input?
+	s := api.BeginSession(&sla, util.Primary) 
+
+	i := 1
+	for ; i <= 10000; i++ {
+		key := fmt.Sprintf("%04d", i)
+		value := uuid.New().String()
+
+		err := api.Put(s, key, value)
+		if err != nil {
+			fmt.Printf("Failed to put key=%s: %v\n", key, err)
+		}
+		if i%1000 == 0 {
+			fmt.Printf("Preloaded %d keys...\n", i)
+		}
+	}
+
+	api.EndSession(s)
+
+	// TODO: handle multi-shards for this later
+	// Wait for replication to complete on secondaries
+	waitForPreLoadingReplication(fmt.Sprintf("%04d", i-1))
+
+	fmt.Println("Finished preloading keys.")
+}
+
+func waitForPreLoadingReplication(lastKey string) {
+	// First get the high timestamp of the primary (the TS of the last object written)
+	_, obj_ts, high_timestamp, err := api.GetPrimaryLatestKey(lastKey)
+
+	if (err != nil) {
+		fmt.Printf("Failed to get the last key from primary: %v\n", err)
+	}
+
+	if (obj_ts != high_timestamp ) {
+		fmt.Printf("Latest obj timestamp is not the same as the node timestamp")
+	}
+
+	api.WaitForSecondaries(obj_ts, lastKey)
+}

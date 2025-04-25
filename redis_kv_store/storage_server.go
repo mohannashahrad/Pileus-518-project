@@ -54,6 +54,7 @@ func main() {
 	http.HandleFunc("/get", handleGet)
 	http.HandleFunc("/replicate", replicationHandler)
 	http.HandleFunc("/probe", handleProbe)
+	http.HandleFunc("/status", sendLatestStatus)
 
 	// Shutdown Signal Handler: For storing the high timestamp information (on Redis)
 	go handleShutdown()
@@ -315,6 +316,17 @@ func pullFromPrimary(shard *util.Shard) error {
 	}
 
 	return nil
+}
+
+// This endpoint is called when the primary want to check how up-to-date the secondaries are
+func sendLatestStatus(w http.ResponseWriter, r *http.Request) {
+	// Make a Map of shardID -> high timestamp
+	status := make(map[int]int64) 
+	
+	for _, shard := range secondaryShards {
+		status[shard.ShardId] = shard.HighTS
+	}
+	json.NewEncoder(w).Encode(status)
 }
 
 func handleProbe(w http.ResponseWriter, r *http.Request) {
