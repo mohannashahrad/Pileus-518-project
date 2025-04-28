@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"time"
-	// "math/rand"
+	"math/rand"
 	"github.com/google/uuid"
 	"client/consistency"
 	"client/util"
@@ -45,17 +45,51 @@ func main() {
 	// api.PrintRTTs()
 
 	// This should always be called from the primary before testing the clients
-	preloadData()
+	preloadData(100)
 
 	// TODO: this should be changed to a more realistic workload like YCSB
 
 	// Uncomment based on the type of the experiment you want to check
 	
+	YCSB_workload("psw_sla", 1000, 100, 0.5, util.Pileus)
 	// password_checking_putWorkload(10, util.Pileus)
 	// password_checking_putWorkload(10, util.Random)
 	// password_checking_putWorkload(10, util.Primary)
 	// password_checking_putWorkload(10, util.Closest)
 }
+
+// Tunable workload 
+func YCSB_workload(sla_name string, size int, keySpace int, readProportion float32, expType util.ServerSelectionPolicy) error {
+	fmt.Printf("Running %s workload of size %d with read proportion %f with %d unique keys \n", sla_name, size, readProportion, keySpace)
+
+	sla := GlobalSLAs[sla_name]
+	s := api.BeginSession(&sla, expType)
+
+	//determinizing workload
+	r := rand.New(rand.NewSource(1337))
+
+	for i := 0; i < size; i++ {
+		// Randomly selects a key from [0, keyCount)
+		key := fmt.Sprintf("%04d", r.Intn(keySpace))
+
+		if r.Float32() < readProportion {
+			val, subSLAGained, err := api.Get(s, key, &sla)
+			if err != nil {
+				fmt.Printf("Get error for key %s: %v (subSLAGained: %v)\n", key, err, subSLAGained)
+			} else {
+				fmt.Printf("Read key=%s, value=%s, subSLAGained=%v\n", key, string(val), subSLAGained)
+			}
+		} else {
+			value := uuid.New().String()
+			api.Put(s, key, value)
+		}
+	}
+
+	fmt.Println(s.Utilities)
+	api.EndSession(s)
+	return nil
+}
+
 
 // Start a session and do a bunch of puts in the same session
 func password_checking_putWorkload(count int, expType util.ServerSelectionPolicy) error {
@@ -134,7 +168,7 @@ func loadStaticSLAs() {
 }
 
 // Write 10K key, value pairs to primary [and wait until it's replicated everywhere]
-func preloadData() {
+func preloadData(keySpace int) {
 	fmt.Println("Starting preload of 10K keys to primary...")
 
 	sla := GlobalSLAs["strong_sla"] // Use strong SLA to ensure primary write
@@ -143,7 +177,7 @@ func preloadData() {
 	s := api.BeginSession(&sla, util.Primary) 
 
 	i := 1
-	for ; i <= 10000; i++ {
+	for ; i <= keySpace; i++ {
 		key := fmt.Sprintf("%04d", i)
 		value := uuid.New().String()
 
