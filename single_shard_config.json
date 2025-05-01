@@ -6,11 +6,11 @@
     }, 
     {
       "nodeId": "utah",
-      "nodeAddress": "128.110.217.110:8080"
+      "nodeAddress": "128.110.217.202:8080"
     }, 
     {
       "nodeId": "wisc",
-      "nodeAddress": "128.105.145.198:8080"
+      "nodeAddress": "128.105.145.204:8080"
     }
   ], 
   "shards": [
