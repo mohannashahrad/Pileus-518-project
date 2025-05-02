@@ -52,7 +52,7 @@ func FindNodeToRead(s *util.Session, key string, sla *consistency.SLA) (string, 
 // Returns the best node for a given SubSLA
 func ComputeUtilityForSubSLA(s *util.Session, key string, sub *consistency.SubSLA) (SubUtility, int64) {
 
-	fmt.Printf("entered ComputeUtilityForSubSLA for %v\n", sub)
+	//fmt.Printf("entered ComputeUtilityForSubSLA for %v\n", sub)
 	var chosen string
 	var maxProb float64 = -1
 

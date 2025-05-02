@@ -110,7 +110,7 @@ func Put(s *util.Session, key string, value string) error {
 	monitor.RecordRTT(GlobalConfig.Shards[shardID].Primary, rtt)
 
 	// Update write timestamp of the session
-	fmt.Printf("Set succeeded. Updating session write timestamp: %d\n", result.SetTimestamp)
+	// fmt.Printf("Set succeeded. Updating session write timestamp: %d\n", result.SetTimestamp)
 	s.ObjectsWritten[key] = result.SetTimestamp          
 
     return nil
@@ -153,8 +153,7 @@ func PileusGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 	val, obj_ts, node_hts, rtt, err := readFromNode(key, storageNode)
 
 	// Calculate and track utility based on get_timestamp and rtt (consistency + latency)
-	// TODO: Right now it is very specific to the SLA's we implement, this should be more general
-	subAchieved := computeUtilityGained(obj_ts, node_hts, rtt, targetSubSLA, activeSLA)
+	subAchieved := detectSubSLAHit(obj_ts, node_hts, rtt, targetSubSLA, activeSLA)
 
 	// If no sub-sla is achieved
 	if subAchieved == nil {
@@ -170,7 +169,6 @@ func PileusGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 	// Update the read timestamp of the object read
 	s.ObjectsRead[key] = obj_ts
 
-	// TODO: make sure you return the correct status code with which sub-SLA is hit [use subSLAAchieved]
 	return val, *subAchieved, err
 }
 
@@ -396,11 +394,9 @@ func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, cons
 }
 
 // TODO: This implementation is right now highly tuned for the SLA's we are testing. Generalize this implementation
-func computeUtilityGained(obj_ts int64, node_hts int64, rtt time.Duration, targetSubSLA consistency.SubSLA, activeSLA *consistency.SLA) *consistency.SubSLA{
-	
+// TOO: client atogether with their sla's should register the utility calculator function
+func detectSubSLAHit(obj_ts int64, node_hts int64, rtt time.Duration, targetSubSLA consistency.SubSLA, activeSLA *consistency.SLA) *consistency.SubSLA{
 	if (activeSLA.ID == "psw_sla") {
-		fmt.Println("Checking the utility gained for password checking example: \n")
-
 		for _, sub := range activeSLA.SubSLAs {
 			// If we targeted strong consistency (contacted primary)
 			if (targetSubSLA.Consistency == 4) {
@@ -413,6 +409,8 @@ func computeUtilityGained(obj_ts int64, node_hts int64, rtt time.Duration, targe
 				if (sub.Consistency == 0 && rtt <= sub.Latency.Duration) {
 					subGained := sub
 					return &subGained
+				} else {
+					return nil
 				}
 			}
 		}
@@ -422,6 +420,8 @@ func computeUtilityGained(obj_ts int64, node_hts int64, rtt time.Duration, targe
 		return nil
 		
 	}
+
+	// TODO: implement the other sub-SLA here 
 
 	// If didn't return yet, no sub-SLA was met 
 	fmt.Println("Specific utility computing function is not implemented, returning nil: \n")

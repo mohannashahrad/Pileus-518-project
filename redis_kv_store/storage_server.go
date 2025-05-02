@@ -22,7 +22,7 @@ var shard_range_end int
 var primaryShard util.Shard		// Note: Assumption that each storage node is primary for 1 shard for now
 var secondaryShards []util.Shard
 
-// How to invoke: go run storage_server.go <storage_id>
+// How to invoke: go run storage_server.go <storage_id>  <replication-config-path>
 func main() {
 	if len(os.Args) < 3 {
 		fmt.Println("Usage: go run storage_server.go <storage-id> <replication-config-path>")

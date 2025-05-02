@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"time"
-	"math/rand"
 	"github.com/google/uuid"
 	"client/consistency"
 	"client/util"
 	"client/api"
+	"bufio"
+	"os"
+	"strings"
 )
 
 // TODO: this records thing should be changed
@@ -39,57 +41,102 @@ func main() {
 
 	// Before sending the workloads, send monitoring probes to the nodes to get RTT 
 	// TODO: we can use probes also for HighTS to begin [for each shard]
-	api.SendProbes()
+	//api.SendProbes()
 
 	// fmt.Println("Checking the RTT's after sending init probes\n")
 	// api.PrintRTTs()
 
 	// This should always be called from the primary before testing the clients
-	preloadData(100)
+	preloadData(10000)
 
-	// TODO: this should be changed to a more realistic workload like YCSB
-
-	// Uncomment based on the type of the experiment you want to check
+	start := time.Now()
+	replay_workload_from_log("ycsb/read50write50.log", util.Pileus, "psw_sla")
+	duration := time.Since(start)
+	fmt.Printf("Workload execution took %v\n", duration)
 	
-	YCSB_workload("psw_sla", 1000, 100, 0.5, util.Pileus)
+	//YCSB_workload("psw_sla", 1000, 100, 0.5, util.Pileus)
 	// password_checking_putWorkload(10, util.Pileus)
 	// password_checking_putWorkload(10, util.Random)
 	// password_checking_putWorkload(10, util.Primary)
 	// password_checking_putWorkload(10, util.Closest)
 }
 
-// Tunable workload 
-func YCSB_workload(sla_name string, size int, keySpace int, readProportion float32, expType util.ServerSelectionPolicy) error {
-	fmt.Printf("Running %s workload of size %d with read proportion %f with %d unique keys \n", sla_name, size, readProportion, keySpace)
+func replay_workload_from_log(workloadFile string, expType util.ServerSelectionPolicy, slaName string) error {
+	// 400 operations per session
+	const opsPerSession = 400
 
-	sla := GlobalSLAs[sla_name]
-	s := api.BeginSession(&sla, expType)
+	file, err := os.Open(workloadFile)
+	if err != nil {
+		return fmt.Errorf("failed to open workload file: %v", err)
+	}
+	defer file.Close()
 
-	//determinizing workload
-	r := rand.New(rand.NewSource(1337))
+	scanner := bufio.NewScanner(file)
+	var ops []string
 
-	for i := 0; i < size; i++ {
-		// Randomly selects a key from [0, keyCount)
-		key := fmt.Sprintf("%04d", r.Intn(keySpace))
-
-		if r.Float32() < readProportion {
-			val, subSLAGained, err := api.Get(s, key, &sla)
-			if err != nil {
-				fmt.Printf("Get error for key %s: %v (subSLAGained: %v)\n", key, err, subSLAGained)
-			} else {
-				fmt.Printf("Read key=%s, value=%s, subSLAGained=%v\n", key, string(val), subSLAGained)
-			}
-		} else {
-			value := uuid.New().String()
-			api.Put(s, key, value)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.TrimSpace(line) != "" {
+			ops = append(ops, line)
 		}
 	}
 
-	fmt.Println(s.Utilities)
-	api.EndSession(s)
+	if err := scanner.Err(); err != nil {
+		return fmt.Errorf("failed to read workload file: %v", err)
+	}
+
+	fmt.Printf("Read %d operations from log\n", len(ops))
+
+	// Replay operations in sessions of 400 ops each
+	sla := GlobalSLAs[slaName]
+	for i := 0; i < len(ops); i += opsPerSession {
+		end := i + opsPerSession
+		if end > len(ops) {
+			end = len(ops)
+		}
+
+		// Start session
+		s := api.BeginSession(&sla, expType)
+
+		for _, op := range ops[i:end] {
+			parts := strings.Fields(op)
+			if len(parts) < 2 {
+				fmt.Printf("Skipping malformed line: %s\n", op)
+				continue
+			}
+
+			switch parts[0] {
+			case "READ":
+				key := parts[1]
+				fmt.Printf("Do a READ\n")
+				val, subSLAGained, err := api.Get(s, key, &sla)
+				if err != nil {
+					fmt.Printf("Get error for key %s: %v (subSLAGained: %v)\n", key, err, subSLAGained)
+				} else {
+					fmt.Printf("Read key=%s, value=%s, subSLAGained=%v\n", key, string(val), subSLAGained)
+				}
+			case "WRITE":
+				if len(parts) < 3 {
+					fmt.Printf("Skipping malformed WRITE line: %s\n", op)
+					continue
+				}
+				key := parts[1]
+				value := parts[2]
+				fmt.Printf("Do a WRITE\n")
+				api.Put(s, key, value)
+			default:
+				fmt.Printf("Unknown operation type: %s\n", parts[0])
+			}
+		}
+
+		fmt.Println("Session complete. Utilities:", s.Utilities)
+
+		// tODO: this should be implemenetd
+		api.EndSession(s)
+	}
+
 	return nil
 }
-
 
 // Start a session and do a bunch of puts in the same session
 func password_checking_putWorkload(count int, expType util.ServerSelectionPolicy) error {
@@ -136,7 +183,7 @@ func loadStaticSLAs() {
 	var sla consistency.SLA
 	var err error
 	
-	sla, err = util.LoadSLAFromFile("consistency/samples/password_checking.json", "psw_sla")
+	sla, err = util.LoadSLAFromFile("consistency/samples/psw_cloudlab.json", "psw_sla")
 	if err != nil {
 		panic(err)
 	}
@@ -194,7 +241,7 @@ func preloadData(keySpace int) {
 
 	// TODO: handle multi-shards for this later
 	// Wait for replication to complete on secondaries
-	waitForPreLoadingReplication(fmt.Sprintf("%04d", i-1))
+	// waitForPreLoadingReplication(fmt.Sprintf("%04d", i-1))
 
 	fmt.Println("Finished preloading keys.")
 }
