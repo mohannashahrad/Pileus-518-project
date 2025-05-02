@@ -3,19 +3,19 @@
     {
       "rank": 1,
       "consistecy": "strong",
-      "latency_bound": 33,
+      "latency_bound": 61,
       "utility": 1
     },
     {
       "rank": 2,
       "consistecy": "eventual",
-      "latency_bound": 33,
+      "latency_bound": 61,
       "utility": 0.5
     },
     {
       "rank": 3,
       "consistecy": "strong",
-      "latency_bound": 300,
+      "latency_bound": 200,
       "utility": 0.25
     }
   ]
