@@ -3,6 +3,7 @@ package monitor
 import (
 	"sync"
 	"time"
+	"fmt"
 )
 
 // Size of the sliding window
@@ -31,6 +32,8 @@ var globalMonitor = &Monitor{
 
 // RecordRTT is called by the API layer to track RTTs.
 func RecordRTT(node string, rtt time.Duration) {
+	fmt.Printf("Recording RTT: node=%s, rtt=%v\n", node, rtt)
+
 	globalMonitor.mu.Lock()
 	defer globalMonitor.mu.Unlock()
 

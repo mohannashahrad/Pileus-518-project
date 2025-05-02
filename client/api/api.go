@@ -79,10 +79,7 @@ type Record struct {
 
 // This will update session metadata on write timestamps
 func Put(s *util.Session, key string, value string) error {
-
-	fmt.Printf("Entered the api Put function\n")
     shardID := determineShardForKey(key)
-	fmt.Printf("shardId is %d \n", shardID)
 
 	rec := Record{
 		Key:   key,
@@ -91,10 +88,6 @@ func Put(s *util.Session, key string, value string) error {
 
 	recordJson, _ := json.Marshal(rec)
 	url := fmt.Sprintf("http://%s/set", GlobalConfig.Shards[shardID].Primary)
-
-	// start := time.Now()
-	// resp, err := http.Post(url, "application/json", bytes.NewBuffer(recordJson))
-	// rtt := time.Since(start)
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(recordJson))
 	if err != nil {
@@ -162,9 +155,9 @@ func PileusGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 	}
 
 	// Find the storage node that maximizes the utility
-	storageNode, targetSubSLA, minReadTSPerSubSLA := optimizer.FindNodeToRead(s, key, activeSLA)
+	storageNode, targetSubSLA, _ := optimizer.FindNodeToRead(s, key, activeSLA)
 	fmt.Printf("chosen storage node is %v and chosen subsla is %v\n", storageNode, targetSubSLA)
-	fmt.Printf("minReadTSPerSubSLA for subslas is %v\n", minReadTSPerSubSLA)
+	// fmt.Printf("minReadTSPerSubSLA for subslas is %v\n", minReadTSPerSubSLA)
 
 	// Perform the read + calculate exact utility achieved
 	val, obj_ts, node_hts, rtt, err := readFromNode(key, storageNode)
@@ -285,8 +278,8 @@ func readFromNode(key string, storageNode string) (string, int64, int64, time.Du
 	object_ts := response.Timestamp
 	node_high_ts := response.HighTS
 
-	fmt.Printf("Returned Object TS is: %d\n", object_ts)
-	fmt.Printf("HighTS of the node responding is: %d\n", node_high_ts)
+	// fmt.Printf("Returned Object TS is: %d\n", object_ts)
+	// fmt.Printf("HighTS of the node responding is: %d\n", node_high_ts)
 
 	monitor.RecordHTS(storageNode, node_high_ts)
 	
