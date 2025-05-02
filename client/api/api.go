@@ -303,6 +303,14 @@ func primaryOnlyGet(s *util.Session, key string, sla *consistency.SLA) (string, 
 	shardID := determineShardForKey(key)
 	val, _, _, rtt, err := readFromNode(key, GlobalConfig.Shards[shardID].Primary)
 
+	if (err != nil) {
+		// Some error happened for the key
+		fmt.Println("primary-only read failed with error")
+		fmt.println(err)
+		s.Utilities = append(s.Utilities, 0.0)
+		return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
+	}
+
 	// If we always go to primary, consistency is always met, the RTT is the only thing to check for the utility checking
 	for _, sub := range activeSLA.SubSLAs {
 		if rtt <= sub.Latency.Duration {
@@ -336,6 +344,14 @@ func randomGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 
 	val, _, _, rtt, err := readFromNode(key, randomNode.Address)
 	fmt.Println("RTT was %f", rtt)
+
+	if (err != nil) {
+		// Some error happened for the key
+		fmt.Println("random read failed with error")
+		fmt.println(err)
+		s.Utilities = append(s.Utilities, 0.0)
+		return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
+	}
 
 	for _, sub := range activeSLA.SubSLAs {
 		if ( rtt <= sub.Latency.Duration && randomNode.Address == primaryForKey) {
@@ -380,6 +396,15 @@ func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, cons
 
 	val, _, _, rtt, err := readFromNode(key, closestNode)
 	fmt.Println("RTT was %f", rtt)
+
+	// TODO: here the retry mechanism should be done
+	if (err != nil) {
+		// Some error happened for the key
+		fmt.Println("closest read failed with error")
+		fmt.println(err)
+		s.Utilities = append(s.Utilities, 0.0)
+		return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
+	}
 
 	for _, sub := range activeSLA.SubSLAs {
 		if (rtt <= sub.Latency.Duration && closestNode == primaryForKey) {
