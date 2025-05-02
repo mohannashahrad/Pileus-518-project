@@ -41,24 +41,20 @@ func main() {
 
 	// Before sending the workloads, send monitoring probes to the nodes to get RTT 
 	// TODO: we can use probes also for HighTS to begin [for each shard]
-	//api.SendProbes()
+	api.SendProbes()
 
-	// fmt.Println("Checking the RTT's after sending init probes\n")
-	// api.PrintRTTs()
-
-	// This should always be called from the primary before testing the clients
-	preloadData(10000)
+	fmt.Println("Checking the RTT's after sending init probes\n")
+	api.PrintRTTs()
 
 	start := time.Now()
-	replay_workload_from_log("ycsb/test.log", util.Pileus, "psw_sla")
+
+	// Adjust the workload based on the exp type
+	replay_workload_from_log("ycsb/2k/r50w50primary.log", util.Pileus, "psw_sla")
+	// replay_workload_from_log("ycsb/read50write50.log", util.Random, "psw_sla")
+	// replay_workload_from_log("ycsb/read50write50.log", util.Primary, "psw_sla")
+	// replay_workload_from_log("ycsb/read50write50.log", util.Closest, "psw_sla")
 	duration := time.Since(start)
 	fmt.Printf("Workload execution took %v\n", duration)
-	
-	//YCSB_workload("psw_sla", 1000, 100, 0.5, util.Pileus)
-	// password_checking_putWorkload(10, util.Pileus)
-	// password_checking_putWorkload(10, util.Random)
-	// password_checking_putWorkload(10, util.Primary)
-	// password_checking_putWorkload(10, util.Closest)
 }
 
 func replay_workload_from_log(workloadFile string, expType util.ServerSelectionPolicy, slaName string) error {
@@ -232,51 +228,4 @@ func loadStaticSLAs() {
 		panic(err)
 	}
 	GlobalSLAs[sla.ID] = sla
-}
-
-// Write 10K key, value pairs to primary [and wait until it's replicated everywhere]
-func preloadData(keySpace int) {
-	fmt.Println("Starting preload of 10K keys to primary...")
-
-	sla := GlobalSLAs["strong_sla"] // Use strong SLA to ensure primary write
-
-	// TODO: how to make the second arg an optional input?
-	s := api.BeginSession(&sla, util.Primary) 
-
-	i := 1
-	for ; i <= keySpace; i++ {
-		key := fmt.Sprintf("%04d", i)
-		value := uuid.New().String()
-
-		err := api.Put(s, key, value)
-		if err != nil {
-			fmt.Printf("Failed to put key=%s: %v\n", key, err)
-		}
-		if i%1000 == 0 {
-			fmt.Printf("Preloaded %d keys...\n", i)
-		}
-	}
-
-	api.EndSession(s)
-
-	// TODO: handle multi-shards for this later
-	// Wait for replication to complete on secondaries
-	// waitForPreLoadingReplication(fmt.Sprintf("%04d", i-1))
-
-	fmt.Println("Finished preloading keys.")
-}
-
-func waitForPreLoadingReplication(lastKey string) {
-	// First get the high timestamp of the primary (the TS of the last object written)
-	_, obj_ts, high_timestamp, err := api.GetPrimaryLatestKey(lastKey)
-
-	if (err != nil) {
-		fmt.Printf("Failed to get the last key from primary: %v\n", err)
-	}
-
-	if (obj_ts != high_timestamp ) {
-		fmt.Printf("Latest obj timestamp is not the same as the node timestamp")
-	}
-
-	api.WaitForSecondaries(obj_ts, lastKey)
 }

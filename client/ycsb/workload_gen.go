@@ -9,14 +9,17 @@ import (
 )
 
 func main() {
-	YCSB_workload_gen("read50write50.log", 300000, 10000, 0.5)
+	YCSB_workload_gen("2k/r50w50primary.log", 2000, 10000, 0.5, 1337)
+	YCSB_workload_gen("2k/r50w50sec1.log", 2000, 10000, 0.5, 1338)
+	YCSB_workload_gen("2k/r50w50sec2.log", 2000, 10000, 0.5, 1339)
+	YCSB_workload_gen("2k/r50w50client.log", 2000, 10000, 0.5, 1340)
 }
 
 // Generates a YCSB-like workload, tunable with
 	// size = Number of operations in the worklaod
 	// Size of the keyspace
 	// Proportion of the read operations (Default for Eval = 50%)
-func YCSB_workload_gen(workload_name string, size int, keySpace int, readProportion float32) error {
+func YCSB_workload_gen(workload_name string, size int, keySpace int, readProportion float32, seed int64) error {
 	fmt.Printf("Generating workload of size %d with read proportion %f and %d unique keys\n", size, readProportion, keySpace)
 
 	f, err := os.Create(workload_name)
@@ -25,7 +28,7 @@ func YCSB_workload_gen(workload_name string, size int, keySpace int, readProport
 	}
 	defer f.Close()
 
-	r := rand.New(rand.NewSource(1337))
+	r := rand.New(rand.NewSource(seed))
 
 	for i := 0; i < size; i++ {
 		key := fmt.Sprintf("%04d", r.Intn(keySpace))
