@@ -306,7 +306,7 @@ func primaryOnlyGet(s *util.Session, key string, sla *consistency.SLA) (string, 
 	if (err != nil) {
 		// Some error happened for the key
 		fmt.Println("primary-only read failed with error")
-		fmt.println(err)
+		fmt.Println(err)
 		s.Utilities = append(s.Utilities, 0.0)
 		return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 	}
@@ -348,7 +348,7 @@ func randomGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 	if (err != nil) {
 		// Some error happened for the key
 		fmt.Println("random read failed with error")
-		fmt.println(err)
+		fmt.Println(err)
 		s.Utilities = append(s.Utilities, 0.0)
 		return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 	}
@@ -401,7 +401,7 @@ func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, cons
 	if (err != nil) {
 		// Some error happened for the key
 		fmt.Println("closest read failed with error")
-		fmt.println(err)
+		fmt.Println(err)
 		s.Utilities = append(s.Utilities, 0.0)
 		return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 	}
