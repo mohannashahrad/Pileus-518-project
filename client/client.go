@@ -50,7 +50,7 @@ func main() {
 	preloadData(10000)
 
 	start := time.Now()
-	replay_workload_from_log("ycsb/read50write50.log", util.Pileus, "psw_sla")
+	replay_workload_from_log("ycsb/test.log", util.Pileus, "psw_sla")
 	duration := time.Since(start)
 	fmt.Printf("Workload execution took %v\n", duration)
 	
@@ -64,6 +64,7 @@ func main() {
 func replay_workload_from_log(workloadFile string, expType util.ServerSelectionPolicy, slaName string) error {
 	// 400 operations per session
 	const opsPerSession = 400
+	var avgUtilityList []float64
 
 	file, err := os.Open(workloadFile)
 	if err != nil {
@@ -130,9 +131,28 @@ func replay_workload_from_log(workloadFile string, expType util.ServerSelectionP
 		}
 
 		fmt.Println("Session complete. Utilities:", s.Utilities)
+		var sessionAvg float64
+		if len(s.Utilities) > 0 {
+			var sum float64
+			for _, u := range s.Utilities {
+				sum += u
+			}
+			sessionAvg = sum / float64(len(s.Utilities))
+		}
 
-		// tODO: this should be implemenetd
+		avgUtilityList = append(avgUtilityList, sessionAvg)
+
 		api.EndSession(s)
+	}
+
+	// Report the avg of all session utilities
+	if len(avgUtilityList) > 0 {
+		var sum float64
+		for _, vg := range avgUtilityList {
+			sum += vg
+		}
+		avg := sum / float64(len(avgUtilityList))
+		fmt.Printf("Average vg across %d sessions: %f\n", len(avgUtilityList), avg)
 	}
 
 	return nil

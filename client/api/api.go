@@ -47,10 +47,27 @@ func BeginSession(sla *consistency.SLA, serverSelectionPolicy util.ServerSelecti
 	}
 }
 
-// TODO: how should it be implemented?
 func EndSession(s *util.Session) {
-	// Clean up state
-	// should have logic for reporting the avg utility of the session reads
+	// 1. Compute average utility
+	var total float64
+	for _, u := range s.Utilities {
+		total += u
+	}
+	avgUtility := 0.0
+	if len(s.Utilities) > 0 {
+		avgUtility = total / float64(len(s.Utilities))
+	}
+
+	// 2. Count objects accessed
+	numReads := len(s.ObjectsRead)
+	numWrites := len(s.ObjectsWritten)
+
+	fmt.Printf("Session ended. Avg Utility: %.4f | Reads: %d | Writes: %d\n", avgUtility, numReads, numWrites)
+
+	// 4. Clean up maps/slices to reclaim memory
+	s.ObjectsRead = nil
+	s.ObjectsWritten = nil
+	s.Utilities = nil
 }
 
 // ========== GET/PUT Endpoints ==========
