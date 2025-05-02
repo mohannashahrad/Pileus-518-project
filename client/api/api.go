@@ -460,16 +460,26 @@ func MeasureProbeRTT(host string, timeout time.Duration, pingCount int) (time.Du
 	var success int
 
 	url := fmt.Sprintf("http://%s/probe", host)
-	fmt.Println(url)
+	fmt.Println("Probing URL:", url)
 
-	client := http.Client{
-		Timeout: timeout * time.Second,
+	// Temporarily set timeout on shared client (optional, but acceptable for controlled use)
+	httpClient.Timeout = timeout * time.Second
+
+	// Warm-up phase (not timed)
+	warmupCount := 2
+	for i := 0; i < warmupCount; i++ {
+		resp, err := httpClient.Get(url)
+		if err != nil {
+			fmt.Printf("Warm-up error pinging %s: %v\n", url, err)
+			continue
+		}
+		resp.Body.Close()
 	}
 
-	// Pinging 5 times
+	// Actual RTT measurement phase
 	for i := 0; i < pingCount; i++ {
 		start := time.Now()
-		resp, err := client.Get(url)
+		resp, err := httpClient.Get(url)
 		elapsed := time.Since(start)
 
 		if err != nil {
@@ -487,7 +497,7 @@ func MeasureProbeRTT(host string, timeout time.Duration, pingCount int) (time.Du
 	if success == 0 {
 		return 0, fmt.Errorf("no successful responses")
 	}
-	
+
 	rtt_float := total / float64(success)
 	return time.Duration(rtt_float * float64(time.Millisecond)), nil
 }

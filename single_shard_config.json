@@ -9,8 +9,8 @@
       "nodeAddress": "128.110.217.202:8080"
     }, 
     {
-      "nodeId": "wisc",
-      "nodeAddress": "128.105.145.204:8080"
+      "nodeId": "frankfurt",
+      "nodeAddress": "3.73.123.235:8080"
     }
   ], 
   "shards": [
@@ -20,7 +20,7 @@
       "end": 10000,
       "primary": "130.127.133.18:8080",
       "primaryID": "clem",
-      "secondaryIDs": ["utah", "wisc"]
+      "secondaryIDs": ["utah", "frankfurt"]
     }
   ]
 }
