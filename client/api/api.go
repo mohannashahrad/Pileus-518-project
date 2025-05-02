@@ -419,8 +419,6 @@ func detectSubSLAHit(obj_ts int64, node_hts int64, rtt time.Duration, targetSubS
 				if (sub.Consistency == 0 && rtt <= sub.Latency.Duration) {
 					subGained := sub
 					return &subGained
-				} else {
-					return nil
 				}
 			}
 		}
