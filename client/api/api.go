@@ -13,6 +13,7 @@ import (
 	"strconv"
 	"time"
 	"math/rand"
+	"sync"
 )
 
 
@@ -70,12 +71,16 @@ func EndSession(s *util.Session) {
 	s.Utilities = nil
 }
 
-// ========== GET/PUT Endpoints ==========
+// ========== Helper Data Structures ==========
 
 type Record struct {
     Key   string `json:"key"`
     Value string `json:"value"`
 }
+var artificialLags = make(map[string]time.Duration)
+var lagMu sync.RWMutex
+
+// ========== GET/PUT Endpoints ==========
 
 // This will update session metadata on write timestamps
 func Put(s *util.Session, key string, value string) error {
@@ -98,6 +103,9 @@ func Put(s *util.Session, key string, value string) error {
 	start := time.Now()
 	resp, err := httpClient.Do(req)
 	rtt := time.Since(start)
+
+	// Adjust RTT is there is a lag associated wih Primary
+	rtt += getArtificialLag(GlobalConfig.Shards[shardID].Primary)
 
 	if err != nil || resp.StatusCode != http.StatusOK {
 		fmt.Printf("An error happened invoking the put endpoint of the storage node\n")
@@ -183,108 +191,8 @@ func PileusGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 }
 
 // =====================
-// Helper Functions
+// Get Functions for Eval
 // =====================
-
-// Loads the sharding and replicaiton config
-func LoadReplicationConfig(path string) error { 
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return err
-	}
-	var config util.ReplicationConfig
-	err = json.Unmarshal(data, &config)
-	if err != nil {
-		return err
-	}
-
-	// From the secondary IDs assign the secondary endpoints
-	nodeIDToAddress := make(map[string]string)
-	for _, node := range config.Nodes {
-		nodeIDToAddress[node.Id] = node.Address
-	}
-
-	// Populate the Secondaries field for each shard using the SecondaryIDs
-	for i := range config.Shards {
-		secondaryAddrs := []string{}
-		for _, secID := range config.Shards[i].SecondaryIDs {
-			addr, ok := nodeIDToAddress[secID]
-			if !ok {
-				return fmt.Errorf("could not find address for secondary ID %s", secID)
-			}
-			secondaryAddrs = append(secondaryAddrs, addr)
-		}
-		config.Shards[i].Secondaries = secondaryAddrs
-	}
-
-	GlobalConfig = &config
-
-	// Also udpate the optimizer with the same config
-	optimizer.Init(GlobalConfig)
-
-	fmt.Println("Loaded the config and it is:")
-	fmt.Println(GlobalConfig)
-
-	return nil 
-}
-
-func determineShardForKey(string_key string) int {
-	key, err := strconv.Atoi(string_key)
-	if err != nil {
-		fmt.Printf("Error happened in getting the int value of the key")
-		return -1
-	}
-   
-    for i, shard := range GlobalConfig.Shards {
-    
-        if key >= shard.RangeStart && key <= shard.RangeEnd {
-            fmt.Printf("Key %d belongs to shard #%d: %+v\n", key, i, shard)
-            return i
-        }
-    }
-    panic(fmt.Sprintf("No shard found for key: %d", key))
-}
-
-// Return Values: value, read_ts of the object, ConditionCode, utility , error (if any)
-func readFromNode(key string, storageNode string) (string, int64, int64, time.Duration, error) {
-
-	url := fmt.Sprintf("http://%s/get?key=%s", storageNode, key)
-
-	start := time.Now()
-	resp, err := http.Get(url)
-	rtt := time.Since(start)
-
-	if err != nil || resp.StatusCode != http.StatusOK {
-		fmt.Printf("Error invoking the storage node's GET endpoint\n")
-		return "", -1, -1 , 0, fmt.Errorf("HTTP error: %v", err)
-	}
-	defer resp.Body.Close()
-
-	// TODO: here should we check the timestamp of the object to make sure consistency was met?
-	var response struct {
-		Key       string    `json:"key"`
-		Value     string 	`json:"value"`
-		Timestamp int64     `json:"timestamp"`
-		HighTS 	  int64 	`json:"highTS"`
-	}
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		return "", -1, -1, 0, fmt.Errorf("error decoding response: %v", err)
-	}
-
-	// If no err, update the RTT window
-	monitor.RecordRTT(storageNode, rtt)
-
-	// Extracting the timestamp info returned from the storage node
-	object_ts := response.Timestamp
-	node_high_ts := response.HighTS
-
-	// fmt.Printf("Returned Object TS is: %d\n", object_ts)
-	// fmt.Printf("HighTS of the node responding is: %d\n", node_high_ts)
-
-	monitor.RecordHTS(storageNode, node_high_ts)
-	
-	return response.Value, object_ts, node_high_ts, rtt, nil
-}
 
 // This is for evaluation purposes
 func primaryOnlyGet(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
@@ -326,7 +234,6 @@ func primaryOnlyGet(s *util.Session, key string, sla *consistency.SLA) (string, 
 	return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 }
 
-// This is for evaluation purposes
 // TODO: utility calculation is highly tuned for password checking now
 func randomGet(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
 	activeSLA := s.DefaultSLA
@@ -428,6 +335,113 @@ func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, cons
 	return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 }
 
+// =====================
+// Helper Functions
+// =====================
+
+// Loads the sharding and replicaiton config
+func LoadReplicationConfig(path string) error { 
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	var config util.ReplicationConfig
+	err = json.Unmarshal(data, &config)
+	if err != nil {
+		return err
+	}
+
+	// From the secondary IDs assign the secondary endpoints
+	nodeIDToAddress := make(map[string]string)
+	for _, node := range config.Nodes {
+		nodeIDToAddress[node.Id] = node.Address
+	}
+
+	// Populate the Secondaries field for each shard using the SecondaryIDs
+	for i := range config.Shards {
+		secondaryAddrs := []string{}
+		for _, secID := range config.Shards[i].SecondaryIDs {
+			addr, ok := nodeIDToAddress[secID]
+			if !ok {
+				return fmt.Errorf("could not find address for secondary ID %s", secID)
+			}
+			secondaryAddrs = append(secondaryAddrs, addr)
+		}
+		config.Shards[i].Secondaries = secondaryAddrs
+	}
+
+	GlobalConfig = &config
+
+	// Also udpate the optimizer with the same config
+	optimizer.Init(GlobalConfig)
+
+	fmt.Println("Loaded the config and it is:")
+	fmt.Println(GlobalConfig)
+
+	return nil 
+}
+
+func determineShardForKey(string_key string) int {
+	key, err := strconv.Atoi(string_key)
+	if err != nil {
+		fmt.Printf("Error happened in getting the int value of the key")
+		return -1
+	}
+   
+    for i, shard := range GlobalConfig.Shards {
+    
+        if key >= shard.RangeStart && key <= shard.RangeEnd {
+            fmt.Printf("Key %d belongs to shard #%d: %+v\n", key, i, shard)
+            return i
+        }
+    }
+    panic(fmt.Sprintf("No shard found for key: %d", key))
+}
+
+// Return Values: value, read_ts of the object, ConditionCode, utility , error (if any)
+func readFromNode(key string, storageNode string) (string, int64, int64, time.Duration, error) {
+
+	url := fmt.Sprintf("http://%s/get?key=%s", storageNode, key)
+
+	start := time.Now()
+	resp, err := http.Get(url)
+	rtt := time.Since(start)
+
+	// Adjust RTT with the artifical lag [used in one of the evalation experiments]
+	rtt += getArtificialLag(storageNode)
+
+	if err != nil || resp.StatusCode != http.StatusOK {
+		fmt.Printf("Error invoking the storage node's GET endpoint\n")
+		return "", -1, -1 , 0, fmt.Errorf("HTTP error: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// TODO: here should we check the timestamp of the object to make sure consistency was met?
+	var response struct {
+		Key       string    `json:"key"`
+		Value     string 	`json:"value"`
+		Timestamp int64     `json:"timestamp"`
+		HighTS 	  int64 	`json:"highTS"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return "", -1, -1, 0, fmt.Errorf("error decoding response: %v", err)
+	}
+
+	// If no err, update the RTT window
+	monitor.RecordRTT(storageNode, rtt)
+
+	// Extracting the timestamp info returned from the storage node
+	object_ts := response.Timestamp
+	node_high_ts := response.HighTS
+
+	// fmt.Printf("Returned Object TS is: %d\n", object_ts)
+	// fmt.Printf("HighTS of the node responding is: %d\n", node_high_ts)
+
+	monitor.RecordHTS(storageNode, node_high_ts)
+	
+	return response.Value, object_ts, node_high_ts, rtt, nil
+}
+
 // TODO: This implementation is right now highly tuned for the SLA's we are testing. Generalize this implementation
 // TOO: client atogether with their sla's should register the utility calculator function
 func detectSubSLAHit(obj_ts int64, node_hts int64, rtt time.Duration, targetSubSLA consistency.SubSLA, activeSLA *consistency.SLA) *consistency.SubSLA{
@@ -525,6 +539,29 @@ func MeasureProbeRTT(host string, timeout time.Duration, pingCount int) (time.Du
 
 	rtt_float := total / float64(success)
 	return time.Duration(rtt_float * float64(time.Millisecond)), nil
+}
+
+func SetArtificialLat(nodeId string, lag time.Duration) {
+	lagMu.Lock()
+	defer lagMu.Unlock()
+
+	found := false
+	for _, node := range GlobalConfig.Nodes {
+		if node.Id == nodeId {
+			artificialLags[node.Address] = lag
+			found = true
+			break
+		}
+	}
+	if !found {
+		fmt.Printf("Warning: nodeId %s not found in GlobalConfig.Nodes\n", nodeId)
+	}
+}
+
+func getArtificialLag(node string) time.Duration {
+	lagMu.RLock()
+	defer lagMu.RUnlock()
+	return artificialLags[node]
 }
 
 // =====================
