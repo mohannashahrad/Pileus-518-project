@@ -9,10 +9,14 @@ import (
 )
 
 func main() {
-	YCSB_workload_gen("2k/r50w50primary.log", 2000, 10000, 0.5, 1337)
-	YCSB_workload_gen("2k/r50w50sec1.log", 2000, 10000, 0.5, 1338)
-	YCSB_workload_gen("2k/r50w50sec2.log", 2000, 10000, 0.5, 1339)
-	YCSB_workload_gen("2k/r50w50client.log", 2000, 10000, 0.5, 1340)
+	// Password-checking SLA Workloads
+	YCSB_workload_gen("Fig12/2k/r50w50primary.log", 2000, 10000, 0.5, 1337)
+	YCSB_workload_gen("Fig12/2k/r50w50sec1.log", 2000, 10000, 0.5, 1338)
+	YCSB_workload_gen("Fig12/2k/r50w50sec2.log", 2000, 10000, 0.5, 1339)
+	YCSB_workload_gen("Fig12/2k/r50w50client.log", 2000, 10000, 0.5, 1340)
+
+	// Workload for artificial latency experiment
+	YCSB_workload_gen("Fig13/utahClient.log", 8000, 10000, 0.5, 1341)
 }
 
 // Generates a YCSB-like workload, tunable with
