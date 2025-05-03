@@ -234,7 +234,7 @@ func primaryOnlyGet(s *util.Session, key string, sla *consistency.SLA) (string, 
 	return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 }
 
-// TODO: utility calculation is highly tuned for password checking now
+// TODO: utility calculation in these functions should be better generalized
 func randomGet(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
 	activeSLA := s.DefaultSLA
 	if sla != nil {
@@ -287,7 +287,6 @@ func randomGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 	return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 }
 
-// TODO: utility calculation is highly tuned for password checking now
 func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, consistency.SubSLA, error) {
 	activeSLA := s.DefaultSLA
 	if sla != nil {
@@ -301,7 +300,7 @@ func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, cons
 	shardID := determineShardForKey(key)
 	primaryForKey := GlobalConfig.Shards[shardID].Primary
 
-	val, _, _, rtt, err := readFromNode(key, closestNode)
+	val, _, node_hts, rtt, err := readFromNode(key, closestNode)
 	fmt.Println("RTT was %f", rtt)
 
 	// TODO: here the retry mechanism should be done
@@ -313,22 +312,42 @@ func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, cons
 		return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 	}
 
-	for _, sub := range activeSLA.SubSLAs {
-		if (rtt <= sub.Latency.Duration && closestNode == primaryForKey) {
-			fmt.Println("Random Node happened to be Primary")
-			subAchieved := &sub 
-			s.Utilities = append(s.Utilities, subAchieved.Utility)
-			return val, *subAchieved, err
+	if (activeSLA.ID == "cart_sla") {
+		_, _, minReadTSPerSubSLA := optimizer.FindNodeToRead(s, key, activeSLA)
+		fmt.Println(minReadTSPerSubSLA)
+
+		// check node high ts
+		for i, sub := range activeSLA.SubSLAs {
+			if rtt <= sub.Latency.Duration {
+				if (node_hts >= minReadTSPerSubSLA[i]) {
+					subAchieved := &sub
+					s.Utilities = append(s.Utilities, subAchieved.Utility)
+					return val, *subAchieved, err
+				}
+			}
 		}
-		if ( rtt <= sub.Latency.Duration && sub.Consistency == 0) {
-			subAchieved := &sub 
-			s.Utilities = append(s.Utilities, subAchieved.Utility)
-			return val, *subAchieved, err
-		} 
 		
-		// TODO: implement for other consistencies
+		// If didn't return yet, no sub-SLA was met 
+		fmt.Println("None of the utilities for password-checking is met, returning nil: \n")
+		return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 	}
 
+	if (activeSLA.ID == "psw_sla") {
+		for _, sub := range activeSLA.SubSLAs {
+			if (rtt <= sub.Latency.Duration && closestNode == primaryForKey) {
+				fmt.Println("Random Node happened to be Primary")
+				subAchieved := &sub 
+				s.Utilities = append(s.Utilities, subAchieved.Utility)
+				return val, *subAchieved, err
+			}
+			if ( rtt <= sub.Latency.Duration && sub.Consistency == 0) {
+				subAchieved := &sub 
+				s.Utilities = append(s.Utilities, subAchieved.Utility)
+				return val, *subAchieved, err
+			} 
+		}
+	}
+	
 	// If we have not returned yet, then no sub-SLA is met
 	fmt.Println("No utility could be computed for closest read")
 	s.Utilities = append(s.Utilities, 0.0)
