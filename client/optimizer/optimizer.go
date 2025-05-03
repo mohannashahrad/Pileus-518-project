@@ -97,6 +97,7 @@ func SelectNodesForConsistency(session *util.Session, key string, level consiste
 			// TODO: Is this right?
 			minReadTS = -1 
 
+		// last preceding Put(key) in the same session
 		case consistency.ReadMyWrites:
 			nodes, requiredReadTS := SelectNodesForReadMyWrites(session, key)
 			selected = append(selected, nodes...)
@@ -181,12 +182,9 @@ func SelectNodesForReadMyWrites(session *util.Session, key string) ([]string, in
 		}
 	}
 
-	fmt.Printf("primary %s is added to the list\n", primary)
-
 	// Consider secondaries that are sufficiently up-to-date
 	for _, node := range replicationConfig.Nodes {
 		fmt.Printf("Searching though nodes with node %v \n", node)
-		// TODO: here make sure weather we are saving addresses or ids of storage nodes
 		if node.Address == primary {
 			continue 
 		}
