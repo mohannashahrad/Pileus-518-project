@@ -163,15 +163,15 @@ func PileusGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 	}
 
 	// Find the storage node that maximizes the utility
-	storageNode, targetSubSLA, _ := optimizer.FindNodeToRead(s, key, activeSLA)
+	storageNode, targetSubSLA, minReadTSPerSubSLA := optimizer.FindNodeToRead(s, key, activeSLA)
 	fmt.Printf("chosen storage node is %v and chosen subsla is %v\n", storageNode, targetSubSLA)
-	// fmt.Printf("minReadTSPerSubSLA for subslas is %v\n", minReadTSPerSubSLA)
+	fmt.Printf("minReadTSPerSubSLA for subslas is %v\n", minReadTSPerSubSLA)
 
 	// Perform the read + calculate exact utility achieved
 	val, obj_ts, node_hts, rtt, err := readFromNode(key, storageNode)
 
 	// Calculate and track utility based on get_timestamp and rtt (consistency + latency)
-	subAchieved := detectSubSLAHit(obj_ts, node_hts, rtt, targetSubSLA, activeSLA)
+	subAchieved := detectSubSLAHit(obj_ts, node_hts, rtt, targetSubSLA, activeSLA, minReadTSPerSubSLA)
 
 	// If no sub-sla is achieved
 	if subAchieved == nil {
@@ -443,8 +443,7 @@ func readFromNode(key string, storageNode string) (string, int64, int64, time.Du
 }
 
 // TODO: This implementation is right now highly tuned for the SLA's we are testing. Generalize this implementation
-// TOO: client atogether with their sla's should register the utility calculator function
-func detectSubSLAHit(obj_ts int64, node_hts int64, rtt time.Duration, targetSubSLA consistency.SubSLA, activeSLA *consistency.SLA) *consistency.SubSLA{
+func detectSubSLAHit(obj_ts int64, node_hts int64, rtt time.Duration, targetSubSLA consistency.SubSLA, activeSLA *consistency.SLA, minReadTSPerSubSLA []int64) *consistency.SubSLA{
 	if (activeSLA.ID == "psw_sla") {
 		for _, sub := range activeSLA.SubSLAs {
 			// If we targeted strong consistency (contacted primary)
@@ -461,14 +460,30 @@ func detectSubSLAHit(obj_ts int64, node_hts int64, rtt time.Duration, targetSubS
 				}
 			}
 		}
+		// If didn't return yet, no sub-SLA was met 
+		fmt.Println("None of the utilities for password-checking is met, returning nil: \n")
+		return nil	
+	} 
+	
+	if (activeSLA.ID == "cart_sla") {
+		fmt.Println("detectSubSLAHit for cart_sla")
+		fmt.Println(minReadTSPerSubSLA)
+		fmt.Println("node_hts is %d and rtt is %v", node_hts, rtt)
 
+		// check node high ts
+		for i, sub := range activeSLA.SubSLAs {
+			if rtt <= sub.Latency.Duration {
+				if (node_hts >= minReadTSPerSubSLA[i]) {
+					subGained := sub
+					return &subGained
+				}
+			}
+		}
+		
 		// If didn't return yet, no sub-SLA was met 
 		fmt.Println("None of the utilities for password-checking is met, returning nil: \n")
 		return nil
-		
 	}
-
-	// TODO: implement the other sub-SLA here 
 
 	// If didn't return yet, no sub-SLA was met 
 	fmt.Println("Specific utility computing function is not implemented, returning nil: \n")

@@ -28,7 +28,7 @@ func FindNodeToRead(s *util.Session, key string, sla *consistency.SLA) (string, 
 
 	var chosenNode string
 	var chosenSubSLA consistency.SubSLA
-	var minTSPerSubSLA []int64
+	var minTSPerSubSLA []int64	// this holds the minReadTimestamp for each sub-SLA
 
 	maxUtility := float32(-1)
 
@@ -36,7 +36,7 @@ func FindNodeToRead(s *util.Session, key string, sla *consistency.SLA) (string, 
 		subUtility, minReadTS := ComputeUtilityForSubSLA(s, key, &sub)
 		minTSPerSubSLA = append(minTSPerSubSLA, minReadTS)
 
-		// TODO: handle stale nodes [when the utility is zero] -> Look at pileus code for this
+		// TODO: handle stale nodes [when the utility is zero] [could be an optimization]
 		// if subUtility.Utility <= 0 { ... }
 
 		if subUtility.Utility > maxUtility {
@@ -51,18 +51,14 @@ func FindNodeToRead(s *util.Session, key string, sla *consistency.SLA) (string, 
 
 // Returns the best node for a given SubSLA
 func ComputeUtilityForSubSLA(s *util.Session, key string, sub *consistency.SubSLA) (SubUtility, int64) {
-
-	//fmt.Printf("entered ComputeUtilityForSubSLA for %v\n", sub)
 	var chosen string
 	var maxProb float64 = -1
 
 	// Only filter those nodes that satisfy the consistency
 	nodes, minReadTS := SelectNodesForConsistency(s, key, sub.Consistency, sub.StalenessBound)
 
-	// TODO: implement the RTT functions in the monitor
 	for _, node := range nodes {
-		// the last input to the function is being optmistic in the probability calculation [unless otherwise is known by witnessing high RTTs]
-		prob := monitor.ProbabilityOfRTTBelow(node, sub.Latency.Duration, true)
+		prob := monitor.ProbabilityOfRTTBelow(node, sub.Latency.Duration, true) // the last input to the function is being optmistic in the probability calculation
 
 		if prob > maxProb {
 			maxProb = prob
@@ -152,6 +148,7 @@ func SelectNodesForEventualConsistency(key string) []string {
 	return selected
 }
 
+// Nodes that have value written by the last preceding Put(key) in the same session
 func SelectNodesForReadMyWrites(session *util.Session, key string) ([]string, int64) {
 	fmt.Printf("entered SelectNodesForReadMyWrites \n")
 	var selected []string
@@ -163,7 +160,7 @@ func SelectNodesForReadMyWrites(session *util.Session, key string) ([]string, in
 	} else {
 		minHighTS = 0
 	}
-
+	fmt.Printf("Last write is %d\n",  session.ObjectsWritten[key])
 	fmt.Printf("minHighTS is set to %d \n", minHighTS)
 
 	numericKey, err := strconv.Atoi(key)
@@ -173,7 +170,7 @@ func SelectNodesForReadMyWrites(session *util.Session, key string) ([]string, in
 	}
 
 	primary := ""
-	// Find primary for the key
+	// Add primary of shard
 	for _, shard := range replicationConfig.Shards {
 		if numericKey >= shard.RangeStart && numericKey <= shard.RangeEnd {
 			primary = shard.Primary
@@ -182,9 +179,8 @@ func SelectNodesForReadMyWrites(session *util.Session, key string) ([]string, in
 		}
 	}
 
-	// Consider secondaries that are sufficiently up-to-date
+	// Also add secondaries that are sufficiently up-to-date
 	for _, node := range replicationConfig.Nodes {
-		fmt.Printf("Searching though nodes with node %v \n", node)
 		if node.Address == primary {
 			continue 
 		}
