@@ -436,46 +436,51 @@ func determineShardForKey(string_key string) int {
 
 // Return Values: value, read_ts of the object, ConditionCode, utility , error (if any)
 func readFromNode(key string, storageNode string) (string, int64, int64, time.Duration, error) {
-
 	url := fmt.Sprintf("http://%s/get?key=%s", storageNode, key)
 
-	start := time.Now()
-	resp, err := http.Get(url)
-	rtt := time.Since(start)
-
-	// Adjust RTT with the artifical lag [used in one of the evalation experiments]
-	rtt += getArtificialLag(storageNode)
-
-	if err != nil || resp.StatusCode != http.StatusOK {
-		fmt.Printf("Error invoking the storage node's GET endpoint\n")
-		return "", -1, -1 , 0, fmt.Errorf("HTTP error: %v", err)
-	}
-	defer resp.Body.Close()
-
-	// TODO: here should we check the timestamp of the object to make sure consistency was met?
+	var lastErr error
 	var response struct {
-		Key       string    `json:"key"`
-		Value     string 	`json:"value"`
-		Timestamp int64     `json:"timestamp"`
-		HighTS 	  int64 	`json:"highTS"`
-	}
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		return "", -1, -1, 0, fmt.Errorf("error decoding response: %v", err)
+		Key       string `json:"key"`
+		Value     string `json:"value"`
+		Timestamp int64  `json:"timestamp"`
+		HighTS    int64  `json:"highTS"`
 	}
 
-	// If no err, update the RTT window
-	monitor.RecordRTT(storageNode, rtt)
+	for attempt := 1; attempt <= 3; attempt++ {
+		start := time.Now()
+		resp, err := http.Get(url)
+		rtt := time.Since(start)
 
-	// Extracting the timestamp info returned from the storage node
-	object_ts := response.Timestamp
-	node_high_ts := response.HighTS
+		// Adjust RTT with the artificial lag
+		rtt += getArtificialLag(storageNode)
 
-	// fmt.Printf("Returned Object TS is: %d\n", object_ts)
-	// fmt.Printf("HighTS of the node responding is: %d\n", node_high_ts)
+		if err != nil || resp.StatusCode != http.StatusOK {
+			if resp != nil {
+				resp.Body.Close()
+			}
+			fmt.Printf("Attempt %d failed: error invoking GET on %s\n", attempt, storageNode)
+			lastErr = fmt.Errorf("HTTP error (attempt %d): %v", attempt, err)
+			time.Sleep(100 * time.Millisecond) // optional small delay between retries
+			continue
+		}
 
-	monitor.RecordHTS(storageNode, node_high_ts)
-	
-	return response.Value, object_ts, node_high_ts, rtt, nil
+		defer resp.Body.Close()
+
+		if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+			fmt.Printf("Attempt %d failed: error decoding response\n", attempt)
+			lastErr = err
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+
+		// If successful, record metrics and return
+		monitor.RecordRTT(storageNode, rtt)
+		monitor.RecordHTS(storageNode, response.HighTS)
+		return response.Value, response.Timestamp, response.HighTS, rtt, nil
+	}
+
+	// All attempts failed
+	return "", -1, -1, 0, lastErr
 }
 
 // TODO: This implementation is right now highly tuned for the SLA's we are testing. Generalize this implementation
