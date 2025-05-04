@@ -20,6 +20,7 @@ func main() {
 
 	// Skewed worklaod for ReadMyWrites Testing
 	Skewed_workload_gen("Fig11/skewed_rmw_test.log", 2000, 10000, 0.5, 0.7, 1343)
+	generateRMWWorkload("Fig11/skewed_rmw_new.log", 1343)
 
 }
 
@@ -143,4 +144,89 @@ func Skewed_workload_gen(workload_name string, size int, keySpace int, readPropo
 
 	fmt.Printf("Workload written to %s\n", workload_name)
 	return nil
+}
+
+func generateRMWWorkload(filename string, seed int64) {
+	var numOperations = 2000
+	var sessionSize = 400
+	var keySpaceSize = 1000
+	var rmwRatio = 0.6 
+
+	r := rand.New(rand.NewSource(seed))
+	file, err := os.Create(filename)
+	if err != nil {
+		fmt.Println("failed to create file: %v", err)
+	}
+	defer file.Close()
+
+	for session := 0; session < numOperations/sessionSize; session++ {
+		ops := make([]string, sessionSize)
+		occupied := make([]bool, sessionSize)
+
+		numReads := sessionSize / 2
+		numWrites := sessionSize - numReads
+		rmwCount := int(float64(numWrites) * rmwRatio)
+
+		writeIndices := make([]int, 0, numWrites)
+		writeKeys := make([]int, 0, numWrites)
+		writeValues := make([]string, 0, numWrites)
+
+		// 1. Generate and place writes randomly
+		for i := 0; i < numWrites; i++ {
+			var index int
+			for {
+				index = r.Intn(sessionSize)
+				if !occupied[index] {
+					break
+				}
+			}
+			key := r.Intn(keySpaceSize)
+			val := uuid.New().String()
+
+			ops[index] = fmt.Sprintf("WRITE %d %s", key, val)
+			occupied[index] = true
+
+			writeIndices = append(writeIndices, index)
+			writeKeys = append(writeKeys, key)
+			writeValues = append(writeValues, val)
+		}
+
+		// 2. Place reads for a subset of writes (RMW reads), within 6 positions after the write
+		usedReadSlots := map[int]bool{}
+		for i := 0; i < rmwCount; i++ {
+			writeIdx := writeIndices[i]
+			key := writeKeys[i]
+
+			var readIdx int
+			for attempts := 0; attempts < 10; attempts++ {
+				offset := r.Intn(6) + 1 // 1 to 6
+				readIdx = writeIdx + offset
+				if readIdx < sessionSize && !occupied[readIdx] && !usedReadSlots[readIdx] {
+					break
+				}
+			}
+
+			if readIdx < sessionSize && !occupied[readIdx] {
+				ops[readIdx] = fmt.Sprintf("READ %d", key)
+				occupied[readIdx] = true
+				usedReadSlots[readIdx] = true
+			}
+		}
+
+		// 3. Fill in remaining reads with random keys
+		for i := 0; i < sessionSize; i++ {
+			if !occupied[i] {
+				key := r.Intn(keySpaceSize)
+				ops[i] = fmt.Sprintf("READ %d", key)
+				occupied[i] = true
+			}
+		}
+
+		// 4. Write session to file
+		for _, op := range ops {
+			fmt.Fprintln(file, op)
+		}
+	}
+
+	fmt.Printf("Workload saved to %s\n", filename)
 }
