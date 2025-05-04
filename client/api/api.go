@@ -277,6 +277,7 @@ func randomGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 		
 		// If didn't return yet, no sub-SLA was met 
 		fmt.Println("None of the utilities for password-checking is met, returning nil: \n")
+		s.Utilities = append(s.Utilities, 0.0)
 		return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 	}
 
@@ -344,6 +345,7 @@ func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, cons
 		
 		// If didn't return yet, no sub-SLA was met 
 		fmt.Println("None of the utilities for password-checking is met, returning nil: \n")
+		s.Utilities = append(s.Utilities, 0.0)
 		return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 	}
 
