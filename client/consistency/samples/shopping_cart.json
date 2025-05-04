@@ -3,13 +3,13 @@
     {
       "rank": 1,
       "consistecy": "ReadMyWrites",
-      "latency_bound": 30,
+      "latency_bound": 150,
       "utility": 1
     },
     {
       "rank": 2,
       "consistecy": "eventual",
-      "latency_bound": 63,
+      "latency_bound": 150,
       "utility": 0.5
     }
   ]

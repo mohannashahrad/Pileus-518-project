@@ -6,11 +6,11 @@
     }, 
     {
       "nodeId": "utah",
-      "nodeAddress": "128.110.217.202:8080"
+      "nodeAddress": "128.110.219.100:8080"
     }, 
     {
       "nodeId": "frankfurt",
-      "nodeAddress": "3.122.179.59:8080"
+      "nodeAddress": "3.74.43.221:8080"
     }
   ], 
   "shards": [
