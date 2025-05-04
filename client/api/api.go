@@ -80,6 +80,8 @@ type Record struct {
 var artificialLags = make(map[string]time.Duration)
 var lagMu sync.RWMutex
 
+var coldStartRTTCounter int = 0
+
 // ========== GET/PUT Endpoints ==========
 
 // This will update session metadata on write timestamps
@@ -125,7 +127,11 @@ func Put(s *util.Session, key string, value string) error {
 	}
 
 	// If no error, then update RTT window in monitor
-	monitor.RecordRTT(GlobalConfig.Shards[shardID].Primary, rtt)
+	coldStartRTTCounter++
+	if (coldStartRTTCounter > 5) {
+		monitor.RecordRTT(GlobalConfig.Shards[shardID].Primary, rtt)
+	}
+	
 
 	// Update write timestamp of the session
 	// fmt.Printf("Set succeeded. Updating session write timestamp: %d\n", result.SetTimestamp)
@@ -474,7 +480,11 @@ func readFromNode(key string, storageNode string) (string, int64, int64, time.Du
 		}
 
 		// If successful, record metrics and return
-		monitor.RecordRTT(storageNode, rtt)
+		
+		coldStartRTTCounter++
+		if (coldStartRTTCounter > 5) {
+			monitor.RecordRTT(storageNode, rtt)
+		}
 		monitor.RecordHTS(storageNode, response.HighTS)
 		return response.Value, response.Timestamp, response.HighTS, rtt, nil
 	}

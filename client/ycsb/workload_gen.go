@@ -17,6 +17,11 @@ func main() {
 
 	// Workload for artificial latency experiment
 	YCSB_workload_gen("Fig13/utahClient.log", 8000, 10000, 0.5, 1341)
+
+	// Skewed worklaod for ReadMyWrites Testing
+	Skewed_workload_gen("Fig11/skewed_rmw_test.log", 2000, 10000, 0.5, 0.7, 1343)
+	generateRMWWorkload("Fig11/skewed_rmw_new.log", 1343)
+
 }
 
 // Generates a YCSB-like workload, tunable with
@@ -53,4 +58,175 @@ func YCSB_workload_gen(workload_name string, size int, keySpace int, readProport
 
 	fmt.Println("Workload written to %s", workload_name)
 	return nil
+}
+
+func Skewed_workload_gen(workload_name string, size int, keySpace int, readProportion float32, readAfterWriteFraction float32, seed int64) error {
+	
+	fmt.Printf("Generating workload of size %d with read proportion %f and %d unique keys\n", size, readProportion, keySpace)
+
+	f, err := os.Create(workload_name)
+	if err != nil {
+		return fmt.Errorf("could not create workload log file: %w", err)
+	}
+	defer f.Close()
+
+	r := rand.New(rand.NewSource(seed))
+
+	numReads := int(float32(size) * readProportion)
+	numWrites := size - numReads
+	numReadMyWrites := int(float32(numWrites) * readAfterWriteFraction)
+	numRegularReads := numReads - numReadMyWrites
+
+	ops := make([]string, 0, size)
+	writeIndices := []int{}
+	writeKeys := []string{}
+	readMyWriteOps := []string{}
+
+	// Step 1: Generate writes and record positions and keys
+	for i := 0; i < numWrites; i++ {
+		key := fmt.Sprintf("%04d", r.Intn(keySpace))
+		value := uuid.New().String()
+		ops = append(ops, fmt.Sprintf("WRITE %s %s\n", key, value))
+
+		if len(writeKeys) < numReadMyWrites {
+			writeIndices = append(writeIndices, len(ops)-1)
+			writeKeys = append(writeKeys, key)
+			readMyWriteOps = append(readMyWriteOps, fmt.Sprintf("READ %s\n", key))
+		}
+	}
+
+	// Step 2: Generate regular random reads
+	for i := 0; i < numRegularReads; i++ {
+		key := fmt.Sprintf("%04d", r.Intn(keySpace))
+		ops = append(ops, fmt.Sprintf("READ %s\n", key))
+	}
+
+	// Step 3: Place read-my-writes
+	earlyReads := numReadMyWrites / 3
+	remainingReads := []string{}
+
+	for i, readOp := range readMyWriteOps {
+		if i < earlyReads {
+			// Insert within 1 to 10 ops after the write
+			insertAfter := writeIndices[i] + 1 + r.Intn(10)
+			if insertAfter > len(ops) {
+				insertAfter = len(ops)
+			}
+			ops = append(ops[:insertAfter], append([]string{readOp}, ops[insertAfter:]...)...)
+			// Update indices for any remaining ops
+			for j := i + 1; j < len(writeIndices); j++ {
+				if writeIndices[j] >= insertAfter {
+					writeIndices[j]++
+				}
+			}
+		} else {
+			// Save for random shuffling later
+			remainingReads = append(remainingReads, readOp)
+		}
+	}
+
+	// Step 4: Shuffle and insert remaining read-my-writes randomly
+	r.Shuffle(len(remainingReads), func(i, j int) {
+		remainingReads[i], remainingReads[j] = remainingReads[j], remainingReads[i]
+	})
+	for _, readOp := range remainingReads {
+		insertPos := r.Intn(len(ops) + 1)
+		ops = append(ops[:insertPos], append([]string{readOp}, ops[insertPos:]...)...)
+	}
+
+	// Step 5: Write all operations to file
+	for _, op := range ops {
+		_, err := f.WriteString(op)
+		if err != nil {
+			return fmt.Errorf("failed to write op: %w", err)
+		}
+	}
+
+	fmt.Printf("Workload written to %s\n", workload_name)
+	return nil
+}
+
+func generateRMWWorkload(filename string, seed int64) {
+	var numOperations = 2000
+	var sessionSize = 400
+	var keySpaceSize = 1000
+	var rmwRatio = 0.6 
+
+	r := rand.New(rand.NewSource(seed))
+	file, err := os.Create(filename)
+	if err != nil {
+		fmt.Println("failed to create file: %v", err)
+	}
+	defer file.Close()
+
+	for session := 0; session < numOperations/sessionSize; session++ {
+		ops := make([]string, sessionSize)
+		occupied := make([]bool, sessionSize)
+
+		numReads := sessionSize / 2
+		numWrites := sessionSize - numReads
+		rmwCount := int(float64(numWrites) * rmwRatio)
+
+		writeIndices := make([]int, 0, numWrites)
+		writeKeys := make([]int, 0, numWrites)
+		writeValues := make([]string, 0, numWrites)
+
+		// 1. Generate and place writes randomly
+		for i := 0; i < numWrites; i++ {
+			var index int
+			for {
+				index = r.Intn(sessionSize)
+				if !occupied[index] {
+					break
+				}
+			}
+			key := r.Intn(keySpaceSize)
+			val := uuid.New().String()
+
+			ops[index] = fmt.Sprintf("WRITE %d %s", key, val)
+			occupied[index] = true
+
+			writeIndices = append(writeIndices, index)
+			writeKeys = append(writeKeys, key)
+			writeValues = append(writeValues, val)
+		}
+
+		// 2. Place reads for a subset of writes (RMW reads), within 6 positions after the write
+		usedReadSlots := map[int]bool{}
+		for i := 0; i < rmwCount; i++ {
+			writeIdx := writeIndices[i]
+			key := writeKeys[i]
+
+			var readIdx int
+			for attempts := 0; attempts < 10; attempts++ {
+				offset := r.Intn(6) + 1 // 1 to 6
+				readIdx = writeIdx + offset
+				if readIdx < sessionSize && !occupied[readIdx] && !usedReadSlots[readIdx] {
+					break
+				}
+			}
+
+			if readIdx < sessionSize && !occupied[readIdx] {
+				ops[readIdx] = fmt.Sprintf("READ %d", key)
+				occupied[readIdx] = true
+				usedReadSlots[readIdx] = true
+			}
+		}
+
+		// 3. Fill in remaining reads with random keys
+		for i := 0; i < sessionSize; i++ {
+			if !occupied[i] {
+				key := r.Intn(keySpaceSize)
+				ops[i] = fmt.Sprintf("READ %d", key)
+				occupied[i] = true
+			}
+		}
+
+		// 4. Write session to file
+		for _, op := range ops {
+			fmt.Fprintln(file, op)
+		}
+	}
+
+	fmt.Printf("Workload saved to %s\n", filename)
 }

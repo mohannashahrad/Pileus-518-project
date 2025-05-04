@@ -1,0 +1,2528 @@
+Optimizor: Replication Config is Set to &{[{clem 130.127.133.18:8080} {utah 128.110.219.100:8080} {frankfurt 3.74.43.221:8080}] [{0 0 10000 130.127.133.18:8080 [utah frankfurt] [128.110.219.100:8080 3.74.43.221:8080] 0}]}
+Loaded the config and it is:
+&{[{clem 130.127.133.18:8080} {utah 128.110.219.100:8080} {frankfurt 3.74.43.221:8080}] [{0 0 10000 130.127.133.18:8080 [utah frankfurt] [128.110.219.100:8080 3.74.43.221:8080] 0}]}
+Cart SLA: {ID:cart_sla SubSLAs:[{Consistency:2 Latency:{Duration:150ms} StalenessBound:<nil> Utility:1} {Consistency:0 Latency:{Duration:150ms} StalenessBound:<nil> Utility:0.5}]}
+**************************************
+Web Applicaiton SLA: {ID:web_sla SubSLAs:[{Consistency:3 Latency:{Duration:200ms} StalenessBound:300ms Utility:1e-05} {Consistency:3 Latency:{Duration:600ms} StalenessBound:300ms Utility:5e-06} {Consistency:3 Latency:{Duration:400ms} StalenessBound:300ms Utility:8e-06} {Consistency:3 Latency:{Duration:1s} StalenessBound:300ms Utility:0}]}
+**************************************
+Password SLA: {ID:psw_sla SubSLAs:[{Consistency:4 Latency:{Duration:61ms} StalenessBound:<nil> Utility:1} {Consistency:0 Latency:{Duration:61ms} StalenessBound:<nil> Utility:0.5} {Consistency:4 Latency:{Duration:200ms} StalenessBound:<nil> Utility:0.25}]}
+Probing URL: http://130.127.133.18:8080/probe
+Recording RTT: node=130.127.133.18:8080, rtt=175ms
+Probing URL: http://128.110.219.100:8080/probe
+Recording RTT: node=128.110.219.100:8080, rtt=132ms
+Probing URL: http://3.74.43.221:8080/probe
+Recording RTT: node=3.74.43.221:8080, rtt=226.6ms
+Checking the RTT's after sending init probes
+
+clem [175ms]
+utah [132ms]
+frankfurt [226.6ms]
+Read 2000 operations from log
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 6251 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+RTT was %f 452.960902ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 0 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 6251: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 3751 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 3751 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+RTT was %f 351.458261ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334829947
+minHighTS is set to 1746334829947 
+Node highTS is 0 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334829947 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3751: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 3224 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Do a WRITE
+Key 1481 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Do a WRITE
+Key 7671 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.213826ms
+Do a WRITE
+Key 5142 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.083986ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 7671 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=177.215087ms
+RTT was %f 177.215087ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334830828
+minHighTS is set to 1746334830828 
+Node highTS is 0 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334830828 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 7671: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 935 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.15732ms
+Do a WRITE
+Key 7462 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.923216ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 5142 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=266.551547ms
+RTT was %f 266.551547ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334831005
+minHighTS is set to 1746334831005 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334831005 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 5142: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 4731 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.911821ms
+RTT was %f 226.911821ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 4731: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 1993 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.611396ms
+RTT was %f 133.611396ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=1993, value=ca70093b-9fee-3d1f-9575-033df2f8bfd7, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 1481 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.894682ms
+RTT was %f 226.894682ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334830652
+minHighTS is set to 1746334830652 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334830652 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1481: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 935 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.358983ms
+RTT was %f 226.358983ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334831359
+minHighTS is set to 1746334831359 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334831359 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0935: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 5250 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.182382ms
+Do a WRITE
+Key 3703 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.568922ms
+Do a WRITE
+Key 8478 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.307797ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 3224 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.029245ms
+RTT was %f 176.029245ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334830476
+minHighTS is set to 1746334830476 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334830476 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3224: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 4751 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.110798ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 3703 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.865368ms
+RTT was %f 226.865368ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334832969
+minHighTS is set to 1746334832969 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334832969 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3703: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 561 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=177.044441ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 8478 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.861961ms
+RTT was %f 226.861961ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334833146
+minHighTS is set to 1746334833146 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334833146 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8478: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 7462 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.641827ms
+RTT was %f 226.641827ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334831535
+minHighTS is set to 1746334831535 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334831535 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 7462: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 4751 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.663697ms
+RTT was %f 133.663697ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334833498
+minHighTS is set to 1746334833498 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334833498 0]
+Read key=4751, value=075b8345-15ef-319c-9a71-23fd855c4cae, subSLAGained={0 {150ms} <nil> 0.5}
+Do a WRITE
+Key 6154 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.016642ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 5250 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.027072ms
+RTT was %f 133.027072ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334832793
+minHighTS is set to 1746334832793 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334832793 0]
+Read key=5250, value=b7c49a41-bddc-3128-b0c3-6ebf8a167012, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 4320 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.324223ms
+RTT was %f 133.324223ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=4320, value=38dbe338-036b-376e-8ce4-5757ce3e1d83, subSLAGained={2 {150ms} <nil> 1}
+Do a WRITE
+Key 8055 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.24459ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 561 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.642702ms
+RTT was %f 175.642702ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334833902
+minHighTS is set to 1746334833902 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334833902 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0561: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 4083 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.281511ms
+Do a WRITE
+Key 4535 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.066057ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 4535 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.390587ms
+RTT was %f 226.390587ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334835638
+minHighTS is set to 1746334835638 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334835638 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 4535: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 9357 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.695895ms
+Do a WRITE
+Key 1531 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.9929ms
+Do a WRITE
+Key 8849 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.870478ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 4083 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.101593ms
+RTT was %f 133.101593ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334835462
+minHighTS is set to 1746334835462 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334835462 0]
+Read key=4083, value=f3ba4d30-e25d-3da2-931d-65fcbd699f80, subSLAGained={0 {150ms} <nil> 0.5}
+Do a WRITE
+Key 8374 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.167139ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 9357 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.868153ms
+RTT was %f 226.868153ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334836041
+minHighTS is set to 1746334836041 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334836041 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 9357: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 6154 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.211073ms
+RTT was %f 176.211073ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334834667
+minHighTS is set to 1746334834667 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334834667 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 6154: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 1531 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.419315ms
+RTT was %f 176.419315ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334836218
+minHighTS is set to 1746334836218 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334836218 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1531: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 8374 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.342606ms
+RTT was %f 226.342606ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334836703
+minHighTS is set to 1746334836703 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334836703 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8374: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 9202 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.330078ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 6677 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.052672ms
+RTT was %f 133.052672ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=6677, value=dd9b83da-4678-3902-9aea-733b278a5962, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 8055 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.9533ms
+RTT was %f 175.9533ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334835110
+minHighTS is set to 1746334835110 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334835110 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8055: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 4963 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.144967ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 8849 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.159167ms
+RTT was %f 133.159167ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334836394
+minHighTS is set to 1746334836394 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334836394 0]
+Read key=8849, value=b7f38c2e-4551-3513-a7a4-a4c31dfa4bb6, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 9202 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.9848ms
+RTT was %f 226.9848ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334837686
+minHighTS is set to 1746334837686 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334837686 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 9202: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 1786 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.182606ms
+Do a WRITE
+Key 6657 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.339247ms
+Do a WRITE
+Key 3728 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.015486ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 3871 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.247574ms
+RTT was %f 176.247574ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3871: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 6843 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.974324ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 6657 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.465434ms
+RTT was %f 176.465434ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334838885
+minHighTS is set to 1746334838885 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334838885 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 6657: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 6843 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.825895ms
+RTT was %f 226.825895ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334839414
+minHighTS is set to 1746334839414 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334839414 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 6843: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 4963 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.277738ms
+RTT was %f 133.277738ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334838172
+minHighTS is set to 1746334838172 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334838172 0]
+Read key=4963, value=1af8c75e-c7e2-319a-8509-479dc9beff1e, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 3728 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.601243ms
+RTT was %f 226.601243ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334839062
+minHighTS is set to 1746334839062 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334839062 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3728: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 7213 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.174201ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 7213 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.410852ms
+RTT was %f 226.410852ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334840355
+minHighTS is set to 1746334840355 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334840355 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 7213: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 4564 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.027961ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 1786 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.786651ms
+RTT was %f 175.786651ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334838709
+minHighTS is set to 1746334838709 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334838709 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1786: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 7654 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.009965ms
+RTT was %f 133.009965ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=7654, value=d12ab7ec-e553-3c1d-84c4-442326ba03fe, subSLAGained={2 {150ms} <nil> 1}
+Do a WRITE
+Key 5686 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.563748ms
+Do a WRITE
+Key 9928 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.176752ms
+Do a WRITE
+Key 6072 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.07147ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 8744 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=227.178974ms
+RTT was %f 227.178974ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8744: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 6072 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.278137ms
+RTT was %f 133.278137ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334841596
+minHighTS is set to 1746334841596 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334841596 0]
+Read key=6072, value=46452b10-4f65-39c9-89ba-13e0f3d2e64a, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 8118 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.018011ms
+RTT was %f 133.018011ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=8118, value=d8676bcf-368e-3a04-a9ef-7cf47df782a7, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 1187 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.79586ms
+RTT was %f 226.79586ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1187: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 8569 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.284099ms
+Do a WRITE
+Key 5717 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.96227ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 4564 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.961713ms
+RTT was %f 175.961713ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334840758
+minHighTS is set to 1746334840758 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334840758 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 4564: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 5686 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.560675ms
+RTT was %f 175.560675ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334841243
+minHighTS is set to 1746334841243 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334841243 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 5686: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 6405 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.049885ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 413 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=132.887801ms
+RTT was %f 132.887801ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=0413, value=8fa46ccc-4e87-3a28-ae5e-ebd915f96e93, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 9928 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.52028ms
+RTT was %f 133.52028ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334841420
+minHighTS is set to 1746334841420 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334841420 0]
+Read key=9928, value=7416d765-f687-3779-abae-ee0aa33aeb2d, subSLAGained={0 {150ms} <nil> 0.5}
+Do a WRITE
+Key 1984 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.092107ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 8324 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.627578ms
+RTT was %f 226.627578ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8324: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 8569 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.169624ms
+RTT was %f 176.169624ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334842493
+minHighTS is set to 1746334842493 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334842493 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8569: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 4089 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.492907ms
+Do a WRITE
+Key 7743 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.884541ms
+Do a WRITE
+Key 9148 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.923783ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 5717 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.843238ms
+RTT was %f 175.843238ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334842669
+minHighTS is set to 1746334842669 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334842669 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 5717: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 5041 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.898469ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 6405 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=132.930576ms
+RTT was %f 132.930576ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334843197
+minHighTS is set to 1746334843197 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334843197 0]
+Read key=6405, value=779965e2-64d9-3030-8d44-7a989d32299a, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 7407 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.040454ms
+RTT was %f 133.040454ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=7407, value=141c23aa-784e-3897-9639-867e85e1837f, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 4089 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.343952ms
+RTT was %f 176.343952ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334844220
+minHighTS is set to 1746334844220 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334844220 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 4089: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 1886 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.988084ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 5041 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.659245ms
+RTT was %f 175.659245ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334844924
+minHighTS is set to 1746334844924 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334844924 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 5041: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 7743 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.324717ms
+RTT was %f 226.324717ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334844396
+minHighTS is set to 1746334844396 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334844396 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 7743: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 9148 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.485599ms
+RTT was %f 133.485599ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334844573
+minHighTS is set to 1746334844573 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334844573 0]
+Read key=9148, value=fe679574-d20c-35bf-8af7-6345ff5e375a, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 1984 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.103478ms
+RTT was %f 176.103478ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334843641
+minHighTS is set to 1746334843641 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334843641 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1984: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 7180 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.696483ms
+RTT was %f 226.696483ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 7180: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 8032 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=177.853249ms
+Do a WRITE
+Key 4783 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.420809ms
+Do a WRITE
+Key 496 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.562698ms
+Do a WRITE
+Key 3861 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.427155ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 8566 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.369257ms
+RTT was %f 133.369257ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=8566, value=d1ea3981-556d-3df1-a910-be4c74abf1fe, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 8032 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.056406ms
+RTT was %f 176.056406ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334846660
+minHighTS is set to 1746334846660 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334846660 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8032: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 9974 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.367585ms
+RTT was %f 133.367585ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=9974, value=0e65dd61-fee7-36c1-a88b-bf3dc60a302b, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 5106 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.581323ms
+RTT was %f 226.581323ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 5106: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 496 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.323843ms
+RTT was %f 226.323843ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334847014
+minHighTS is set to 1746334847014 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334847014 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0496: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 8660 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.6909ms
+RTT was %f 226.6909ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8660: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 3861 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.220269ms
+RTT was %f 133.220269ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334847191
+minHighTS is set to 1746334847191 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334847191 0]
+Read key=3861, value=82860892-cddc-3a93-b5cd-88e17b1ab9f5, subSLAGained={0 {150ms} <nil> 0.5}
+Do a WRITE
+Key 3912 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.227273ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 9808 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.093965ms
+RTT was %f 176.093965ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 9808: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 1886 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.583324ms
+RTT was %f 133.583324ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334845544
+minHighTS is set to 1746334845544 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334845544 0]
+Read key=1886, value=d80b85d6-530b-3fac-8651-37684ed67d4f, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 9199 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.360007ms
+RTT was %f 176.360007ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 9199: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 4922 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.150998ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 3912 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.306249ms
+RTT was %f 133.306249ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334848624
+minHighTS is set to 1746334848624 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334848624 0]
+Read key=3912, value=4a674a79-3009-3ebc-9b53-5501524c5267, subSLAGained={0 {150ms} <nil> 0.5}
+Do a WRITE
+Key 636 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=177.890077ms
+Do a WRITE
+Key 1701 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.088534ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 3633 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.400748ms
+RTT was %f 226.400748ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3633: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 1667 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=177.131618ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 4783 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.723115ms
+RTT was %f 175.723115ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334846837
+minHighTS is set to 1746334846837 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334846837 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 4783: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 4922 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.39222ms
+RTT was %f 133.39222ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334849287
+minHighTS is set to 1746334849287 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334849287 0]
+Read key=4922, value=b387c134-9913-3052-8f2c-27c93b539448, subSLAGained={0 {150ms} <nil> 0.5}
+Do a WRITE
+Key 2655 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=177.815072ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 2655 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.631885ms
+RTT was %f 226.631885ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334850666
+minHighTS is set to 1746334850666 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334850666 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 2655: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 636 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.236961ms
+RTT was %f 226.236961ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334849599
+minHighTS is set to 1746334849599 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334849599 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0636: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 6298 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.829279ms
+RTT was %f 175.829279ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 6298: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 7266 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.086154ms
+Do a WRITE
+Key 5367 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.786856ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 7266 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.980866ms
+RTT was %f 175.980866ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334851472
+minHighTS is set to 1746334851472 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334851472 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 7266: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 5367 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.966305ms
+RTT was %f 175.966305ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334851648
+minHighTS is set to 1746334851648 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334851648 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 5367: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 6395 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.536032ms
+RTT was %f 133.536032ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=6395, value=00e3b57c-1824-3c55-b289-299c917fa30f, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 1667 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.118531ms
+RTT was %f 133.118531ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334850179
+minHighTS is set to 1746334850179 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334850179 0]
+Read key=1667, value=ef2b69f7-00da-3675-a79b-cf691bd95e74, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 1701 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=177.69728ms
+RTT was %f 177.69728ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334849775
+minHighTS is set to 1746334849775 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334849775 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1701: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 4943 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.863924ms
+Do a WRITE
+Key 4332 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.975266ms
+Do a WRITE
+Key 2677 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.047509ms
+Do a WRITE
+Key 9461 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.023593ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 1542 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=227.001212ms
+RTT was %f 227.001212ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1542: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 4943 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.033043ms
+RTT was %f 133.033043ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334852621
+minHighTS is set to 1746334852621 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334852621 0]
+Read key=4943, value=1559ed49-df19-35eb-a1de-0f2e64cc5800, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 6177 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.867337ms
+RTT was %f 175.867337ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 6177: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 9461 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.988666ms
+RTT was %f 175.988666ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334853149
+minHighTS is set to 1746334853149 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334853149 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 9461: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 2211 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.140593ms
+Do a WRITE
+Key 5431 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.432953ms
+Do a WRITE
+Key 16 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.210132ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 7959 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.195128ms
+RTT was %f 176.195128ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 7959: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 6440 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.894451ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 16 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.749752ms
+RTT was %f 175.749752ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334854391
+minHighTS is set to 1746334854391 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334854391 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0016: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 4332 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.340074ms
+RTT was %f 176.340074ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334852797
+minHighTS is set to 1746334852797 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334852797 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 4332: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 172 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=227.330144ms
+RTT was %f 227.330144ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0172: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 2211 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.31762ms
+RTT was %f 226.31762ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334854038
+minHighTS is set to 1746334854038 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334854038 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 2211: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 5431 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.252764ms
+RTT was %f 133.252764ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334854214
+minHighTS is set to 1746334854214 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334854214 0]
+Read key=5431, value=95eb9124-5c4a-3ea7-b2b0-66af122b3427, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 2677 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.090726ms
+RTT was %f 133.090726ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334852973
+minHighTS is set to 1746334852973 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334852973 0]
+Read key=2677, value=57aea686-be79-3b0e-858f-e675a0a2a644, subSLAGained={0 {150ms} <nil> 0.5}
+Do a WRITE
+Key 5371 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.347948ms
+Do a WRITE
+Key 8714 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.268934ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 3242 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.905714ms
+RTT was %f 175.905714ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3242: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 6589 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.963418ms
+RTT was %f 226.963418ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 6589: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 2413 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.29313ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 5630 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.069396ms
+RTT was %f 133.069396ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=5630, value=3f3a57db-72ef-31d0-a209-b09daea35ed0, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 9618 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.274883ms
+RTT was %f 176.274883ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 9618: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 6440 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.157342ms
+RTT was %f 176.157342ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334854743
+minHighTS is set to 1746334854743 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334854743 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 6440: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 1704 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.542672ms
+RTT was %f 226.542672ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1704: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 8714 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.241153ms
+RTT was %f 176.241153ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334856169
+minHighTS is set to 1746334856169 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334856169 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8714: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 6428 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.031806ms
+Do a WRITE
+Key 9374 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.219434ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 5371 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.35434ms
+RTT was %f 226.35434ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334855993
+minHighTS is set to 1746334855993 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334855993 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 5371: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 2936 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.337542ms
+RTT was %f 226.337542ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 2936: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 570 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.18013ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 9374 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.913587ms
+RTT was %f 175.913587ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334857990
+minHighTS is set to 1746334857990 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334857990 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 9374: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 6428 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.400807ms
+RTT was %f 226.400807ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334857814
+minHighTS is set to 1746334857814 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334857814 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 6428: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 247 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.928848ms
+RTT was %f 226.928848ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0247: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 2413 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.587523ms
+RTT was %f 226.587523ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334856749
+minHighTS is set to 1746334856749 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334856749 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 2413: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 8752 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.420911ms
+Do a WRITE
+Key 1948 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.984476ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 3011 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.088012ms
+RTT was %f 133.088012ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=3011, value=281cb2cd-af02-32ed-b653-2eafed9f429a, subSLAGained={2 {150ms} <nil> 1}
+Do a WRITE
+Key 8432 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.210044ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 570 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.462084ms
+RTT was %f 226.462084ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334858620
+minHighTS is set to 1746334858620 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334858620 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0570: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 8432 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.386939ms
+RTT was %f 226.386939ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334860139
+minHighTS is set to 1746334860139 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334860139 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8432: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 9014 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.566625ms
+RTT was %f 226.566625ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 9014: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 5581 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.56692ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 5581 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.721989ms
+RTT was %f 175.721989ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334860995
+minHighTS is set to 1746334860995 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334860995 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 5581: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 8752 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.614068ms
+RTT was %f 133.614068ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334859653
+minHighTS is set to 1746334859653 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334859653 0]
+Read key=8752, value=76516292-9ec6-3044-a3f9-abed5a25719c, subSLAGained={0 {150ms} <nil> 0.5}
+Do a WRITE
+Key 995 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.149524ms
+Do a WRITE
+Key 4032 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.962203ms
+Do a WRITE
+Key 1206 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.256407ms
+Do a WRITE
+Key 9818 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.132475ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 995 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.283698ms
+RTT was %f 176.283698ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334861482
+minHighTS is set to 1746334861482 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334861482 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0995: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 1302 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.364241ms
+RTT was %f 133.364241ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=1302, value=9be38a65-695b-3e3c-8aac-527d8d210ffb, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 9818 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.013036ms
+RTT was %f 133.013036ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334862010
+minHighTS is set to 1746334862010 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334862010 0]
+Read key=9818, value=12f713e8-bfcd-3692-b423-4a155dabfbb8, subSLAGained={0 {150ms} <nil> 0.5}
+Do a WRITE
+Key 1283 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.09091ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 1206 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.640003ms
+RTT was %f 226.640003ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334861834
+minHighTS is set to 1746334861834 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334861834 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1206: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 1948 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.66439ms
+RTT was %f 176.66439ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334859829
+minHighTS is set to 1746334859829 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334859829 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1948: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 7358 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.023244ms
+Do a WRITE
+Key 3409 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.060803ms
+Do a WRITE
+Key 6833 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.350193ms
+Do a WRITE
+Key 9130 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.012134ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 4032 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.142456ms
+RTT was %f 133.142456ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334861658
+minHighTS is set to 1746334861658 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334861658 0]
+Read key=4032, value=f7817c24-64a3-39e7-a34c-e2a892c1b53e, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 1058 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.772432ms
+RTT was %f 175.772432ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1058: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 9167 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.186181ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 4410 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.033654ms
+RTT was %f 133.033654ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=4410, value=7114964d-3b62-3a8f-85bb-54b7dfd150a4, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 8932 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.298084ms
+RTT was %f 176.298084ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8932: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 1179 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.114362ms
+RTT was %f 176.114362ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1179: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 5091 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.433352ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 9167 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.249306ms
+RTT was %f 133.249306ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334864224
+minHighTS is set to 1746334864224 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334864224 0]
+Read key=9167, value=be279363-3a0d-33e5-813e-ea35f0e4eb74, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 1283 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.714316ms
+RTT was %f 226.714316ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334862630
+minHighTS is set to 1746334862630 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334862630 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 1283: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 7358 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.270037ms
+RTT was %f 176.270037ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334863210
+minHighTS is set to 1746334863210 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334863210 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 7358: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 4836 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.968372ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 3409 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.221646ms
+RTT was %f 176.221646ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334863386
+minHighTS is set to 1746334863386 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334863386 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3409: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 9130 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.38539ms
+RTT was %f 226.38539ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334863739
+minHighTS is set to 1746334863739 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334863739 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 9130: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 485 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.349189ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 5137 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=132.915571ms
+RTT was %f 132.915571ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=5137, value=49c3453b-7218-3036-9a62-38599d152514, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 6833 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.020132ms
+RTT was %f 176.020132ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334863562
+minHighTS is set to 1746334863562 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334863562 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 6833: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 5091 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=227.048083ms
+RTT was %f 227.048083ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334864887
+minHighTS is set to 1746334864887 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334864887 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 5091: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 485 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=227.312915ms
+RTT was %f 227.312915ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334866179
+minHighTS is set to 1746334866179 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334866179 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0485: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 2466 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.534081ms
+RTT was %f 133.534081ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=2466, value=8cd96503-93be-3df5-a768-81e25e6e58d3, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 4836 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.394289ms
+RTT was %f 226.394289ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334865600
+minHighTS is set to 1746334865600 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334865600 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 4836: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 9653 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.132974ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 297 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.843977ms
+RTT was %f 226.843977ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0297: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 4573 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.930242ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 6248 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.383005ms
+RTT was %f 133.383005ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=6248, value=106e70fe-ad71-3467-b3d6-4ee84ab0d4ba, subSLAGained={2 {150ms} <nil> 1}
+Do a WRITE
+Key 5046 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.242133ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 9653 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.75104ms
+RTT was %f 226.75104ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334867479
+minHighTS is set to 1746334867479 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334867479 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 9653: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 227 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.451256ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 227 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.029259ms
+RTT was %f 133.029259ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334868597
+minHighTS is set to 1746334868597 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334868597 0]
+Read key=0227, value=8acfaa20-841b-34b2-823d-9a1575e031a9, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 274 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.420163ms
+RTT was %f 133.420163ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=0274, value=36766e63-4c9c-373c-aa68-99f6653b03bf, subSLAGained={2 {150ms} <nil> 1}
+Do a WRITE
+Key 8863 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.091948ms
+Do a WRITE
+Key 1038 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.86595ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 4573 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.900455ms
+RTT was %f 176.900455ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334867883
+minHighTS is set to 1746334867883 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334867883 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 4573: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 3824 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.944514ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 5046 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.144873ms
+RTT was %f 133.144873ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334868194
+minHighTS is set to 1746334868194 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334868194 0]
+Read key=5046, value=46576818-402f-3272-be52-b695478136e8, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 1038 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.33531ms
+RTT was %f 133.33531ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334869216
+minHighTS is set to 1746334869216 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334869216 0]
+Read key=1038, value=9a31d0cf-67dd-36b9-bcea-09fada62a8d6, subSLAGained={0 {150ms} <nil> 0.5}
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 1148 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.193694ms
+RTT was %f 133.193694ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=1148, value=14779f89-16b6-3998-bb93-c67e8490c5aa, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 3824 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.358696ms
+RTT was %f 226.358696ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334869569
+minHighTS is set to 1746334869569 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334869569 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3824: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 833 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.180418ms
+RTT was %f 133.180418ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=0833, value=f0808ee1-9900-3ff9-a997-667a804e33ea, subSLAGained={2 {150ms} <nil> 1}
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 8863 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.599799ms
+RTT was %f 226.599799ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334869040
+minHighTS is set to 1746334869040 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334869040 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 8863: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 8368 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.932853ms
+Do a WRITE
+Key 403 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.646959ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 3010 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.178835ms
+RTT was %f 176.178835ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3010: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 6716 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.160939ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 5589 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.738523ms
+RTT was %f 133.738523ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+Read key=5589, value=bd40950a-9cee-301c-9a10-2246ec8cdfb7, subSLAGained={2 {150ms} <nil> 1}
+Do a WRITE
+Key 7259 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.033809ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 3826 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.504109ms
+RTT was %f 226.504109ms
+entered SelectNodesForReadMyWrites 
+Last write is 0
+minHighTS is set to 0 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080 128.110.219.100:8080 3.74.43.221:8080]
+[0 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3826: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 3371 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.119326ms
+Do a WRITE
+Key 5434 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.838583ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 3409 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=3.74.43.221:8080, rtt=226.196426ms
+RTT was %f 226.196426ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334863386
+minHighTS is set to 1746334863386 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334863386 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 3409: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 1594 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.103462ms
+Do a READ
+Doing a Random Get:
+Random Node is %s utah
+Key 3371 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=133.050981ms
+RTT was %f 133.050981ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334871976
+minHighTS is set to 1746334871976 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334871976 0]
+Read key=3371, value=f44c9cad-f9ee-361d-b3ff-5d8cc3548f8d, subSLAGained={0 {150ms} <nil> 0.5}
+Do a WRITE
+Key 163 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.951991ms
+Do a READ
+Doing a Random Get:
+Random Node is %s clem
+Key 163 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=175.888828ms
+RTT was %f 175.888828ms
+entered SelectNodesForReadMyWrites 
+Last write is 1746334872863
+minHighTS is set to 1746334872863 
+Node highTS is 1746334108271 
+Node highTS is 1746334108271 
+returnung the nodes [130.127.133.18:8080]
+[1746334872863 0]
+None of the utilities for password-checking is met, returning nil: 
+
+Get error for key 0163: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 2762 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=176.497309ms
+Do a READ
+Doing a Random Get:
+Random Node is %s frankfurt
+Key 1717 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah frankfurt] Secondaries:[128.110.219.100:8080 3.74.43.221:8080] HighTS:0}
