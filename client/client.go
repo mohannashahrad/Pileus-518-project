@@ -60,7 +60,8 @@ func main() {
 	// ================ Shopping Cart Experiemnts ====================== 
 
 	// Adjust the workload based on the exp type
-	replay_workload_from_log("ycsb/Fig11/tmp.log", util.Pileus, "cart_sla")
+	//replay_workload_from_log("ycsb/Fig11/2k/r50w50sec2.log", util.Closest, "cart_sla")
+	replay_workload_from_log("ycsb/Fig11/skewed_rmw_test.log", util.Random, "cart_sla")
 
 	// ================ Adaptabiliy to Network Latency Experiemnts ================== 
 	// replay_workload_with_artificial_latency("ycsb/Fig13/utahClient.log", util.Pileus, "psw_sla")
@@ -71,7 +72,7 @@ func main() {
 
 func replay_workload_from_log(workloadFile string, expType util.ServerSelectionPolicy, slaName string) error {
 	// 400 operations per session
-	const opsPerSession = 6
+	const opsPerSession = 400
 	var avgUtilityList []float64
 
 	file, err := os.Open(workloadFile)
@@ -133,9 +134,6 @@ func replay_workload_from_log(workloadFile string, expType util.ServerSelectionP
 				value := parts[2]
 				fmt.Printf("Do a WRITE\n")
 				api.Put(s, key, value)
-
-				// after the write wait for 6 seconds to sync
-				time.Sleep(5 * time.Second) 
 			default:
 				fmt.Printf("Unknown operation type: %s\n", parts[0])
 			}
