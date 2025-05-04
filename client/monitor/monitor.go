@@ -4,13 +4,16 @@ import (
 	"sync"
 	"time"
 	"fmt"
+	"encoding/json"
+	"client/consistency"
+	"bytes"
+	"net/http"
 )
 
 // Size of the sliding window
 // TODO: what should be the size of the sliding window to be more reactive
 const maxSamples = 100
 
-// TODO: look at how the sliding window is implemented
 type RTTWindow struct {
 	samples []time.Duration
 	index   int
@@ -18,16 +21,26 @@ type RTTWindow struct {
 	mu      sync.Mutex
 }
 
+type UtilityWindow struct {
+	samples []float64
+	index   int
+	full    bool
+	mu      sync.Mutex
+}
+
 // Monitor also needs a mutex on modifying the map of all nodes [map changing might not be thread-safe]
+// Right now this is a one-per-client monitoring strategy.
 type Monitor struct {
-	nodeRTTs map[string]*RTTWindow 	// Map of node -> RTT window
-	nodeHTS map[string]*int64 		// Map of node -> High Timestamp
+	nodeRTTs map[string]*RTTWindow 		// Map of node -> RTT window
+	nodeHTS map[string]*int64 			// Map of node -> High Timestamp
+	utilities *UtilityWindow
 	mu   sync.RWMutex
 }
 
 var globalMonitor = &Monitor{
 	nodeRTTs: make(map[string]*RTTWindow),
 	nodeHTS: make(map[string]*int64),
+	utilities: &UtilityWindow{samples: make([]float64, maxSamples)}, 
 }
 
 // RecordRTT is called by the API layer to track RTTs.
@@ -60,6 +73,23 @@ func RecordHTS(node string, hts int64) {
 	defer globalMonitor.mu.Unlock()
 
 	globalMonitor.nodeHTS[node] = &hts
+}
+
+// Record the utility gained after communicating with a "storageNode"
+func RecordUtility(utility float64) {
+	globalMonitor.mu.Lock()
+	defer globalMonitor.mu.Unlock()
+
+	window := globalMonitor.utilities
+
+	window.mu.Lock()
+	defer window.mu.Unlock()
+
+	window.samples[window.index] = utility
+	window.index = (window.index + 1) % maxSamples
+	if window.index == 0 {
+		window.full = true
+	}
 }
 
 /*
@@ -97,6 +127,25 @@ func GetHTS(node string) int64 {
 		return 0
 	}
 	return *ptr
+}
+
+func GetUtilities() []float64 {
+	globalMonitor.mu.RLock()  
+	defer globalMonitor.mu.RUnlock()
+
+	window := globalMonitor.utilities
+
+	window.mu.Lock() 
+	defer window.mu.Unlock()
+
+	var result []float64
+	if window.full {
+		result = append(result, window.samples[window.index:]...)
+		result = append(result, window.samples[:window.index]...)
+	} else {
+		result = append(result, window.samples[:window.index]...)
+	}
+	return result
 }
 
 func GetAvgRTT(node string) time.Duration {
@@ -217,4 +266,56 @@ func ProbabilityOfRTTBelow(node string, threshold time.Duration, optimistic bool
 
 	// Return the proportion of RTT's less than threshold over all exisiting RTT's
 	return float64(count) / float64(total)
+}
+
+// ================== Data Structure and Function to Communicate with Coordinator ========
+
+type UtilityReport struct {
+	ClientID  string                      `json:"client_id"`
+	Region    string                      `json:"region"`
+	AvgUtility float64          			`json:"utility"`
+	SLA    consistency.SLA  			  `json:"sla"`
+}
+
+func SendUtilityReport(clientID string, region string, sla consistency.SLA, coordinatorURL string) {
+	fmt.Println("in the SendUtilityReport function")
+	globalMonitor.mu.RLock()
+	defer globalMonitor.mu.RUnlock()
+
+	globalMonitor.utilities.mu.Lock()
+	defer globalMonitor.utilities.mu.Unlock()
+
+	var sum float64
+	var count int
+	for _, u := range globalMonitor.utilities.samples {
+		if u != 0 {
+			sum += u
+			count++
+		}
+	}
+	avgUtility := 0.0
+	if count > 0 {
+		avgUtility = sum / float64(count)
+	}
+
+	report := UtilityReport{
+		ClientID:  clientID,
+		Region:    region,
+		AvgUtility: avgUtility,
+		SLA:      sla,
+	}
+
+	payload, err := json.Marshal(report)
+	if err != nil {
+		fmt.Println("failed to marshal utility report:", err)
+		return
+	}
+
+	resp, err := http.Post(coordinatorURL, "application/json", bytes.NewBuffer(payload))
+	if err != nil {
+		fmt.Println("failed to send utility report:", err)
+		return
+	}
+	defer resp.Body.Close()
+	fmt.Printf("Utility report sent (status %d)\n", resp.StatusCode)
 }

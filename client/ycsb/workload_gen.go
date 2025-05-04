@@ -150,12 +150,13 @@ func generateRMWWorkload(filename string, seed int64) {
 	var numOperations = 2000
 	var sessionSize = 400
 	var keySpaceSize = 1000
-	var rmwRatio = 0.6 
+	var rmwRatio = 0.6
 
 	r := rand.New(rand.NewSource(seed))
 	file, err := os.Create(filename)
 	if err != nil {
-		fmt.Println("failed to create file: %v", err)
+		fmt.Printf("failed to create file: %v\n", err)
+		return
 	}
 	defer file.Close()
 
@@ -182,8 +183,9 @@ func generateRMWWorkload(filename string, seed int64) {
 			}
 			key := r.Intn(keySpaceSize)
 			val := uuid.New().String()
+			formattedKey := fmt.Sprintf("%04d", key)
 
-			ops[index] = fmt.Sprintf("WRITE %d %s", key, val)
+			ops[index] = fmt.Sprintf("WRITE %s %s", formattedKey, val)
 			occupied[index] = true
 
 			writeIndices = append(writeIndices, index)
@@ -196,6 +198,7 @@ func generateRMWWorkload(filename string, seed int64) {
 		for i := 0; i < rmwCount; i++ {
 			writeIdx := writeIndices[i]
 			key := writeKeys[i]
+			formattedKey := fmt.Sprintf("%04d", key)
 
 			var readIdx int
 			for attempts := 0; attempts < 10; attempts++ {
@@ -207,7 +210,7 @@ func generateRMWWorkload(filename string, seed int64) {
 			}
 
 			if readIdx < sessionSize && !occupied[readIdx] {
-				ops[readIdx] = fmt.Sprintf("READ %d", key)
+				ops[readIdx] = fmt.Sprintf("READ %s", formattedKey)
 				occupied[readIdx] = true
 				usedReadSlots[readIdx] = true
 			}
@@ -217,7 +220,8 @@ func generateRMWWorkload(filename string, seed int64) {
 		for i := 0; i < sessionSize; i++ {
 			if !occupied[i] {
 				key := r.Intn(keySpaceSize)
-				ops[i] = fmt.Sprintf("READ %d", key)
+				formattedKey := fmt.Sprintf("%04d", key)
+				ops[i] = fmt.Sprintf("READ %s", formattedKey)
 				occupied[i] = true
 			}
 		}
