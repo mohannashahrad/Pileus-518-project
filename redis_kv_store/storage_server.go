@@ -11,6 +11,7 @@ import (
 	"pileus/util"
 	"os/signal"
 	"syscall"
+	"github.com/google/uuid"
 )
 
 // each storage node is co-located with a local redis instance
@@ -49,6 +50,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	//preload the store with data
+	preloadKeys(10000)
 
 	http.HandleFunc("/set", handleSet)
 	http.HandleFunc("/get", handleGet)
@@ -106,7 +110,7 @@ func initShards(configPath string) {
 		shard := &secondaryShards[i]
 		go func(shard *util.Shard) {
 			// TODO: the frequency of the replication pulling should be tuned
-			ticker := time.NewTicker(5 * time.Second)
+			ticker := time.NewTicker(10 * time.Second)
 			defer ticker.Stop()
 	
 			for range ticker.C {
@@ -393,4 +397,21 @@ func loadHighTSFromSnapshot(shardId int) int64 {
 	}
 
 	return 0
+}
+
+func preloadKeys(count int) {
+	fmt.Println("Preloading Redis with deterministic key-value pairs")
+
+	// Use a fixed namespace and input string for deterministic UUIDs
+	namespace := uuid.NewSHA1(uuid.NameSpaceDNS, []byte("my-fixed-namespace"))
+
+	for i := 0; i < count; i++ {
+		key := fmt.Sprintf("key_%04d", i)
+		// Generate a deterministic UUID based on the key name
+		value := uuid.NewMD5(namespace, []byte(fmt.Sprintf("val_%04d", i))).String()
+		_, err := localStore.Set(key, value)
+		if err != nil {
+			fmt.Printf("Failed to preload key %s: %v\n", key, err)
+		}
+	}
 }
