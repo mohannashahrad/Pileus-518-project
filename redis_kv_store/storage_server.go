@@ -51,7 +51,14 @@ func main() {
 		panic(err)
 	}
 
-	//preload the store with data
+	err = localStore.FlushAll()
+	if err != nil {
+		fmt.Println("Failed to flush Redis:", err)
+		os.Exit(1)
+	}
+	fmt.Println("Redis flushed successfully")
+
+	// preload the store with data
 	preloadKeys(10000)
 
 	http.HandleFunc("/set", handleSet)
@@ -86,7 +93,7 @@ func initShards(configPath string) {
 			shard.AmIPrimary = true
 			shard.AmISecondary = false
 			// If it does not exist, return 0
-			shard.HighTS= loadHighTSFromSnapshot(shard.ShardId)
+			shard.HighTS=loadHighTSFromSnapshot(shard.ShardId)
 			primaryShard = shard
         }
 
@@ -402,14 +409,18 @@ func loadHighTSFromSnapshot(shardId int) int64 {
 func preloadKeys(count int) {
 	fmt.Println("Preloading Redis with deterministic key-value pairs")
 
-	// Use a fixed namespace and input string for deterministic UUIDs
-	namespace := uuid.NewSHA1(uuid.NameSpaceDNS, []byte("my-fixed-namespace"))
+	namespace := uuid.NewSHA1(uuid.NameSpaceDNS, []byte("pileus"))
 
 	for i := 0; i < count; i++ {
-		key := fmt.Sprintf("key_%04d", i)
+		key := fmt.Sprintf("%04d", i)
 		// Generate a deterministic UUID based on the key name
-		value := uuid.NewMD5(namespace, []byte(fmt.Sprintf("val_%04d", i))).String()
-		_, err := localStore.Set(key, value)
+		value := uuid.NewMD5(namespace, []byte(fmt.Sprintf("%04d", i))).String()
+
+		vv := redis.VersionedValue{
+			Value:     value,
+			Timestamp: -1,
+		}
+		err := localStore.SetVersioned(key, vv)
 		if err != nil {
 			fmt.Printf("Failed to preload key %s: %v\n", key, err)
 		}

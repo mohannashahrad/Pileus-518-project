@@ -237,3 +237,10 @@ func NewClient(options Options) (Client, error) {
 
 	return result, nil
 }
+
+func (c *Client) FlushAll() error {
+	tctx, cancel := context.WithTimeout(context.Background(), c.timeOut)
+	defer cancel()
+
+	return c.c.FlushAll(tctx).Err()
+}
