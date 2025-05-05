@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"time"
+	"encoding/json"
 	"github.com/google/uuid"
 	"client/consistency"
+	"client/monitor"
 	"client/util"
 	"client/api"
 	"bufio"
@@ -12,10 +14,15 @@ import (
 	"strings"
 )
 
-// TODO: this records thing should be changed
 type Record struct {
     Key   string `json:"key"`
     Value string `json:"value"`
+}
+
+type DynamicReconfigurationConfig struct {
+	ClientID      string `json:"client_id"`
+	Region        string `json:"region"`
+	CoordinatorURL string `json:"reconfiguration_coordinator_url"`
 }
 
 var GlobalSLAs = map[string]consistency.SLA{}
@@ -39,12 +46,27 @@ func main() {
 	fmt.Printf("**************************************\n")
 	fmt.Printf("Password SLA: %+v\n", GlobalSLAs["psw_sla"])
 
+	// Load node info for reconfiguration
+	configuration_config, err := loadClientConfigByRegion("clients_config.json", "utah")
+	if err != nil {
+		fmt.Println("Failed to load client config: %v\n", err)
+	}
+
 	// Before sending the workloads, send monitoring probes to the nodes to get RTT 
 	// TODO: we can use probes also for HighTS to begin [for each shard]
 	api.SendProbes()
 
 	fmt.Println("Checking the RTT's after sending init probes\n")
 	api.PrintRTTs()
+
+	// Set Dynamic Configuration Coordination for Monitor
+	monitor.SetDynamicConfigData(
+		configuration_config.ClientID, 
+		configuration_config.Region,
+		GlobalSLAs["dynamic_cart_sla"], 
+		configuration_config.CoordinatorURL, 
+		true,
+	)
 
 	start := time.Now()
 
@@ -60,11 +82,14 @@ func main() {
 	// ================ Shopping Cart Experiemnts ====================== 
 
 	// Adjust the workload based on the exp type
-	//replay_workload_from_log("ycsb/Fig11/2k/r50w50sec2.log", util.Closest, "cart_sla")
-	replay_workload_from_log("ycsb/Fig11/skewed_rmw_test.log", util.Random, "cart_sla")
+	// replay_workload_from_log("ycsb/Fig11/2k/r50w50sec2.log", util.Pileus, "cart_sla")
+	//replay_workload_from_log("ycsb/Fig11/skewed_rmw_test.log", util.Random, "cart_sla")
 
 	// ================ Adaptabiliy to Network Latency Experiemnts ================== 
 	// replay_workload_with_artificial_latency("ycsb/Fig13/utahClient.log", util.Pileus, "psw_sla")
+
+	// ================ Dynamic Reconfiguration Experiemnts ================== 
+	replay_workload_from_log("ycsb/Fig11/dynamic_reconfig.log", util.Pileus, "dynamic_cart_sla")
 
 	duration := time.Since(start)
 	fmt.Printf("Workload execution took %v\n", duration)
@@ -353,4 +378,32 @@ func loadStaticSLAs() {
 		panic(err)
 	}
 	GlobalSLAs[sla.ID] = sla
+
+	sla, err = util.LoadSLAFromFile("consistency/samples/dynamic_cart.json", "dynamic_cart_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
+}
+
+func loadClientConfigByRegion(path, region string) (*DynamicReconfigurationConfig, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("could not open config file: %w", err)
+	}
+	defer file.Close()
+
+	// Parse the entire config as a map from region name to config struct
+	var allConfigs map[string]DynamicReconfigurationConfig
+	decoder := json.NewDecoder(file)
+	if err := decoder.Decode(&allConfigs); err != nil {
+		return nil, fmt.Errorf("could not decode config JSON: %w", err)
+	}
+
+	// Lookup the one we want
+	config, ok := allConfigs[region]
+	if !ok {
+		return nil, fmt.Errorf("region %q not found in config", region)
+	}
+	return &config, nil
 }

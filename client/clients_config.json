@@ -1,0 +1,22 @@
+{
+  "clem": {
+    "client_id": "clem_client",
+    "region": "us-east",
+    "reconfiguration_coordinator_url": "http://128.105.145.204:8080/report"
+  },  
+  "utah": {
+    "client_id": "utah_client",
+    "region": "us-west",
+    "reconfiguration_coordinator_url": "http://128.105.145.204:8080/report"
+  },  
+  "frankfurt": {
+    "client_id": "frankfurt_client",
+    "region": "eu",
+    "reconfiguration_coordinator_url": "http://128.105.145.204:8080/report"
+  },  
+  "tokyo": {
+    "client_id": "tokyo_client",
+    "region": "asia",
+    "reconfiguration_coordinator_url": "http://128.105.145.204:8080/report"
+  }
+}

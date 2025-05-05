@@ -8,8 +8,8 @@ import (
 
 var nodes = map[string]string{
 	"Clem": "http://130.127.133.18:8080",
-	"Wisc": "http://128.105.145.204:8080",
-	"Utah":    "http://128.110.217.202:8080",
+	// "Wisc": "http://128.105.145.204:8080",
+	// "Utah":    "http://128.110.217.202:8080",
 }
 
 // Change this on each EC2 instance
