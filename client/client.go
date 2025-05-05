@@ -47,7 +47,7 @@ func main() {
 	fmt.Printf("Password SLA: %+v\n", GlobalSLAs["psw_sla"])
 
 	// Load node info for reconfiguration
-	configuration_config, err := loadClientConfigByRegion("clients_config.json", "clem")
+	configuration_config, err := loadClientConfigByRegion("clients_config.json", "utah")
 	if err != nil {
 		fmt.Println("Failed to load client config: %v\n", err)
 	}
@@ -59,20 +59,14 @@ func main() {
 	fmt.Println("Checking the RTT's after sending init probes\n")
 	api.PrintRTTs()
 
-	// Start periodic monitoring report [every 10 seconds]
-	go func() {
-		ticker := time.NewTicker(200 * time.Millisecond)
-		defer ticker.Stop()
-
-		for range ticker.C {
-			monitor.SendUtilityReport(
-				configuration_config.ClientID,
-				configuration_config.Region,
-				GlobalSLAs["cart_sla"],				// change this based on the SLA testing
-				configuration_config.CoordinatorURL,
-			)
-		}
-	}()
+	// Set Dynamic Configuration Coordination for Monitor
+	monitor.SetDynamicConfigData(
+		configuration_config.ClientID, 
+		configuration_config.Region,
+		GlobalSLAs["dynamic_cart_sla"], 
+		configuration_config.CoordinatorURL, 
+		true,
+	)
 
 	start := time.Now()
 
@@ -95,7 +89,7 @@ func main() {
 	// replay_workload_with_artificial_latency("ycsb/Fig13/utahClient.log", util.Pileus, "psw_sla")
 
 	// ================ Dynamic Reconfiguration Experiemnts ================== 
-	replay_workload_from_log("ycsb/Fig11/dynamic_reconfig.log", util.Pileus, "psw_sla")
+	replay_workload_from_log("ycsb/Fig11/dynamic_reconfig.log", util.Pileus, "dynamic_cart_sla")
 
 	duration := time.Since(start)
 	fmt.Printf("Workload execution took %v\n", duration)
@@ -380,6 +374,12 @@ func loadStaticSLAs() {
 	GlobalSLAs[sla.ID] = sla
 
 	sla, err = util.LoadSLAFromFile("consistency/samples/shopping_cart.json", "cart_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
+
+	sla, err = util.LoadSLAFromFile("consistency/samples/dynamic_cart.json", "dynamic_cart_sla")
 	if err != nil {
 		panic(err)
 	}

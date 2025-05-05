@@ -81,6 +81,7 @@ type Record struct {
     Key   string `json:"key"`
     Value string `json:"value"`
 }
+
 var artificialLags = make(map[string]time.Duration)
 var lagMu sync.RWMutex
 
@@ -181,7 +182,16 @@ func PileusGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 	val, obj_ts, node_hts, rtt, err := readFromNode(key, storageNode)
 
 	// Calculate and track utility based on get_timestamp and rtt (consistency + latency)
-	subAchieved := detectSubSLAHit(obj_ts, node_hts, rtt, targetSubSLA, activeSLA, minReadTSPerSubSLA)
+	subAchieved, detailedSubStatus := detectSubSLAHit(obj_ts, node_hts, rtt, targetSubSLA, activeSLA, minReadTSPerSubSLA)
+	
+	fmt.Println("Detailed Sub Status is when going to %s", storageNode)
+	fmt.Println(detailedSubStatus)
+
+	readStatus := monitor.ReadStatus{
+		Node:          storageNode,
+		SubSLADetails: detailedSubStatus,
+	}
+	monitor.RecordReadStatus(readStatus)
 
 	// If no sub-sla is achieved
 	if subAchieved == nil {
@@ -500,51 +510,67 @@ func readFromNode(key string, storageNode string) (string, int64, int64, time.Du
 }
 
 // TODO: This implementation is right now highly tuned for the SLA's we are testing. Generalize this implementation
-func detectSubSLAHit(obj_ts int64, node_hts int64, rtt time.Duration, targetSubSLA consistency.SubSLA, activeSLA *consistency.SLA, minReadTSPerSubSLA []int64) *consistency.SubSLA{
-	if (activeSLA.ID == "psw_sla") {
-		for _, sub := range activeSLA.SubSLAs {
-			// If we targeted strong consistency (contacted primary)
-			if (targetSubSLA.Consistency == 4) {
-				if (rtt <= sub.Latency.Duration) {
-					subGained := sub
-					return &subGained
-				}
-			} else if (targetSubSLA.Consistency == 0) {
-				// If aimed for eventual, then strong is not met [//NOTE: this is our assumption]
-				if (sub.Consistency == 0 && rtt <= sub.Latency.Duration) {
-					subGained := sub
-					return &subGained
-				}
-			}
-		}
-		// If didn't return yet, no sub-SLA was met 
-		fmt.Println("None of the utilities for password-checking is met, returning nil: \n")
-		return nil	
-	} 
-	
-	if (activeSLA.ID == "cart_sla") {
-		fmt.Println("detectSubSLAHit for cart_sla")
-		fmt.Println(minReadTSPerSubSLA)
-		fmt.Println("node_hts is %d and rtt is %v", node_hts, rtt)
+func detectSubSLAHit(obj_ts int64, node_hts int64, rtt time.Duration, targetSubSLA consistency.SubSLA, activeSLA *consistency.SLA, minReadTSPerSubSLA []int64) (*consistency.SubSLA, []monitor.SubSLAStatus) {
+	var statuses []monitor.SubSLAStatus
 
-		// check node high ts
-		for i, sub := range activeSLA.SubSLAs {
-			if rtt <= sub.Latency.Duration {
-				if (node_hts >= minReadTSPerSubSLA[i]) {
+	if activeSLA.ID == "psw_sla" {
+		for _, sub := range activeSLA.SubSLAs {
+			status := monitor.SubSLAStatus{SubSLA: sub, Status: "NA"}
+
+			if targetSubSLA.Consistency == 4 { // Strong
+				if rtt <= sub.Latency.Duration {
+					status.Status = "Met"
+					statuses = append(statuses, status)
 					subGained := sub
-					return &subGained
+					return &subGained, statuses
+				} else {
+					status.Status = "Lat_Not_Met"
+				}
+			} else if targetSubSLA.Consistency == 0 { // Eventual
+				if sub.Consistency == 0 {
+					if rtt <= sub.Latency.Duration {
+						status.Status = "Met"
+						statuses = append(statuses, status)
+						subGained := sub
+						return &subGained, statuses
+					} else {
+						status.Status = "Lat_Not_Met"
+					}
 				}
 			}
+			statuses = append(statuses, status)
 		}
-		
-		// If didn't return yet, no sub-SLA was met 
-		fmt.Println("None of the utilities for password-checking is met, returning nil: \n")
-		return nil
+
+		fmt.Println("None of the utilities for password-checking is met, returning nil")
+		return nil, statuses
 	}
 
-	// If didn't return yet, no sub-SLA was met 
-	fmt.Println("Specific utility computing function is not implemented, returning nil: \n")
-	return nil
+	if activeSLA.ID == "cart_sla" || activeSLA.ID == "dynamic_cart_sla" {
+		fmt.Println("detectSubSLAHit for cart_sla")
+		fmt.Println(minReadTSPerSubSLA)
+		fmt.Printf("node_hts is %d and rtt is %v\n", node_hts, rtt)
+
+		for i, sub := range activeSLA.SubSLAs {
+			status := monitor.SubSLAStatus{SubSLA: sub, Status: "NA"}
+			if rtt > sub.Latency.Duration {
+				status.Status = "Lat_Not_Met"
+			} else if node_hts < minReadTSPerSubSLA[i] {
+				status.Status = "Consistency_Not_Met"
+			} else {
+				status.Status = "Met"
+				statuses = append(statuses, status)
+				subGained := sub
+				return &subGained, statuses
+			}
+			statuses = append(statuses, status)
+		}
+
+		fmt.Println("None of the utilities for cart-checking is met, returning nil")
+		return nil, statuses
+	}
+
+	fmt.Println("SLA ID not recognized, returning nil")
+	return nil, statuses
 }
 
 // =====================
