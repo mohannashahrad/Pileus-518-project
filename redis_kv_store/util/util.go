@@ -22,6 +22,7 @@ type Shard struct {
 	Primary	string `json:"primary"` 
 	PrimaryID string `json:"primaryID"` 
 	Secondaries []string `json:"secondaryIDs"`
+	ReplicationFrequencySeconds float64  `json:"defaultRepFreq"`
 	AmIPrimary bool
 	AmISecondary bool
 	HighTS  int64 // highest known timestamp from this shard

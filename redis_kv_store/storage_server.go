@@ -66,6 +66,7 @@ func main() {
 	http.HandleFunc("/replicate", replicationHandler)
 	http.HandleFunc("/probe", handleProbe)
 	http.HandleFunc("/status", sendLatestStatus)
+	http.HandleFunc("/adjust_replication", adjustReplicationHandler)
 
 	// Shutdown Signal Handler: For storing the high timestamp information (on Redis)
 	go handleShutdown()
@@ -115,12 +116,28 @@ func initShards(configPath string) {
 
 	for i := range secondaryShards {
 		shard := &secondaryShards[i]
-		go func(shard *util.Shard) {
-			// TODO: the frequency of the replication pulling should be tuned
-			ticker := time.NewTicker(10 * time.Second)
-			defer ticker.Stop()
+		// go func(shard *util.Shard) {
+		// 	// ticker := time.NewTicker(20 * time.Second)
+		// 	fmt.Println("Setting rep freq to ", shard.ReplicationFrequencySeconds)
+		// 	ticker := time.NewTicker(time.Duration(shard.ReplicationFrequencySeconds) * time.Second)
+		// 	defer ticker.Stop()
 	
-			for range ticker.C {
+		// 	for range ticker.C {
+		// 		err := pullFromPrimary(shard)
+		// 		if err != nil {
+		// 			fmt.Printf("Replication error from primary %s: %v\n", shard.Primary, err)
+		// 		}
+		// 	}
+		// }(shard)
+
+		go func(shard *util.Shard) {
+			for {
+				freq := shard.ReplicationFrequencySeconds
+				fmt.Printf("Sleeping for %d seconds before pulling updates...\n", freq)
+	
+				timer := time.NewTimer(time.Duration(freq) * time.Second)
+				<-timer.C
+	
 				err := pullFromPrimary(shard)
 				if err != nil {
 					fmt.Printf("Replication error from primary %s: %v\n", shard.Primary, err)
@@ -209,6 +226,27 @@ func handleGet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(response)
+}
+
+func adjustReplicationHandler(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		ShardID int `json:"shardID"`
+		NewFreq float64 `json:"new_freq"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "invalid json", http.StatusBadRequest)
+		return
+	}
+
+	for i := range secondaryShards {
+		if secondaryShards[i].ShardId == req.ShardID {
+			fmt.Printf("Updating replication frequency for shard %d to %d seconds\n", req.ShardID, req.NewFreq)
+			secondaryShards[i].ReplicationFrequencySeconds = req.NewFreq
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+	}
+	w.WriteHeader(http.StatusOK)
 }
 
 // Endpoint for replciation between storage nodes (pull-based)
