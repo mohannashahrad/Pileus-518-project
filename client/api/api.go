@@ -49,6 +49,10 @@ func BeginSession(sla *consistency.SLA, serverSelectionPolicy util.ServerSelecti
 }
 
 func EndSession(s *util.Session) {
+	// Print Monitoring data 
+	fmt.Println("Monitor Utilities are: ")
+	fmt.Println(monitor.GetUtilities())
+
 	// 1. Compute average utility
 	var total float64
 	for _, u := range s.Utilities {
@@ -183,12 +187,14 @@ func PileusGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 	if subAchieved == nil {
 		fmt.Println("No utility could be computed, because gained subSLA was null")
 		s.Utilities = append(s.Utilities, 0.0)
+		monitor.RecordUtility(0.0)
 		s.ObjectsRead[key] = obj_ts
 		return val, consistency.SubSLA{}, fmt.Errorf("no utility could be computed")
 	}
 
 	// Update session read utilities
 	s.Utilities = append(s.Utilities, subAchieved.Utility)
+	monitor.RecordUtility(subAchieved.Utility)
 
 	// Update the read timestamp of the object read
 	s.ObjectsRead[key] = obj_ts
