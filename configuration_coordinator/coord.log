@@ -1,0 +1,166 @@
+Loaded the config and it is:
+&{[{clem 130.127.133.18:8080} {utah 128.110.219.100:8080}] [{0 0 10000 130.127.133.18:8080 [utah] [128.110.219.100:8080] 30 map[128.110.219.100:8080:30]}]}
+Coordinator agent running on :8080
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.000
+map[128.110.219.100:8080:0 130.127.133.18:8080:86]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Lat_Not_Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 30
+[RECONFIG] Requesting 128.110.219.100:8080 to increase replication freq from 30.00 to 15.00
+[SUCCESS] Replication frequency update acknowledged by secondary
+[SKIPPED] Recent utility drop already handled for utah_client in us-west
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.493
+map[128.110.219.100:8080:0 130.127.133.18:8080:58]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 15
+[SKIPPED] Replication update to 128.110.219.100:8080 skipped due to cooldown
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.591
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 15
+[SKIPPED] Replication update to 128.110.219.100:8080 skipped due to cooldown
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.565
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 15
+[SKIPPED] Replication update to 128.110.219.100:8080 skipped due to cooldown
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.595
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 15
+[SKIPPED] Replication update to 128.110.219.100:8080 skipped due to cooldown
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.595
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 15
+[SKIPPED] Replication update to 128.110.219.100:8080 skipped due to cooldown
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.595
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 15
+[SKIPPED] Replication update to 128.110.219.100:8080 skipped due to cooldown
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.595
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 15
+[RECONFIG] Requesting 128.110.219.100:8080 to increase replication freq from 15.00 to 7.50
+[SUCCESS] Replication frequency update acknowledged by secondary
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.565
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 7.5
+[SKIPPED] Replication update to 128.110.219.100:8080 skipped due to cooldown
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.595
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 7.5
+[SKIPPED] Replication update to 128.110.219.100:8080 skipped due to cooldown
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.588
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 7.5
+[SKIPPED] Replication update to 128.110.219.100:8080 skipped due to cooldown
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.595
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 7.5
+[RECONFIG] Requesting 128.110.219.100:8080 to increase replication freq from 7.50 to 3.75
+[SUCCESS] Replication frequency update acknowledged by secondary
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.595
+map[128.110.219.100:8080:0 130.127.133.18:8080:59]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+[SKIPPED] Replication update to 128.110.219.100:8080 skipped due to cooldown
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.588
+map[128.110.219.100:8080:0 130.127.133.18:8080:59]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+[SKIPPED] Replication update to 128.110.219.100:8080 skipped due to cooldown
+[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.580
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+Freq is already too low[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.580
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+Freq is already too low[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.580
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+Freq is already too low[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.573
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+Freq is already too low[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.565
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+Freq is already too low[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.565
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+Freq is already too low[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.565
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+Freq is already too low[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.595
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+Freq is already too low[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.595
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+Freq is already too low[ALERT] Utility drop detected: client=utah_client region=us-west utility=0.595
+map[128.110.219.100:8080:0 130.127.133.18:8080:57]
+{130.127.133.18:8080 [{{2 {20ms} <nil> 1} Lat_Not_Met} {{2 {40ms} <nil> 0.5} Lat_Not_Met} {{2 {100ms} <nil> 0.25} Met}]}
+[RECONFIG CANDIDATE] Node utah_client failing SLA with Consistency=2 Latency=20ms
+closest node is %s 128.110.219.100:8080
+Rep Frequency in it is %d 3.75
+Freq is already too low
