@@ -7,6 +7,10 @@
     {
       "nodeId": "utah",
       "nodeAddress": "128.110.219.100:8080"
+    },
+    {
+      "nodeId": "frankfurt",
+      "nodeAddress": "3.125.40.68:8080"
     }
   ], 
   "shards": [
@@ -16,7 +20,7 @@
       "end": 10000,
       "primary": "130.127.133.18:8080",
       "primaryID": "clem",
-      "secondaryIDs": ["utah"]
+      "secondaryIDs": ["utah", "frankfurt"]
     }
   ]
 }
