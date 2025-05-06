@@ -581,21 +581,16 @@ func detectSubSLAHit(obj_ts int64, node_hts int64, rtt time.Duration, targetSubS
 // Start RTT for each node in the replicaiton config
 func SendProbes() {
 	for _, node := range GlobalConfig.Nodes {
-		rtt, err := MeasureProbeRTT(node.Address, 2, 5)	// Pass timeout and pingCount to the function as well
+		err := MeasureProbeRTT(node.Address, 2, 5)	// Pass timeout and pingCount to the function as well
 		
-		if (err == nil) {
-			monitor.RecordRTT(node.Address, rtt)
-		} else {
+		if (err != nil) {
 			fmt.Println("Error happened sending probes to node: %s\n", node.Address)
 		}
 		
 	} 
 }
 
-func MeasureProbeRTT(host string, timeout time.Duration, pingCount int) (time.Duration, error) {
-	var total float64
-	var success int
-
+func MeasureProbeRTT(host string, timeout time.Duration, pingCount int) error {
 	url := fmt.Sprintf("http://%s/probe", host)
 	fmt.Println("Probing URL:", url)
 
@@ -626,17 +621,12 @@ func MeasureProbeRTT(host string, timeout time.Duration, pingCount int) (time.Du
 		resp.Body.Close()
 
 		if resp.StatusCode == http.StatusOK {
-			total += float64(elapsed.Milliseconds())
-			success++
+			monitor.RecordRTT(host, time.Duration(elapsed.Milliseconds()) * time.Millisecond)
+		} else {
+			return err
 		}
 	}
-
-	if success == 0 {
-		return 0, fmt.Errorf("no successful responses")
-	}
-
-	rtt_float := total / float64(success)
-	return time.Duration(rtt_float * float64(time.Millisecond)), nil
+	return nil
 }
 
 func SetArtificialLat(nodeId string, lag time.Duration) {

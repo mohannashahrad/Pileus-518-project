@@ -1,0 +1,24 @@
+{
+    "subSLAs": [
+      {
+        "rank": 1,
+        "consistecy": "MonotonicReads",
+        "latency_bound": 20,
+        "utility": 1
+      },
+      {
+        "rank": 2,
+        "consistecy": "Bounded",
+        "latency_bound": 40,
+        "staleness_bound": 10,
+        "utility": 0.5
+      }, 
+      {
+        "rank": 2,
+        "consistecy": "Eventual",
+        "latency_bound": 100,
+        "utility": 0.25
+      }
+    ]
+  }
+  

@@ -65,7 +65,7 @@ func main() {
 		configuration_config.Region,
 		GlobalSLAs["dynamic_cart_sla"], 
 		configuration_config.CoordinatorURL, 
-		true,
+		false,
 	)
 
 	start := time.Now()
@@ -82,14 +82,14 @@ func main() {
 	// ================ Shopping Cart Experiemnts ====================== 
 
 	// Adjust the workload based on the exp type
-	// replay_workload_from_log("ycsb/Fig11/2k/r50w50sec2.log", util.Pileus, "cart_sla")
-	//replay_workload_from_log("ycsb/Fig11/skewed_rmw_test.log", util.Random, "cart_sla")
+	//replay_workload_from_log("ycsb/Fig11/2k/r50w50client.log", util.Random, "cart_sla")
+	replay_workload_from_log("ycsb/Fig11/skewed_rmw_new.log", util.Pileus, "cart_sla")
 
 	// ================ Adaptabiliy to Network Latency Experiemnts ================== 
 	// replay_workload_with_artificial_latency("ycsb/Fig13/utahClient.log", util.Pileus, "psw_sla")
 
 	// ================ Dynamic Reconfiguration Experiemnts ================== 
-	replay_workload_from_log("ycsb/Fig11/dynamic_reconfig.log", util.Pileus, "dynamic_cart_sla")
+	// replay_workload_from_log("ycsb/Fig11/dynamic_reconfig.log", util.Pileus, "dynamic_cart_sla")
 
 	duration := time.Since(start)
 	fmt.Printf("Workload execution took %v\n", duration)
