@@ -98,9 +98,17 @@ func SelectNodesForConsistency(session *util.Session, key string, level consiste
 			nodes, requiredReadTS := SelectNodesForReadMyWrites(session, key)
 			selected = append(selected, nodes...)
 			minReadTS = requiredReadTS
+		
+		// last preceding GET(key) in the same session
+		case consistency.MonotonicReads:
+			nodes, requiredReadTS := SelectNodesForMonotonicReads(session, key)
+			selected = append(selected, nodes...)
+			minReadTS = requiredReadTS
 
-		// case consistency.Bounded:
-		// 	selected = append(selected, SelectNodesForBoundedStaleness(key))
+		case consistency.Bounded:
+			nodes, requiredReadTS := SelectNodesForBoundedStaleness(session, key, bound)
+			selected = append(selected, nodes...)
+			minReadTS = requiredReadTS
 
 		case consistency.Eventual:
 			selected = append(selected, SelectNodesForEventualConsistency(key)...)
@@ -178,6 +186,105 @@ func SelectNodesForReadMyWrites(session *util.Session, key string) ([]string, in
 			break
 		}
 	}
+
+	// Also add secondaries that are sufficiently up-to-date
+	for _, node := range replicationConfig.Nodes {
+		if node.Address == primary {
+			continue 
+		}
+
+		highTS := monitor.GetHTS(node.Address)
+		fmt.Printf("Node highTS is %d \n", highTS)
+
+		if highTS >= minHighTS {
+			selected = append(selected, node.Address)
+		}
+	}
+
+	fmt.Printf("returnung the nodes %v\n", selected)
+	return selected, minHighTS
+}
+
+func SelectNodesForMonotonicReads(session *util.Session, key string) ([]string, int64) {
+	fmt.Printf("entered SelectNodesForMonotonicReads \n")
+	var selected []string
+	var minHighTS int64
+
+	// Get the last time key was read in this session
+	if ts, ok := session.ObjectsRead[key]; ok {
+		minHighTS = ts
+	} else {
+		minHighTS = 0
+	}
+	fmt.Printf("Last read is %d\n",  session.ObjectsRead[key])
+	fmt.Printf("minHighTS is set to %d \n", minHighTS)
+
+	numericKey, err := strconv.Atoi(key)
+	if err != nil {
+		fmt.Printf("Error: Could not convert key to numeric value.\n")
+		return selected, minHighTS
+	}
+
+	primary := ""
+	// Add primary of shard
+	for _, shard := range replicationConfig.Shards {
+		if numericKey >= shard.RangeStart && numericKey <= shard.RangeEnd {
+			primary = shard.Primary
+			selected = append(selected, primary)
+			break
+		}
+	}
+
+	// Also add secondaries that are sufficiently up-to-date
+	for _, node := range replicationConfig.Nodes {
+		if node.Address == primary {
+			continue 
+		}
+
+		highTS := monitor.GetHTS(node.Address)
+		fmt.Printf("Node highTS is %d \n", highTS)
+
+		if highTS >= minHighTS {
+			selected = append(selected, node.Address)
+		}
+	}
+
+	fmt.Printf("returnung the nodes %v\n", selected)
+	return selected, minHighTS
+}
+
+// The input bound is in Milliseconds
+func SelectNodesForBoundedStaleness(session *util.Session, key string, bound *time.Duration) ([]string, int64) {
+	fmt.Printf("entered SelectNodesForBoundedStaleness \n")
+	var selected []string
+	var minHighTS int64
+
+	// Get the last time key was written in this session
+	minHighTS = time.Now().Add(-*bound).UnixMilli()
+
+	fmt.Printf("Last write is %d\n",  session.ObjectsWritten[key])
+	fmt.Println("Curr time is", time.Now().UnixMilli())
+	fmt.Printf("minHighTS is set to %d \n", minHighTS)
+
+	numericKey, err := strconv.Atoi(key)
+	if err != nil {
+		fmt.Printf("Error: Could not convert key to numeric value.\n")
+		return selected, minHighTS
+	}
+
+	primary := ""
+	// Add primary of shard
+	for _, shard := range replicationConfig.Shards {
+		if numericKey >= shard.RangeStart && numericKey <= shard.RangeEnd {
+			primary = shard.Primary
+			selected = append(selected, primary)
+
+			primaryHighTS := monitor.GetHTS(primary)
+			fmt.Printf("Primary highTS is %d \n", primaryHighTS)
+			break
+		}
+	}
+
 
 	// Also add secondaries that are sufficiently up-to-date
 	for _, node := range replicationConfig.Nodes {
