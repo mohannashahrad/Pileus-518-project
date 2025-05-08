@@ -234,6 +234,54 @@ func handleReportAnalysis(report UtilityDropReport) {
 					break	
 				}
 			}
+		} else if entry.Status == "Consistency_Not_Met" {
+			cons := entry.SubSLA.Consistency
+			if cons == 1 || cons == 2 || cons == 3 {
+				fmt.Printf("[RECONFIG CANDIDATE] Node %s failing SLA with Consistency=%d Latency=%v\n",
+						report.ClientID, cons, entry.SubSLA.Latency.Duration)
+					
+					// Contact the secondary node for setting rep frequency
+					currentFreq := GlobalConfig.Shards[0].ReplicationFreqs[summary.Node]
+					if summary.Node != "" {
+						lastUpdate, seen := lastReplicationUpdate[summary.Node]
+
+						// Don't send many close adjusting requests to a server
+						if seen && time.Since(lastUpdate) < time.Duration(currentFreq * 2 * float64(time.Second)) {
+							fmt.Println("[SKIPPED] Replication update to %s skipped due to cooldown", summary.Node)
+							return
+						}
+
+						if currentFreq <= 5 {
+							fmt.Println("Freq is already too low")
+							// TODO: here should consider tracking these cases and if needed move primary
+							return
+						}
+
+						
+						newFreq := currentFreq * 0.5
+
+						fmt.Printf("[RECONFIG] Requesting %s to increase replication freq from %.2f to %.2f\n", summary.Node, currentFreq, newFreq)
+
+						reqBody := map[string]float64{"new_freq": newFreq, "shardID": 0}
+						jsonData, _ := json.Marshal(reqBody)
+
+						resp, err := http.Post(fmt.Sprintf("http://%s/adjust_replication", summary.Node), "application/json", bytes.NewBuffer(jsonData))
+						if err != nil {
+							fmt.Printf("[ERROR] Failed to contact %s for replication update: %v\n", summary.Node, err)
+						} else {
+							defer resp.Body.Close()
+							if resp.StatusCode == http.StatusOK {
+								fmt.Println("[SUCCESS] Replication frequency update acknowledged by secondary")
+								GlobalConfig.Shards[0].ReplicationFreqs[summary.Node] = newFreq
+								lastReplicationUpdate[summary.Node] = time.Now()
+							} else {
+								fmt.Printf("[WARN] Replication update failed with status: %d\n", resp.StatusCode)
+							}
+						}
+					}
+
+					break
+			}
 		}
 	}
 }
