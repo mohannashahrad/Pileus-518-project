@@ -12,6 +12,7 @@ import (
 	"bufio"
 	"os"
 	"strings"
+	"math/rand"
 )
 
 type Record struct {
@@ -92,7 +93,7 @@ func main() {
 	// replay_workload_from_log("ycsb/Fig11/dynamic_reconfig.log", util.Pileus, "dynamic_cart_sla")
 
 	// ================ New SLA Experiemnts ================== 
-	replay_workload_from_log("ycsb/Fig11/2k/r50w50client.log", util.Pileus, "new_sla")
+	replay_workload_from_log("ycsb/monotonic.log", util.Pileus, "new_sla")
 
 	duration := time.Since(start)
 	fmt.Printf("Workload execution took %v\n", duration)
@@ -141,6 +142,13 @@ func replay_workload_from_log(workloadFile string, expType util.ServerSelectionP
 			if len(parts) < 2 {
 				fmt.Printf("Skipping malformed line: %s\n", op)
 				continue
+			}
+
+			// Simulate bursty network to the primary
+			if rand.Float64() < 0.5 { // 50% chance
+				api.SetArtificialLat("clem", 10*time.Millisecond)
+			} else {
+				api.SetArtificialLat("clem", 0*time.Millisecond)
 			}
 
 			switch parts[0] {

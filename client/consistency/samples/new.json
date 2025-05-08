@@ -2,22 +2,22 @@
     "subSLAs": [
       {
         "rank": 1,
-        "consistecy": "MonotonicReads",
-        "latency_bound": 20,
+        "consistecy": "ReadMyWrites",
+        "latency_bound": 60,
         "utility": 1
       },
       {
         "rank": 2,
-        "consistecy": "Bounded",
-        "latency_bound": 40,
-        "staleness_bound": 10,
+        "consistecy": "MonotonicReads",
+        "latency_bound": 30,
         "utility": 0.5
-      }, 
+      },
+      
       {
-        "rank": 2,
+        "rank": 3,
         "consistecy": "Eventual",
         "latency_bound": 100,
-        "utility": 0.25
+        "utility": 0.1
       }
     ]
   }

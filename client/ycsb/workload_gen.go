@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-
+	"sort"
 	"github.com/google/uuid"
 )
 
@@ -19,8 +19,8 @@ func main() {
 	YCSB_workload_gen("Fig13/utahClient.log", 8000, 10000, 0.5, 1341)
 
 	// Skewed worklaod for ReadMyWrites Testing
-	Skewed_workload_gen("Fig11/skewed_rmw_test.log", 2000, 10000, 0.5, 0.7, 1343)
-	generateRMWWorkload("Fig11/skewed_rmw_new.log", 1343)
+	generateRMWWorkload("Fig11/skewed_rmw.log", 1000, 1343)
+	generateRMWWorkload("monotonic.log", 100, 1344)
 
 }
 
@@ -60,96 +60,9 @@ func YCSB_workload_gen(workload_name string, size int, keySpace int, readProport
 	return nil
 }
 
-func Skewed_workload_gen(workload_name string, size int, keySpace int, readProportion float32, readAfterWriteFraction float32, seed int64) error {
-	
-	fmt.Printf("Generating workload of size %d with read proportion %f and %d unique keys\n", size, readProportion, keySpace)
-
-	f, err := os.Create(workload_name)
-	if err != nil {
-		return fmt.Errorf("could not create workload log file: %w", err)
-	}
-	defer f.Close()
-
-	r := rand.New(rand.NewSource(seed))
-
-	numReads := int(float32(size) * readProportion)
-	numWrites := size - numReads
-	numReadMyWrites := int(float32(numWrites) * readAfterWriteFraction)
-	numRegularReads := numReads - numReadMyWrites
-
-	ops := make([]string, 0, size)
-	writeIndices := []int{}
-	writeKeys := []string{}
-	readMyWriteOps := []string{}
-
-	// Step 1: Generate writes and record positions and keys
-	for i := 0; i < numWrites; i++ {
-		key := fmt.Sprintf("%04d", r.Intn(keySpace))
-		value := uuid.New().String()
-		ops = append(ops, fmt.Sprintf("WRITE %s %s\n", key, value))
-
-		if len(writeKeys) < numReadMyWrites {
-			writeIndices = append(writeIndices, len(ops)-1)
-			writeKeys = append(writeKeys, key)
-			readMyWriteOps = append(readMyWriteOps, fmt.Sprintf("READ %s\n", key))
-		}
-	}
-
-	// Step 2: Generate regular random reads
-	for i := 0; i < numRegularReads; i++ {
-		key := fmt.Sprintf("%04d", r.Intn(keySpace))
-		ops = append(ops, fmt.Sprintf("READ %s\n", key))
-	}
-
-	// Step 3: Place read-my-writes
-	earlyReads := numReadMyWrites / 3
-	remainingReads := []string{}
-
-	for i, readOp := range readMyWriteOps {
-		if i < earlyReads {
-			// Insert within 1 to 10 ops after the write
-			insertAfter := writeIndices[i] + 1 + r.Intn(10)
-			if insertAfter > len(ops) {
-				insertAfter = len(ops)
-			}
-			ops = append(ops[:insertAfter], append([]string{readOp}, ops[insertAfter:]...)...)
-			// Update indices for any remaining ops
-			for j := i + 1; j < len(writeIndices); j++ {
-				if writeIndices[j] >= insertAfter {
-					writeIndices[j]++
-				}
-			}
-		} else {
-			// Save for random shuffling later
-			remainingReads = append(remainingReads, readOp)
-		}
-	}
-
-	// Step 4: Shuffle and insert remaining read-my-writes randomly
-	r.Shuffle(len(remainingReads), func(i, j int) {
-		remainingReads[i], remainingReads[j] = remainingReads[j], remainingReads[i]
-	})
-	for _, readOp := range remainingReads {
-		insertPos := r.Intn(len(ops) + 1)
-		ops = append(ops[:insertPos], append([]string{readOp}, ops[insertPos:]...)...)
-	}
-
-	// Step 5: Write all operations to file
-	for _, op := range ops {
-		_, err := f.WriteString(op)
-		if err != nil {
-			return fmt.Errorf("failed to write op: %w", err)
-		}
-	}
-
-	fmt.Printf("Workload written to %s\n", workload_name)
-	return nil
-}
-
-func generateRMWWorkload(filename string, seed int64) {
+func generateRMWWorkload(filename string, keySpaceSize int, seed int64) {
 	var numOperations = 2000
 	var sessionSize = 400
-	var keySpaceSize = 1000
 	var rmwRatio = 0.6
 
 	r := rand.New(rand.NewSource(seed))
@@ -233,4 +146,91 @@ func generateRMWWorkload(filename string, seed int64) {
 	}
 
 	fmt.Printf("Workload saved to %s\n", filename)
+}
+
+func generateMonotonicReadWorkload(filename string, seed int64) {
+	var numOperations = 2000
+	var sessionSize = 400
+	var keySpaceSize = 1000
+	var monotonicRatio = 0.6 // 60% of reads will stress the same key
+
+	r := rand.New(rand.NewSource(seed))
+	file, err := os.Create(filename)
+	if err != nil {
+		fmt.Printf("failed to create file: %v\n", err)
+		return
+	}
+	defer file.Close()
+
+	for session := 0; session < numOperations/sessionSize; session++ {
+		ops := make([]string, sessionSize)
+		occupied := make([]bool, sessionSize)
+
+		numReads := sessionSize / 2
+		numWrites := sessionSize - numReads
+
+		// Choose a key to stress with repeated reads and interleaved writes
+		monotonicKey := r.Intn(keySpaceSize)
+		formattedKey := fmt.Sprintf("%04d", monotonicKey)
+		repeatedReadCount := int(float64(numReads) * monotonicRatio)
+
+		// Step 1: Assign interleaved reads and writes for the monotonic key
+		readWriteIndices := make([]int, 0)
+		for i := 0; i < repeatedReadCount; i++ {
+			var idx int
+			for {
+				idx = r.Intn(sessionSize)
+				if !occupied[idx] {
+					break
+				}
+			}
+			readWriteIndices = append(readWriteIndices, idx)
+		}
+		// Sort to simulate time progression (e.g., read, write, read, write...)
+		sort.Ints(readWriteIndices)
+		readIsNext := true
+		for _, idx := range readWriteIndices {
+			if readIsNext {
+				ops[idx] = fmt.Sprintf("READ %s", formattedKey)
+			} else {
+				val := uuid.New().String()
+				ops[idx] = fmt.Sprintf("WRITE %s %s", formattedKey, val)
+			}
+			occupied[idx] = true
+			readIsNext = !readIsNext
+		}
+
+		// Step 2: Fill remaining writes randomly (non-monotonic)
+		for i := 0; i < numWrites-repeatedReadCount/2; i++ {
+			var index int
+			for {
+				index = r.Intn(sessionSize)
+				if !occupied[index] {
+					break
+				}
+			}
+			key := r.Intn(keySpaceSize)
+			val := uuid.New().String()
+			formatted := fmt.Sprintf("%04d", key)
+			ops[index] = fmt.Sprintf("WRITE %s %s", formatted, val)
+			occupied[index] = true
+		}
+
+		// Step 3: Fill remaining reads randomly
+		for i := 0; i < sessionSize; i++ {
+			if !occupied[i] {
+				key := r.Intn(keySpaceSize)
+				formatted := fmt.Sprintf("%04d", key)
+				ops[i] = fmt.Sprintf("READ %s", formatted)
+				occupied[i] = true
+			}
+		}
+
+		// Step 4: Write the session to file
+		for _, op := range ops {
+			fmt.Fprintln(file, op)
+		}
+	}
+
+	fmt.Printf("Monotonic-read workload saved to %s\n", filename)
 }

@@ -198,7 +198,6 @@ func PileusGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 		fmt.Println("No utility could be computed, because gained subSLA was null")
 		s.Utilities = append(s.Utilities, 0.0)
 		monitor.RecordUtility(0.0)
-		s.ObjectsRead[key] = obj_ts
 		return val, consistency.SubSLA{}, fmt.Errorf("no utility could be computed")
 	}
 
@@ -207,6 +206,7 @@ func PileusGet(s *util.Session, key string, sla *consistency.SLA) (string, consi
 	monitor.RecordUtility(subAchieved.Utility)
 
 	// Update the read timestamp of the object read
+	fmt.Printf("Updating session read timestamp: %d\n", obj_ts)
 	s.ObjectsRead[key] = obj_ts
 
 	return val, *subAchieved, err
@@ -350,7 +350,7 @@ func closestGet(s *util.Session, key string, sla *consistency.SLA) (string, cons
 		return val, consistency.SubSLA{}, fmt.Errorf("No subSLA met")
 	}
 
-	if (activeSLA.ID == "cart_sla") {
+	if (activeSLA.ID == "cart_sla") || (activeSLA.ID == "new_sla") {
 		_, _, minReadTSPerSubSLA := optimizer.FindNodeToRead(s, key, activeSLA)
 		fmt.Println(minReadTSPerSubSLA)
 
@@ -510,6 +510,7 @@ func readFromNode(key string, storageNode string) (string, int64, int64, time.Du
 }
 
 // TODO: This implementation is right now highly tuned for the SLA's we are testing. Generalize this implementation
+// I think we have everything to make thi sfunction general!
 func detectSubSLAHit(obj_ts int64, node_hts int64, rtt time.Duration, targetSubSLA consistency.SubSLA, activeSLA *consistency.SLA, minReadTSPerSubSLA []int64) (*consistency.SubSLA, []monitor.SubSLAStatus) {
 	var statuses []monitor.SubSLAStatus
 
@@ -566,6 +567,29 @@ func detectSubSLAHit(obj_ts int64, node_hts int64, rtt time.Duration, targetSubS
 		}
 
 		fmt.Println("None of the utilities for cart-checking is met, returning nil")
+		return nil, statuses
+	}
+
+	if activeSLA.ID == "new_sla" {
+		fmt.Println(minReadTSPerSubSLA)
+		fmt.Printf("node_hts is %d and rtt is %v\n", node_hts, rtt)
+
+		for i, sub := range activeSLA.SubSLAs {
+			status := monitor.SubSLAStatus{SubSLA: sub, Status: "NA"}
+			if rtt > sub.Latency.Duration {
+				status.Status = "Lat_Not_Met"
+			} else if node_hts < minReadTSPerSubSLA[i] {
+				status.Status = "Consistency_Not_Met"
+			} else {
+				status.Status = "Met"
+				statuses = append(statuses, status)
+				subGained := sub
+				return &subGained, statuses
+			}
+			statuses = append(statuses, status)
+		}
+
+		fmt.Println("None of the utilities is met, returning nil")
 		return nil, statuses
 	}
 

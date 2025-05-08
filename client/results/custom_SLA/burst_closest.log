@@ -1,0 +1,3144 @@
+Optimizor: Replication Config is Set to &{[{clem 130.127.133.18:8080} {utah 128.110.219.100:8080}] [{0 0 10000 130.127.133.18:8080 [utah] [128.110.219.100:8080] 0}]}
+Loaded the config and it is:
+&{[{clem 130.127.133.18:8080} {utah 128.110.219.100:8080}] [{0 0 10000 130.127.133.18:8080 [utah] [128.110.219.100:8080] 0}]}
+Cart SLA: {ID:cart_sla SubSLAs:[{Consistency:2 Latency:{Duration:150ms} StalenessBound:<nil> Utility:1} {Consistency:0 Latency:{Duration:150ms} StalenessBound:<nil> Utility:0.5}]}
+**************************************
+Web Applicaiton SLA: {ID:web_sla SubSLAs:[{Consistency:3 Latency:{Duration:200ms} StalenessBound:300ms Utility:1e-05} {Consistency:3 Latency:{Duration:600ms} StalenessBound:300ms Utility:5e-06} {Consistency:3 Latency:{Duration:400ms} StalenessBound:300ms Utility:8e-06} {Consistency:3 Latency:{Duration:1s} StalenessBound:300ms Utility:0}]}
+**************************************
+Password SLA: {ID:psw_sla SubSLAs:[{Consistency:4 Latency:{Duration:61ms} StalenessBound:<nil> Utility:1} {Consistency:0 Latency:{Duration:61ms} StalenessBound:<nil> Utility:0.5} {Consistency:4 Latency:{Duration:200ms} StalenessBound:<nil> Utility:0.25}]}
+Probing URL: http://130.127.133.18:8080/probe
+Recording RTT: node=130.127.133.18:8080, rtt=57ms
+Recording RTT: node=130.127.133.18:8080, rtt=57ms
+Recording RTT: node=130.127.133.18:8080, rtt=57ms
+Recording RTT: node=130.127.133.18:8080, rtt=57ms
+Recording RTT: node=130.127.133.18:8080, rtt=57ms
+Probing URL: http://128.110.219.100:8080/probe
+Recording RTT: node=128.110.219.100:8080, rtt=0s
+Recording RTT: node=128.110.219.100:8080, rtt=0s
+Recording RTT: node=128.110.219.100:8080, rtt=0s
+Recording RTT: node=128.110.219.100:8080, rtt=0s
+Recording RTT: node=128.110.219.100:8080, rtt=0s
+Checking the RTT's after sending init probes
+
+clem [57ms 57ms 57ms 57ms 57ms]
+utah [0s 0s 0s 0s 0s]
+Read 2000 operations from log
+Do a WRITE
+Key 91 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Do a WRITE
+Key 6 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 0s
+Key 91 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+RTT was %f 1.588398ms
+No utility could be computed for closest read
+Get error for key 0091: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Do a WRITE
+Key 41 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 0s
+Key 41 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=867.427µs
+RTT was %f 867.427µs
+No utility could be computed for closest read
+Get error for key 0041: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 144.571µs
+Key 6 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=803.578µs
+RTT was %f 803.578µs
+No utility could be computed for closest read
+Get error for key 0006: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 28 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.700547ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 238.715µs
+Key 28 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=995.496µs
+RTT was %f 995.496µs
+No utility could be computed for closest read
+Get error for key 0028: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 24 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.638441ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 333.312µs
+Key 24 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=980.06µs
+RTT was %f 980.06µs
+No utility could be computed for closest read
+Get error for key 0024: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 20 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.750915ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 405.173µs
+Key 18 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.480241ms
+RTT was %f 1.480241ms
+No utility could be computed for closest read
+Get error for key 0018: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.591065ms
+Do a WRITE
+Key 17 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.677598ms
+Do a WRITE
+Key 2 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.653011ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 512.68µs
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=926.028µs
+RTT was %f 926.028µs
+No utility could be computed for closest read
+Get error for key 0073: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 6 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.745852ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 550.257µs
+Key 17 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=956.355µs
+RTT was %f 956.355µs
+No utility could be computed for closest read
+Get error for key 0017: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 584.098µs
+Key 28 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=581.16µs
+RTT was %f 581.16µs
+No utility could be computed for closest read
+Get error for key 0028: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 583.872µs
+Key 6 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=699.556µs
+RTT was %f 699.556µs
+No utility could be computed for closest read
+Get error for key 0006: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 65 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.709085ms
+Do a WRITE
+Key 88 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.642707ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 592.135µs
+Key 9 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=808.324µs
+RTT was %f 808.324µs
+No utility could be computed for closest read
+Get error for key 0009: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 606.548µs
+Key 37 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=828.707µs
+RTT was %f 828.707µs
+No utility could be computed for closest read
+Get error for key 0037: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 620.433µs
+Key 63 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=705.274µs
+RTT was %f 705.274µs
+No utility could be computed for closest read
+Get error for key 0063: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 625.423µs
+Key 50 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=579.566µs
+RTT was %f 579.566µs
+No utility could be computed for closest read
+Get error for key 0050: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 622.876µs
+Key 43 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=571.467µs
+RTT was %f 571.467µs
+No utility could be computed for closest read
+Get error for key 0043: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 620.17µs
+Key 37 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=480.14µs
+RTT was %f 480.14µs
+No utility could be computed for closest read
+Get error for key 0037: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 23 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.816016ms
+Do a WRITE
+Key 56 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.656898ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 613.168µs
+Key 56 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=999.235µs
+RTT was %f 999.235µs
+No utility could be computed for closest read
+Get error for key 0056: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 631.553µs
+Key 23 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=767.314µs
+RTT was %f 767.314µs
+No utility could be computed for closest read
+Get error for key 0023: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.606603ms
+Do a WRITE
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.728686ms
+Do a WRITE
+Key 13 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.621848ms
+Do a WRITE
+Key 59 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.736124ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 637.724µs
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=857.319µs
+RTT was %f 857.319µs
+No utility could be computed for closest read
+Get error for key 0080: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 647.271µs
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=685.529µs
+RTT was %f 685.529µs
+No utility could be computed for closest read
+Get error for key 0080: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 68 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.735578ms
+Do a WRITE
+Key 47 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.804588ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 648.865µs
+Key 68 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=873.406µs
+RTT was %f 873.406µs
+No utility could be computed for closest read
+Get error for key 0068: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 24 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=58.029123ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 657.847µs
+Key 47 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=758.268µs
+RTT was %f 758.268µs
+No utility could be computed for closest read
+Get error for key 0047: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 23 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.700136ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 661.709µs
+Key 24 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=868.65µs
+RTT was %f 868.65µs
+No utility could be computed for closest read
+Get error for key 0024: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 669.374µs
+Key 97 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=645.54µs
+RTT was %f 645.54µs
+No utility could be computed for closest read
+Get error for key 0097: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 668.522µs
+Key 60 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=604.615µs
+RTT was %f 604.615µs
+No utility could be computed for closest read
+Get error for key 0060: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 666.319µs
+Key 71 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=589.114µs
+RTT was %f 589.114µs
+No utility could be computed for closest read
+Get error for key 0071: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 17 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.667154ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 663.745µs
+Key 23 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=983.303µs
+RTT was %f 983.303µs
+No utility could be computed for closest read
+Get error for key 0023: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 39 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.733673ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 674.053µs
+Key 68 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=905.892µs
+RTT was %f 905.892µs
+No utility could be computed for closest read
+Get error for key 0068: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 681.298µs
+Key 17 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=976.241µs
+RTT was %f 976.241µs
+No utility could be computed for closest read
+Get error for key 0017: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 690.236µs
+Key 39 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=594.04µs
+RTT was %f 594.04µs
+No utility could be computed for closest read
+Get error for key 0039: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 62 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.718328ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 687.407µs
+Key 15 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.118187ms
+RTT was %f 1.118187ms
+No utility could be computed for closest read
+Get error for key 0015: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 699.715µs
+Key 62 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=807.863µs
+RTT was %f 807.863µs
+No utility could be computed for closest read
+Get error for key 0062: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 1 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.689225ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 702.719µs
+Key 74 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.044971ms
+RTT was %f 1.044971ms
+No utility could be computed for closest read
+Get error for key 0074: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 711.969µs
+Key 55 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=738.391µs
+RTT was %f 738.391µs
+No utility could be computed for closest read
+Get error for key 0055: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.68883ms
+Do a WRITE
+Key 71 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.674762ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 712.664µs
+Key 1 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=998.883µs
+RTT was %f 998.883µs
+No utility could be computed for closest read
+Get error for key 0001: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 1 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.722295ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 720.003µs
+Key 66 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=997.149µs
+RTT was %f 997.149µs
+No utility could be computed for closest read
+Get error for key 0066: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 75 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.678691ms
+Do a WRITE
+Key 88 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.718889ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 726.932µs
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=846.373µs
+RTT was %f 846.373µs
+No utility could be computed for closest read
+Get error for key 0022: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 96 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.752193ms
+Do a WRITE
+Key 13 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.721319ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 729.845µs
+Key 28 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=967.059µs
+RTT was %f 967.059µs
+No utility could be computed for closest read
+Get error for key 0028: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 735.493µs
+Key 13 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=818.308µs
+RTT was %f 818.308µs
+No utility could be computed for closest read
+Get error for key 0013: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 737.419µs
+Key 96 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=559.399µs
+RTT was %f 559.399µs
+No utility could be computed for closest read
+Get error for key 0096: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 733.373µs
+Key 26 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=685.323µs
+RTT was %f 685.323µs
+No utility could be computed for closest read
+Get error for key 0026: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 732.305µs
+Key 19 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=550.493µs
+RTT was %f 550.493µs
+No utility could be computed for closest read
+Get error for key 0019: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 17 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.728898ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 728.353µs
+Key 4 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=832.436µs
+RTT was %f 832.436µs
+No utility could be computed for closest read
+Get error for key 0004: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 730.567µs
+Key 17 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=701.796µs
+RTT was %f 701.796µs
+No utility could be computed for closest read
+Get error for key 0017: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 97 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.754275ms
+Do a WRITE
+Key 3 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.724272ms
+Do a WRITE
+Key 35 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.757069ms
+Do a WRITE
+Key 29 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.743888ms
+Do a WRITE
+Key 90 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.741517ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 729.968µs
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=951.9µs
+RTT was %f 951.9µs
+No utility could be computed for closest read
+Get error for key 0034: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 734.497µs
+Key 97 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=832.647µs
+RTT was %f 832.647µs
+No utility could be computed for closest read
+Get error for key 0097: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 736.46µs
+Key 90 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=486.243µs
+RTT was %f 486.243µs
+No utility could be computed for closest read
+Get error for key 0090: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 731.554µs
+Key 11 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=588.818µs
+RTT was %f 588.818µs
+No utility could be computed for closest read
+Get error for key 0011: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 728.809µs
+Key 29 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=560.803µs
+RTT was %f 560.803µs
+No utility could be computed for closest read
+Get error for key 0029: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 24 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.725836ms
+Do a WRITE
+Key 51 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.804774ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 725.639µs
+Key 16 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=755.547µs
+RTT was %f 755.547µs
+No utility could be computed for closest read
+Get error for key 0016: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 726.193µs
+Key 51 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=739.805µs
+RTT was %f 739.805µs
+No utility could be computed for closest read
+Get error for key 0051: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 726.44µs
+Key 24 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=572.766µs
+RTT was %f 572.766µs
+No utility could be computed for closest read
+Get error for key 0024: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 32 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.705188ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 723.696µs
+Key 75 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=840.294µs
+RTT was %f 840.294µs
+No utility could be computed for closest read
+Get error for key 0075: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 60 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.749035ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 725.742µs
+Key 66 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=853.861µs
+RTT was %f 853.861µs
+No utility could be computed for closest read
+Get error for key 0066: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 727.951µs
+Key 32 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=622.586µs
+RTT was %f 622.586µs
+No utility could be computed for closest read
+Get error for key 0032: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 726.165µs
+Key 60 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=748.761µs
+RTT was %f 748.761µs
+No utility could be computed for closest read
+Get error for key 0060: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.926929ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 726.541µs
+Key 6 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=898.826µs
+RTT was %f 898.826µs
+No utility could be computed for closest read
+Get error for key 0006: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 37 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.638106ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 729.366µs
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=934.188µs
+RTT was %f 934.188µs
+No utility could be computed for closest read
+Get error for key 0076: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 11 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.693559ms
+Do a WRITE
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.710454ms
+Do a WRITE
+Key 88 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.609068ms
+Do a WRITE
+Key 46 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.768636ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 732.669µs
+Key 37 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=935.772µs
+RTT was %f 935.772µs
+No utility could be computed for closest read
+Get error for key 0037: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 20 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.752512ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 735.893µs
+Key 88 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=951.458µs
+RTT was %f 951.458µs
+No utility could be computed for closest read
+Get error for key 0088: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 739.261µs
+Key 20 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=935.095µs
+RTT was %f 935.095µs
+No utility could be computed for closest read
+Get error for key 0020: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 51 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.772064ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 742.274µs
+Key 51 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=971.936µs
+RTT was %f 971.936µs
+No utility could be computed for closest read
+Get error for key 0051: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 745.754µs
+Key 4 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=592.416µs
+RTT was %f 592.416µs
+No utility could be computed for closest read
+Get error for key 0004: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 61 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.750035ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 743.465µs
+Key 15 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=919.715µs
+RTT was %f 919.715µs
+No utility could be computed for closest read
+Get error for key 0015: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 95 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.78568ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 746.057µs
+Key 95 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.019056ms
+RTT was %f 1.019056ms
+No utility could be computed for closest read
+Get error for key 0095: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 750.014µs
+Key 61 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=786.749µs
+RTT was %f 786.749µs
+No utility could be computed for closest read
+Get error for key 0061: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 5 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.688859ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 750.538µs
+Key 64 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=979.769µs
+RTT was %f 979.769µs
+No utility could be computed for closest read
+Get error for key 0064: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 13 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.724372ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 753.767µs
+Key 14 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=970.884µs
+RTT was %f 970.884µs
+No utility could be computed for closest read
+Get error for key 0014: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 756.782µs
+Key 33 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=662.72µs
+RTT was %f 662.72µs
+No utility could be computed for closest read
+Get error for key 0033: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 755.494µs
+Key 68 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=574.309µs
+RTT was %f 574.309µs
+No utility could be computed for closest read
+Get error for key 0068: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 79 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.689907ms
+Do a WRITE
+Key 9 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.665333ms
+Do a WRITE
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.644702ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 753.045µs
+Key 79 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=918.792µs
+RTT was %f 918.792µs
+No utility could be computed for closest read
+Get error for key 0079: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 12 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.740764ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 755.255µs
+Key 79 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=974.742µs
+RTT was %f 974.742µs
+No utility could be computed for closest read
+Get error for key 0079: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 62 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.701323ms
+Do a WRITE
+Key 0 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.774022ms
+Do a WRITE
+Key 17 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.775562ms
+Do a WRITE
+Key 48 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.656002ms
+Do a WRITE
+Key 87 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.675564ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 758.143µs
+Key 62 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=983.483µs
+RTT was %f 983.483µs
+No utility could be computed for closest read
+Get error for key 0062: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 40 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.663204ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 761.07µs
+Key 17 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=982.656µs
+RTT was %f 982.656µs
+No utility could be computed for closest read
+Get error for key 0017: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 38 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.710414ms
+Do a WRITE
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.755585ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 763.911µs
+Key 38 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=719.282µs
+RTT was %f 719.282µs
+No utility could be computed for closest read
+Get error for key 0038: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 61 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.7641ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 763.346µs
+Key 61 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=954.815µs
+RTT was %f 954.815µs
+No utility could be computed for closest read
+Get error for key 0061: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 49 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.766409ms
+Do a WRITE
+Key 64 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.698517ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 765.739µs
+Key 64 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=881.986µs
+RTT was %f 881.986µs
+No utility could be computed for closest read
+Get error for key 0064: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 23 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.724327ms
+Do a WRITE
+Key 31 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.709712ms
+Do a WRITE
+Key 2 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.659291ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 767.174µs
+Key 49 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=909.25µs
+RTT was %f 909.25µs
+No utility could be computed for closest read
+Get error for key 0049: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 90 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.749986ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 768.907µs
+Key 90 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=956.074µs
+RTT was %f 956.074µs
+No utility could be computed for closest read
+Get error for key 0090: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 58 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.74254ms
+Do a WRITE
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.683531ms
+Do a WRITE
+Key 85 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.81776ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 771.162µs
+Key 85 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=836.621µs
+RTT was %f 836.621µs
+No utility could be computed for closest read
+Get error for key 0085: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 771.941µs
+Key 58 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=631.678µs
+RTT was %f 631.678µs
+No utility could be computed for closest read
+Get error for key 0058: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 770.291µs
+Key 24 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=771.949µs
+RTT was %f 771.949µs
+No utility could be computed for closest read
+Get error for key 0024: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 770.31µs
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=577.722µs
+RTT was %f 577.722µs
+No utility could be computed for closest read
+Get error for key 0076: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 768.097µs
+Key 51 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=590.066µs
+RTT was %f 590.066µs
+No utility could be computed for closest read
+Get error for key 0051: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 766.074µs
+Key 40 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=738.893µs
+RTT was %f 738.893µs
+No utility could be computed for closest read
+Get error for key 0040: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 765.768µs
+Key 95 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=724.809µs
+RTT was %f 724.809µs
+No utility could be computed for closest read
+Get error for key 0095: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 9 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.714921ms
+Do a WRITE
+Key 47 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.718674ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 765.313µs
+Key 9 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=912.578µs
+RTT was %f 912.578µs
+No utility could be computed for closest read
+Get error for key 0009: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 766.931µs
+Key 45 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=612.588µs
+RTT was %f 612.588µs
+No utility could be computed for closest read
+Get error for key 0045: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 765.254µs
+Key 79 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=680.086µs
+RTT was %f 680.086µs
+No utility could be computed for closest read
+Get error for key 0079: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 12 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.741272ms
+Do a WRITE
+Key 56 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.77742ms
+Do a WRITE
+Key 18 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.759104ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 764.338µs
+Key 16 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=934.644µs
+RTT was %f 934.644µs
+No utility could be computed for closest read
+Get error for key 0016: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 766.15µs
+Key 56 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=731.897µs
+RTT was %f 731.897µs
+No utility could be computed for closest read
+Get error for key 0056: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 10 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.783425ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 765.789µs
+Key 84 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=995.926µs
+RTT was %f 995.926µs
+No utility could be computed for closest read
+Get error for key 0084: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 768.186µs
+Key 18 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=651.153µs
+RTT was %f 651.153µs
+No utility could be computed for closest read
+Get error for key 0018: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 766.98µs
+Key 51 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=616.863µs
+RTT was %f 616.863µs
+No utility could be computed for closest read
+Get error for key 0051: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 66 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.696907ms
+Do a WRITE
+Key 16 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.715667ms
+Do a WRITE
+Key 78 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.727365ms
+Do a WRITE
+Key 13 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.674745ms
+Do a WRITE
+Key 43 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.757484ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 765.448µs
+Key 16 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=848.97µs
+RTT was %f 848.97µs
+No utility could be computed for closest read
+Get error for key 0016: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 83 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.732726ms
+Do a WRITE
+Key 20 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.766983ms
+Do a WRITE
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.782316ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 766.292µs
+Key 13 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=849.816µs
+RTT was %f 849.816µs
+No utility could be computed for closest read
+Get error for key 0013: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 767.127µs
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=602.374µs
+RTT was %f 602.374µs
+No utility could be computed for closest read
+Get error for key 0073: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 84 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.787685ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 773.151µs
+Key 20 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=985.799µs
+RTT was %f 985.799µs
+No utility could be computed for closest read
+Get error for key 0020: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 783.009µs
+Key 84 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=709.51µs
+RTT was %f 709.51µs
+No utility could be computed for closest read
+Get error for key 0084: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 75 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.760301ms
+Do a WRITE
+Key 9 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.755154ms
+Do a WRITE
+Key 51 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.737407ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 790.104µs
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=909.209µs
+RTT was %f 909.209µs
+No utility could be computed for closest read
+Get error for key 0034: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 25 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.779812ms
+Do a WRITE
+Key 13 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.722638ms
+Do a WRITE
+Key 99 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.838768ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 799.196µs
+Key 13 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=943.49µs
+RTT was %f 943.49µs
+No utility could be computed for closest read
+Get error for key 0013: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 808.631µs
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=840.384µs
+RTT was %f 840.384µs
+No utility could be computed for closest read
+Get error for key 0076: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 86 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.724227ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 808.36µs
+Key 99 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=988.74µs
+RTT was %f 988.74µs
+No utility could be computed for closest read
+Get error for key 0099: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 810.212µs
+Key 12 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=797.585µs
+RTT was %f 797.585µs
+No utility could be computed for closest read
+Get error for key 0012: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 808.233µs
+Key 86 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=619.354µs
+RTT was %f 619.354µs
+No utility could be computed for closest read
+Get error for key 0086: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 804.626µs
+Key 38 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=630.766µs
+RTT was %f 630.766µs
+No utility could be computed for closest read
+Get error for key 0038: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 796.131µs
+Key 49 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=562.782µs
+RTT was %f 562.782µs
+No utility could be computed for closest read
+Get error for key 0049: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.499µs
+Key 43 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=630.344µs
+RTT was %f 630.344µs
+No utility could be computed for closest read
+Get error for key 0043: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 789.238µs
+Key 3 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=593.503µs
+RTT was %f 593.503µs
+No utility could be computed for closest read
+Get error for key 0003: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 52 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.652445ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 789.362µs
+Key 94 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=828.18µs
+RTT was %f 828.18µs
+No utility could be computed for closest read
+Get error for key 0094: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 790.648µs
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=761.205µs
+RTT was %f 761.205µs
+No utility could be computed for closest read
+Get error for key 0076: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 29 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.74306ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 790.177µs
+Key 29 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=837.006µs
+RTT was %f 837.006µs
+No utility could be computed for closest read
+Get error for key 0029: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 790.26µs
+Key 1 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=678.567µs
+RTT was %f 678.567µs
+No utility could be computed for closest read
+Get error for key 0001: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 789.993µs
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=572.865µs
+RTT was %f 572.865µs
+No utility could be computed for closest read
+Get error for key 0073: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 41 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.786377ms
+Do a WRITE
+Key 20 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.675036ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 789.926µs
+Key 65 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=797.379µs
+RTT was %f 797.379µs
+No utility could be computed for closest read
+Get error for key 0065: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.185µs
+Key 81 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=711.037µs
+RTT was %f 711.037µs
+No utility could be computed for closest read
+Get error for key 0081: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 794.494µs
+Key 55 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=561.208µs
+RTT was %f 561.208µs
+No utility could be computed for closest read
+Get error for key 0055: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 790.114µs
+Key 10 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=531.675µs
+RTT was %f 531.675µs
+No utility could be computed for closest read
+Get error for key 0010: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.803671ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 787.757µs
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=837.006µs
+RTT was %f 837.006µs
+No utility could be computed for closest read
+Get error for key 0076: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 787.554µs
+Key 82 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=531.73µs
+RTT was %f 531.73µs
+No utility could be computed for closest read
+Get error for key 0082: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 77 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.832128ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 786.016µs
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=894.947µs
+RTT was %f 894.947µs
+No utility could be computed for closest read
+Get error for key 0022: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 60 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.644651ms
+Do a WRITE
+Key 58 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.695946ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 786.232µs
+Key 77 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=885.429µs
+RTT was %f 885.429µs
+No utility could be computed for closest read
+Get error for key 0077: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 787.503µs
+Key 58 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=646.107µs
+RTT was %f 646.107µs
+No utility could be computed for closest read
+Get error for key 0058: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 77 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.736606ms
+Do a WRITE
+Key 36 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.696448ms
+Do a WRITE
+Key 41 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.76454ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 785.278µs
+Key 36 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=846.308µs
+RTT was %f 846.308µs
+No utility could be computed for closest read
+Get error for key 0036: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 46 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.653121ms
+Do a WRITE
+Key 78 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.696884ms
+Do a WRITE
+Key 5 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.756875ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 787.285µs
+Key 78 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.046284ms
+RTT was %f 1.046284ms
+No utility could be computed for closest read
+Get error for key 0078: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 791.702µs
+Key 46 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=836.536µs
+RTT was %f 836.536µs
+No utility could be computed for closest read
+Get error for key 0046: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 794.176µs
+Key 5 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=550.404µs
+RTT was %f 550.404µs
+No utility could be computed for closest read
+Get error for key 0005: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 789.847µs
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=723.086µs
+RTT was %f 723.086µs
+No utility could be computed for closest read
+Get error for key 0073: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 50 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.759384ms
+Do a WRITE
+Key 38 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.771526ms
+Do a WRITE
+Key 90 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.752547ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 788.019µs
+Key 90 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.061816ms
+RTT was %f 1.061816ms
+No utility could be computed for closest read
+Get error for key 0090: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 788.875µs
+Key 50 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=521.17µs
+RTT was %f 521.17µs
+No utility could be computed for closest read
+Get error for key 0050: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 91 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.792206ms
+Do a WRITE
+Key 66 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.612596ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 788.146µs
+Key 93 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=986.024µs
+RTT was %f 986.024µs
+No utility could be computed for closest read
+Get error for key 0093: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 786.825µs
+Key 66 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=835.373µs
+RTT was %f 835.373µs
+No utility could be computed for closest read
+Get error for key 0066: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 787.1µs
+Key 91 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=603.797µs
+RTT was %f 603.797µs
+No utility could be computed for closest read
+Get error for key 0091: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 82 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.8207ms
+Do a WRITE
+Key 59 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.689851ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 782.688µs
+Key 31 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=839.537µs
+RTT was %f 839.537µs
+No utility could be computed for closest read
+Get error for key 0031: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 783.699µs
+Key 54 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=702.803µs
+RTT was %f 702.803µs
+No utility could be computed for closest read
+Get error for key 0054: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 780.739µs
+Key 3 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=644.317µs
+RTT was %f 644.317µs
+No utility could be computed for closest read
+Get error for key 0003: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 7 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.724271ms
+Do a WRITE
+Key 56 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.777922ms
+Do a WRITE
+Key 49 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.735775ms
+Do a WRITE
+Key 55 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.743616ms
+Do a WRITE
+Key 2 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.774052ms
+Do a WRITE
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.692744ms
+Do a WRITE
+Key 46 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.800384ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 777.21µs
+Key 2 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=933.286µs
+RTT was %f 933.286µs
+No utility could be computed for closest read
+Get error for key 0002: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 778.079µs
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=844.825µs
+RTT was %f 844.825µs
+No utility could be computed for closest read
+Get error for key 0022: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 67 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.795057ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 776.857µs
+Key 41 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=951.954µs
+RTT was %f 951.954µs
+No utility could be computed for closest read
+Get error for key 0041: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 99 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.74917ms
+Do a WRITE
+Key 81 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.714833ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 778.194µs
+Key 67 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=876.434µs
+RTT was %f 876.434µs
+No utility could be computed for closest read
+Get error for key 0067: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 62 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=68.148627ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 781.364µs
+Key 99 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=924.284µs
+RTT was %f 924.284µs
+No utility could be computed for closest read
+Get error for key 0099: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 88 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.764185ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 783.754µs
+Key 88 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=986.475µs
+RTT was %f 986.475µs
+No utility could be computed for closest read
+Get error for key 0088: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 42 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.819063ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 788.113µs
+Key 6 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=967.48µs
+RTT was %f 967.48µs
+No utility could be computed for closest read
+Get error for key 0006: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 36 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.761559ms
+Do a WRITE
+Key 5 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.747114ms
+Do a WRITE
+Key 82 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.761387ms
+Do a WRITE
+Key 3 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.643012ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 789.464µs
+Key 42 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=875.17µs
+RTT was %f 875.17µs
+No utility could be computed for closest read
+Get error for key 0042: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 74 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.784215ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 791.198µs
+Key 82 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=958.946µs
+RTT was %f 958.946µs
+No utility could be computed for closest read
+Get error for key 0082: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 85 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.804142ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 791.268µs
+Key 84 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=864.932µs
+RTT was %f 864.932µs
+No utility could be computed for closest read
+Get error for key 0084: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 791.591µs
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=580.559µs
+RTT was %f 580.559µs
+No utility could be computed for closest read
+Get error for key 0076: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.534µs
+Key 57 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=587.109µs
+RTT was %f 587.109µs
+No utility could be computed for closest read
+Get error for key 0057: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 41 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.752933ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.517µs
+Key 85 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=986.821µs
+RTT was %f 986.821µs
+No utility could be computed for closest read
+Get error for key 0085: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 41 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.693761ms
+Do a WRITE
+Key 84 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.709057ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 796.777µs
+Key 41 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=947.218µs
+RTT was %f 947.218µs
+No utility could be computed for closest read
+Get error for key 0041: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 59 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.704285ms
+Do a WRITE
+Key 14 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.737117ms
+Do a WRITE
+Key 95 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.830441ms
+Do a WRITE
+Key 90 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.772079ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 798.694µs
+Key 84 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=929.04µs
+RTT was %f 929.04µs
+No utility could be computed for closest read
+Get error for key 0084: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 800.586µs
+Key 59 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=779.677µs
+RTT was %f 779.677µs
+No utility could be computed for closest read
+Get error for key 0059: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 28 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.732306ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 802.655µs
+Key 24 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=961.451µs
+RTT was %f 961.451µs
+No utility could be computed for closest read
+Get error for key 0024: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 11 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.802855ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 803.867µs
+Key 78 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.149916ms
+RTT was %f 1.149916ms
+No utility could be computed for closest read
+Get error for key 0078: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 806.827µs
+Key 83 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=580.419µs
+RTT was %f 580.419µs
+No utility could be computed for closest read
+Get error for key 0083: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 3 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.598318ms
+Do a WRITE
+Key 93 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.764977ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 806.406µs
+Key 93 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=923.503µs
+RTT was %f 923.503µs
+No utility could be computed for closest read
+Get error for key 0093: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 808.153µs
+Key 11 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=845.226µs
+RTT was %f 845.226µs
+No utility could be computed for closest read
+Get error for key 0011: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 807.617µs
+Key 94 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=698.699µs
+RTT was %f 698.699µs
+No utility could be computed for closest read
+Get error for key 0094: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 805.262µs
+Key 41 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=548.008µs
+RTT was %f 548.008µs
+No utility could be computed for closest read
+Get error for key 0041: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 801.385µs
+Key 18 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=616.688µs
+RTT was %f 616.688µs
+No utility could be computed for closest read
+Get error for key 0018: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 798.037µs
+Key 35 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=575.607µs
+RTT was %f 575.607µs
+No utility could be computed for closest read
+Get error for key 0035: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.778017ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 794.442µs
+Key 5 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=931.527µs
+RTT was %f 931.527µs
+No utility could be computed for closest read
+Get error for key 0005: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 97 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.681989ms
+Do a WRITE
+Key 81 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.733167ms
+Do a WRITE
+Key 69 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.779851ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 794.038µs
+Key 81 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=908.939µs
+RTT was %f 908.939µs
+No utility could be computed for closest read
+Get error for key 0081: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 797.203µs
+Key 51 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=631.853µs
+RTT was %f 631.853µs
+No utility could be computed for closest read
+Get error for key 0051: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 794.325µs
+Key 95 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=670.679µs
+RTT was %f 670.679µs
+No utility could be computed for closest read
+Get error for key 0095: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 11 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.746128ms
+Do a WRITE
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.681432ms
+Do a WRITE
+Key 14 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.745492ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 790.841µs
+Key 85 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=944.277µs
+RTT was %f 944.277µs
+No utility could be computed for closest read
+Get error for key 0085: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.416µs
+Key 11 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=979.884µs
+RTT was %f 979.884µs
+No utility could be computed for closest read
+Get error for key 0011: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 23 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.752272ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.417µs
+Key 23 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=997.741µs
+RTT was %f 997.741µs
+No utility could be computed for closest read
+Get error for key 0023: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.724477ms
+Do a WRITE
+Key 31 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.92699ms
+Do a WRITE
+Key 97 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.767156ms
+Do a WRITE
+Key 35 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.777451ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.686µs
+Key 47 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=934.283µs
+RTT was %f 934.283µs
+No utility could be computed for closest read
+Get error for key 0047: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 7 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.726511ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 795.401µs
+Key 7 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=869.894µs
+RTT was %f 869.894µs
+No utility could be computed for closest read
+Get error for key 0007: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 798.357µs
+Key 31 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=677.43µs
+RTT was %f 677.43µs
+No utility could be computed for closest read
+Get error for key 0031: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 795.944µs
+Key 91 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=611.691µs
+RTT was %f 611.691µs
+No utility could be computed for closest read
+Get error for key 0091: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=58.177934ms
+Do a WRITE
+Key 65 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.790617ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.313µs
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=942.076µs
+RTT was %f 942.076µs
+No utility could be computed for closest read
+Get error for key 0073: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 40 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.705117ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 791.899µs
+Key 65 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=990.76µs
+RTT was %f 990.76µs
+No utility could be computed for closest read
+Get error for key 0065: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 65 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.810662ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 791.98µs
+Key 65 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=831.785µs
+RTT was %f 831.785µs
+No utility could be computed for closest read
+Get error for key 0065: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 793.105µs
+Key 40 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=872.916µs
+RTT was %f 872.916µs
+No utility could be computed for closest read
+Get error for key 0040: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.286µs
+Key 14 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=597.683µs
+RTT was %f 597.683µs
+No utility could be computed for closest read
+Get error for key 0014: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 3 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.664934ms
+Do a WRITE
+Key 17 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.684594ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 789.443µs
+Key 20 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.137823ms
+RTT was %f 1.137823ms
+No utility could be computed for closest read
+Get error for key 0020: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 11 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.707186ms
+Do a WRITE
+Key 89 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.608999ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 791.729µs
+Key 72 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=934.764µs
+RTT was %f 934.764µs
+No utility could be computed for closest read
+Get error for key 0072: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 27 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.734084ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 791.516µs
+Key 11 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=954.571µs
+RTT was %f 954.571µs
+No utility could be computed for closest read
+Get error for key 0011: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.695µs
+Key 45 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=650.722µs
+RTT was %f 650.722µs
+No utility could be computed for closest read
+Get error for key 0045: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.886µs
+Key 27 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=692.445µs
+RTT was %f 692.445µs
+No utility could be computed for closest read
+Get error for key 0027: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 15 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.613166ms
+Do a WRITE
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.768405ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.091µs
+Key 19 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=721.437µs
+RTT was %f 721.437µs
+No utility could be computed for closest read
+Get error for key 0019: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.62888ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 793.528µs
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=804.159µs
+RTT was %f 804.159µs
+No utility could be computed for closest read
+Get error for key 0073: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 795.669µs
+Key 59 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=603.933µs
+RTT was %f 603.933µs
+No utility could be computed for closest read
+Get error for key 0059: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 794.319µs
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=558.392µs
+RTT was %f 558.392µs
+No utility could be computed for closest read
+Get error for key 0076: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.659585ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.655µs
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.004737ms
+RTT was %f 1.004737ms
+No utility could be computed for closest read
+Get error for key 0073: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 15 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.759213ms
+Do a WRITE
+Key 1 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.65328ms
+Do a WRITE
+Key 66 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.720152ms
+Do a WRITE
+Key 42 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.703083ms
+Do a WRITE
+Key 69 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.713195ms
+Do a WRITE
+Key 61 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.775521ms
+Do a WRITE
+Key 60 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.754567ms
+Do a WRITE
+Key 27 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.736646ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 793.577µs
+Key 42 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=984.22µs
+RTT was %f 984.22µs
+No utility could be computed for closest read
+Get error for key 0042: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 797.293µs
+Key 27 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=582.307µs
+RTT was %f 582.307µs
+No utility could be computed for closest read
+Get error for key 0027: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 54 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.655938ms
+Do a WRITE
+Key 24 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.760205ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 796.315µs
+Key 60 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=983.729µs
+RTT was %f 983.729µs
+No utility could be computed for closest read
+Get error for key 0060: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 796.806µs
+Key 54 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=739.96µs
+RTT was %f 739.96µs
+No utility could be computed for closest read
+Get error for key 0054: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 796.887µs
+Key 24 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=611.601µs
+RTT was %f 611.601µs
+No utility could be computed for closest read
+Get error for key 0024: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.766094ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 793.043µs
+Key 86 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=917.554µs
+RTT was %f 917.554µs
+No utility could be computed for closest read
+Get error for key 0086: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 795.707µs
+Key 62 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=655.543µs
+RTT was %f 655.543µs
+No utility could be computed for closest read
+Get error for key 0062: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 90 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.698482ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 796.094µs
+Key 90 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=939.37µs
+RTT was %f 939.37µs
+No utility could be computed for closest read
+Get error for key 0090: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 12 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.707433ms
+Do a WRITE
+Key 52 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.725559ms
+Do a WRITE
+Key 81 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.704239ms
+Do a WRITE
+Key 57 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.667219ms
+Do a WRITE
+Key 3 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.785491ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 796.998µs
+Key 81 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.027806ms
+RTT was %f 1.027806ms
+No utility could be computed for closest read
+Get error for key 0081: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 47 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.75177ms
+Do a WRITE
+Key 68 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.668273ms
+Do a WRITE
+Key 45 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.688544ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 798.778µs
+Key 47 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=922.907µs
+RTT was %f 922.907µs
+No utility could be computed for closest read
+Get error for key 0047: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 70 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.759858ms
+Do a WRITE
+Key 66 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.661356ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 801.983µs
+Key 66 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=954.501µs
+RTT was %f 954.501µs
+No utility could be computed for closest read
+Get error for key 0066: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 94 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.770098ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 801.67µs
+Key 50 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=899.983µs
+RTT was %f 899.983µs
+No utility could be computed for closest read
+Get error for key 0050: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 803.575µs
+Key 94 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=965.251µs
+RTT was %f 965.251µs
+No utility could be computed for closest read
+Get error for key 0094: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Session complete. Utilities: [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+Monitor Utilities are: 
+[]
+Session ended. Avg Utility: 0.0000 | Reads: 0 | Writes: 87
+Do a WRITE
+Key 27 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.764189ms
+Do a WRITE
+Key 35 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.69137ms
+Do a WRITE
+Key 35 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.636872ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 804.136µs
+Key 62 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=942.718µs
+RTT was %f 942.718µs
+No utility could be computed for closest read
+Get error for key 0062: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 804.128µs
+Key 35 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=838.801µs
+RTT was %f 838.801µs
+No utility could be computed for closest read
+Get error for key 0035: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 804.112µs
+Key 49 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=569.151µs
+RTT was %f 569.151µs
+No utility could be computed for closest read
+Get error for key 0049: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 96 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.735132ms
+Do a WRITE
+Key 26 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.806468ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 799.916µs
+Key 63 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=930.284µs
+RTT was %f 930.284µs
+No utility could be computed for closest read
+Get error for key 0063: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 801.243µs
+Key 99 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=951.934µs
+RTT was %f 951.934µs
+No utility could be computed for closest read
+Get error for key 0099: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 12 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.776483ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 804.569µs
+Key 43 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=844.829µs
+RTT was %f 844.829µs
+No utility could be computed for closest read
+Get error for key 0043: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 806.71µs
+Key 35 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=685.453µs
+RTT was %f 685.453µs
+No utility could be computed for closest read
+Get error for key 0035: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 807.936µs
+Key 12 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=799.624µs
+RTT was %f 799.624µs
+No utility could be computed for closest read
+Get error for key 0012: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 61 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.70039ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 809.629µs
+Key 32 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=877.681µs
+RTT was %f 877.681µs
+No utility could be computed for closest read
+Get error for key 0032: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 812.471µs
+Key 61 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=873.327µs
+RTT was %f 873.327µs
+No utility could be computed for closest read
+Get error for key 0061: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 812.922µs
+Key 32 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=570.535µs
+RTT was %f 570.535µs
+No utility could be computed for closest read
+Get error for key 0032: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 811.016µs
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=527.735µs
+RTT was %f 527.735µs
+No utility could be computed for closest read
+Get error for key 0034: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 807.923µs
+Key 81 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=648.497µs
+RTT was %f 648.497µs
+No utility could be computed for closest read
+Get error for key 0081: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 807.622µs
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=552.428µs
+RTT was %f 552.428µs
+No utility could be computed for closest read
+Get error for key 0080: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 38 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.625005ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 807.418µs
+Key 29 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.028859ms
+RTT was %f 1.028859ms
+No utility could be computed for closest read
+Get error for key 0029: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 809.733µs
+Key 41 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=778.665µs
+RTT was %f 778.665µs
+No utility could be computed for closest read
+Get error for key 0041: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 810.409µs
+Key 32 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=598.916µs
+RTT was %f 598.916µs
+No utility could be computed for closest read
+Get error for key 0032: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 46 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.732306ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 810.786µs
+Key 31 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=965.676µs
+RTT was %f 965.676µs
+No utility could be computed for closest read
+Get error for key 0031: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.712424ms
+Do a WRITE
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.750171ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 815.126µs
+Key 46 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=914.252µs
+RTT was %f 914.252µs
+No utility could be computed for closest read
+Get error for key 0046: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 52 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.745897ms
+Do a WRITE
+Key 27 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.715212ms
+Do a WRITE
+Key 75 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.708123ms
+Do a WRITE
+Key 59 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.712133ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 815.898µs
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=737.369µs
+RTT was %f 737.369µs
+No utility could be computed for closest read
+Get error for key 0034: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 817.955µs
+Key 27 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=685.558µs
+RTT was %f 685.558µs
+No utility could be computed for closest read
+Get error for key 0027: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 36 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.719145ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 815.861µs
+Key 59 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=844.755µs
+RTT was %f 844.755µs
+No utility could be computed for closest read
+Get error for key 0059: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 815.454µs
+Key 37 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=636.81µs
+RTT was %f 636.81µs
+No utility could be computed for closest read
+Get error for key 0037: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 815.361µs
+Key 36 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=718.726µs
+RTT was %f 718.726µs
+No utility could be computed for closest read
+Get error for key 0036: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 97 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.801466ms
+Do a WRITE
+Key 92 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.708349ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 814.085µs
+Key 92 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=872.73µs
+RTT was %f 872.73µs
+No utility could be computed for closest read
+Get error for key 0092: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 75 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.685772ms
+Do a WRITE
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.715457ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 812.35µs
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=706.502µs
+RTT was %f 706.502µs
+No utility could be computed for closest read
+Get error for key 0022: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 811.05µs
+Key 25 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=757.857µs
+RTT was %f 757.857µs
+No utility could be computed for closest read
+Get error for key 0025: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 99 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.716468ms
+Do a WRITE
+Key 28 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.773195ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 813.124µs
+Key 60 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=925.708µs
+RTT was %f 925.708µs
+No utility could be computed for closest read
+Get error for key 0060: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.641488ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 815.15µs
+Key 82 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=974.552µs
+RTT was %f 974.552µs
+No utility could be computed for closest read
+Get error for key 0082: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 814.278µs
+Key 67 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=781.643µs
+RTT was %f 781.643µs
+No utility could be computed for closest read
+Get error for key 0067: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 816.882µs
+Key 32 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=720.595µs
+RTT was %f 720.595µs
+No utility could be computed for closest read
+Get error for key 0032: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 814.228µs
+Key 18 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=615.124µs
+RTT was %f 615.124µs
+No utility could be computed for closest read
+Get error for key 0018: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 812.026µs
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=544.69µs
+RTT was %f 544.69µs
+No utility could be computed for closest read
+Get error for key 0076: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 94 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.813745ms
+Do a WRITE
+Key 40 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.73033ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 811.435µs
+Key 17 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=860.912µs
+RTT was %f 860.912µs
+No utility could be computed for closest read
+Get error for key 0017: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.699394ms
+Do a WRITE
+Key 94 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.685508ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 811.648µs
+Key 94 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=996.994µs
+RTT was %f 996.994µs
+No utility could be computed for closest read
+Get error for key 0094: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 89 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.692001ms
+Do a WRITE
+Key 94 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.763223ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 814.59µs
+Key 74 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=951.247µs
+RTT was %f 951.247µs
+No utility could be computed for closest read
+Get error for key 0074: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 817.659µs
+Key 76 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=816.408µs
+RTT was %f 816.408µs
+No utility could be computed for closest read
+Get error for key 0076: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 816.491µs
+Key 3 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=585.846µs
+RTT was %f 585.846µs
+No utility could be computed for closest read
+Get error for key 0003: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 84 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.72361ms
+Do a WRITE
+Key 18 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.672992ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 813.901µs
+Key 18 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=1.015212ms
+RTT was %f 1.015212ms
+No utility could be computed for closest read
+Get error for key 0018: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 64 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.726647ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 814.533µs
+Key 61 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=968.237µs
+RTT was %f 968.237µs
+No utility could be computed for closest read
+Get error for key 0061: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 46 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.726382ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 815.452µs
+Key 47 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=894.956µs
+RTT was %f 894.956µs
+No utility could be computed for closest read
+Get error for key 0047: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 815.158µs
+Key 56 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=629.187µs
+RTT was %f 629.187µs
+No utility could be computed for closest read
+Get error for key 0056: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 50 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.740734ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 811.585µs
+Key 46 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=927.984µs
+RTT was %f 927.984µs
+No utility could be computed for closest read
+Get error for key 0046: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 811.19µs
+Key 50 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=826.552µs
+RTT was %f 826.552µs
+No utility could be computed for closest read
+Get error for key 0050: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 810.704µs
+Key 45 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=719.638µs
+RTT was %f 719.638µs
+No utility could be computed for closest read
+Get error for key 0045: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 33 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.658513ms
+Do a WRITE
+Key 13 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.699865ms
+Do a WRITE
+Key 94 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.735693ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 808.311µs
+Key 33 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=816.413µs
+RTT was %f 816.413µs
+No utility could be computed for closest read
+Get error for key 0033: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 807.826µs
+Key 94 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=566.471µs
+RTT was %f 566.471µs
+No utility could be computed for closest read
+Get error for key 0094: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.748619ms
+Do a WRITE
+Key 25 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.740579ms
+Do a WRITE
+Key 99 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.678926ms
+Do a WRITE
+Key 81 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.753876ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 807.685µs
+Key 81 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=897.572µs
+RTT was %f 897.572µs
+No utility could be computed for closest read
+Get error for key 0081: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 55 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.782863ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 810.79µs
+Key 15 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=933.171µs
+RTT was %f 933.171µs
+No utility could be computed for closest read
+Get error for key 0015: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 810.253µs
+Key 25 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=780.74µs
+RTT was %f 780.74µs
+No utility could be computed for closest read
+Get error for key 0025: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 808.588µs
+Key 94 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=575.687µs
+RTT was %f 575.687µs
+No utility could be computed for closest read
+Get error for key 0094: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 73 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.733679ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 805.055µs
+Key 53 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=933.687µs
+RTT was %f 933.687µs
+No utility could be computed for closest read
+Get error for key 0053: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 806.595µs
+Key 98 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=639.852µs
+RTT was %f 639.852µs
+No utility could be computed for closest read
+Get error for key 0098: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 52 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.744875ms
+Do a WRITE
+Key 79 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.705833ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 803.379µs
+Key 79 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=749.763µs
+RTT was %f 749.763µs
+No utility could be computed for closest read
+Get error for key 0079: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 799.377µs
+Key 36 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=684.812µs
+RTT was %f 684.812µs
+No utility could be computed for closest read
+Get error for key 0036: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 68 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.685537ms
+Do a WRITE
+Key 54 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=58.263784ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 800.421µs
+Key 54 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=859.895µs
+RTT was %f 859.895µs
+No utility could be computed for closest read
+Get error for key 0054: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.497221ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 799.785µs
+Key 96 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=950.115µs
+RTT was %f 950.115µs
+No utility could be computed for closest read
+Get error for key 0096: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 800.834µs
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=694.273µs
+RTT was %f 694.273µs
+No utility could be computed for closest read
+Get error for key 0080: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 800.79µs
+Key 68 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=731.726µs
+RTT was %f 731.726µs
+No utility could be computed for closest read
+Get error for key 0068: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 31 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.446785ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 802.627µs
+Key 71 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=932.689µs
+RTT was %f 932.689µs
+No utility could be computed for closest read
+Get error for key 0071: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 805.787µs
+Key 3 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=731.751µs
+RTT was %f 731.751µs
+No utility could be computed for closest read
+Get error for key 0003: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 807.349µs
+Key 35 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=586.583µs
+RTT was %f 586.583µs
+No utility could be computed for closest read
+Get error for key 0035: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 66 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.512297ms
+Do a WRITE
+Key 27 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.660266ms
+Do a WRITE
+Key 67 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.595883ms
+Do a WRITE
+Key 35 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.510128ms
+Do a WRITE
+Key 12 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.534359ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 803.899µs
+Key 66 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=902.785µs
+RTT was %f 902.785µs
+No utility could be computed for closest read
+Get error for key 0066: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 803.838µs
+Key 12 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=795.069µs
+RTT was %f 795.069µs
+No utility could be computed for closest read
+Get error for key 0012: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.526851ms
+Do a WRITE
+Key 67 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.461143ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 805.47µs
+Key 67 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=960.775µs
+RTT was %f 960.775µs
+No utility could be computed for closest read
+Get error for key 0067: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 11 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.600477ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 808.371µs
+Key 22 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=954.465µs
+RTT was %f 954.465µs
+No utility could be computed for closest read
+Get error for key 0022: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 808.473µs
+Key 52 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=772.897µs
+RTT was %f 772.897µs
+No utility could be computed for closest read
+Get error for key 0052: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 806.403µs
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=619.645µs
+RTT was %f 619.645µs
+No utility could be computed for closest read
+Get error for key 0080: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 802.622µs
+Key 11 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=688.811µs
+RTT was %f 688.811µs
+No utility could be computed for closest read
+Get error for key 0011: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.505776ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 800.167µs
+Key 42 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=848.017µs
+RTT was %f 848.017µs
+No utility could be computed for closest read
+Get error for key 0042: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 56 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.496481ms
+Do a WRITE
+Key 27 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.471175ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 799.948µs
+Key 99 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=950.892µs
+RTT was %f 950.892µs
+No utility could be computed for closest read
+Get error for key 0099: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 802.683µs
+Key 59 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=668.694µs
+RTT was %f 668.694µs
+No utility could be computed for closest read
+Get error for key 0059: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 803.253µs
+Key 56 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=560.577µs
+RTT was %f 560.577µs
+No utility could be computed for closest read
+Get error for key 0056: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 32 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.487259ms
+Do a WRITE
+Key 98 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.436205ms
+Do a WRITE
+Key 90 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.558835ms
+Do a WRITE
+Key 41 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.489795ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 799.438µs
+Key 90 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=829.779µs
+RTT was %f 829.779µs
+No utility could be computed for closest read
+Get error for key 0090: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.563456ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 797.828µs
+Key 32 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=966.964µs
+RTT was %f 966.964µs
+No utility could be computed for closest read
+Get error for key 0032: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 799.18µs
+Key 51 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=594.276µs
+RTT was %f 594.276µs
+No utility could be computed for closest read
+Get error for key 0051: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 75 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.602843ms
+Do a WRITE
+Key 69 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.556947ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 796.394µs
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=905.125µs
+RTT was %f 905.125µs
+No utility could be computed for closest read
+Get error for key 0034: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 799.468µs
+Key 75 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=637.466µs
+RTT was %f 637.466µs
+No utility could be computed for closest read
+Get error for key 0075: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 794.464µs
+Key 6 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=760.343µs
+RTT was %f 760.343µs
+No utility could be computed for closest read
+Get error for key 0006: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.72µs
+Key 6 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=670.057µs
+RTT was %f 670.057µs
+No utility could be computed for closest read
+Get error for key 0006: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 50 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.478459ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 789.875µs
+Key 32 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=961.872µs
+RTT was %f 961.872µs
+No utility could be computed for closest read
+Get error for key 0032: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 64 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.461774ms
+Do a WRITE
+Key 67 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.511997ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 792.987µs
+Key 50 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=860.205µs
+RTT was %f 860.205µs
+No utility could be computed for closest read
+Get error for key 0050: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 97 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.511972ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 794.664µs
+Key 97 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=965.911µs
+RTT was %f 965.911µs
+No utility could be computed for closest read
+Get error for key 0097: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 797.109µs
+Key 64 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=689.372µs
+RTT was %f 689.372µs
+No utility could be computed for closest read
+Get error for key 0064: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 795.961µs
+Key 67 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=567.829µs
+RTT was %f 567.829µs
+No utility could be computed for closest read
+Get error for key 0067: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 83 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.542638ms
+Do a WRITE
+Key 26 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=57.654463ms
+Do a WRITE
+Key 80 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=130.127.133.18:8080, rtt=67.785544ms
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 795.6µs
+Key 34 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=933.121µs
+RTT was %f 933.121µs
+No utility could be computed for closest read
+Get error for key 0034: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a READ
+Doing a Closest Get:
+Closest Node is %s with minRTT %d 128.110.219.100:8080 799.347µs
+Key 83 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}
+Recording RTT: node=128.110.219.100:8080, rtt=941.39µs
+RTT was %f 941.39µs
+No utility could be computed for closest read
+Get error for key 0083: No subSLA met (subSLAGained: {0 {0s} <nil> 0})
+Do a WRITE
+Key 86 belongs to shard #0: {ShardId:0 RangeStart:0 RangeEnd:10000 Primary:130.127.133.18:8080 SecondaryIDs:[utah] Secondaries:[128.110.219.100:8080] HighTS:0}

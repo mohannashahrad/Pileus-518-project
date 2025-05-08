@@ -262,7 +262,6 @@ func SelectNodesForBoundedStaleness(session *util.Session, key string, bound *ti
 	// Get the last time key was written in this session
 	minHighTS = time.Now().Add(-*bound).UnixMilli()
 
-	fmt.Printf("Last write is %d\n",  session.ObjectsWritten[key])
 	fmt.Println("Curr time is", time.Now().UnixMilli())
 	fmt.Printf("minHighTS is set to %d \n", minHighTS)
 
