@@ -63,7 +63,7 @@ func main() {
 	monitor.SetDynamicConfigData(
 		configuration_config.ClientID, 
 		configuration_config.Region,
-		GlobalSLAs["dynamic_cart_sla"], 
+		GlobalSLAs["cart_sla"], 
 		configuration_config.CoordinatorURL, 
 		false,
 	)
@@ -83,13 +83,16 @@ func main() {
 
 	// Adjust the workload based on the exp type
 	//replay_workload_from_log("ycsb/Fig11/2k/r50w50client.log", util.Random, "cart_sla")
-	replay_workload_from_log("ycsb/Fig11/skewed_rmw_new.log", util.Pileus, "cart_sla")
+	// replay_workload_from_log("ycsb/Fig11/skewed_rmw_new.log", util.Pileus, "cart_sla")
 
 	// ================ Adaptabiliy to Network Latency Experiemnts ================== 
 	// replay_workload_with_artificial_latency("ycsb/Fig13/utahClient.log", util.Pileus, "psw_sla")
 
 	// ================ Dynamic Reconfiguration Experiemnts ================== 
 	// replay_workload_from_log("ycsb/Fig11/dynamic_reconfig.log", util.Pileus, "dynamic_cart_sla")
+
+	// ================ New SLA Experiemnts ================== 
+	replay_workload_from_log("ycsb/Fig11/2k/r50w50client.log", util.Pileus, "new_sla")
 
 	duration := time.Since(start)
 	fmt.Printf("Workload execution took %v\n", duration)
@@ -380,6 +383,12 @@ func loadStaticSLAs() {
 	GlobalSLAs[sla.ID] = sla
 
 	sla, err = util.LoadSLAFromFile("consistency/samples/dynamic_cart.json", "dynamic_cart_sla")
+	if err != nil {
+		panic(err)
+	}
+	GlobalSLAs[sla.ID] = sla
+
+	sla, err = util.LoadSLAFromFile("consistency/samples/new.json", "new_sla")
 	if err != nil {
 		panic(err)
 	}
